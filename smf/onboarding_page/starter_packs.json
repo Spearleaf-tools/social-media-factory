@@ -1,0 +1,183 @@
+{
+  "about": "Starter packs by type of business (spec smf-spec-onboarding-v2.md rev 12, N3). Bundled with the Social Media Factory, read by the onboarding page on this computer: nothing is fetched. A pack only suggests what is general to a trade, never what only the owner can say. Every suggestion is shown as 'Suggested for <pack>. Please check' and nothing counts until the owner keeps it. Packs hold no statistics, prices or claims of results. 'suggestions' may only fill the allowlisted fields (audience_who, audience_way, myths, mistakes, rules, platforms); questions, objections and steps get 'topic_ideas' instead (post ideas, never answers). 'compliance_candidate' only suggests a compliance pack; the owner turns it on. Change a pack: raise 'version'.",
+  "version": 1,
+  "allowlist": ["audience_who", "audience_way", "myths", "mistakes", "rules", "platforms"],
+  "topic_fields": ["audience_questions", "objections", "steps"],
+  "packs": [
+    {
+      "id": "auto-repair",
+      "name": "auto repair",
+      "matches": ["mechanic", "auto repair", "car repair", "garage", "auto shop", "body shop", "tyres", "tires", "brakes", "oil change", "car service"],
+      "compliance_candidate": null,
+      "suggestions": {
+        "audience_who": "Local drivers who want an honest shop they can trust, and people with a car problem they don't understand yet.",
+        "audience_way": ["They don't know if a repair is really needed", "They worry about being overcharged", "They put off maintenance until something breaks"],
+        "myths": ["A dashboard warning light can always wait", "Dealer servicing is the only way to keep a warranty", "Premium fuel helps any car run better"],
+        "mistakes": ["Ignoring small noises until they become big repairs", "Skipping regular oil changes", "Driving on worn tyres or brakes"],
+        "rules": [],
+        "platforms": ["facebook", "instagram", "tiktok", "youtube"]
+      },
+      "topic_ideas": {
+        "audience_questions": ["Why is my check-engine light on?", "How often do I really need an oil change?", "Is this repair worth it on an older car?"],
+        "objections": ["“Your price is higher than the shop down the road.”", "“Can't I just do this myself?”"],
+        "steps": ["How a diagnosis works before any repair", "What a basic service covers"]
+      },
+      "palettes": [
+        {"background": "#F7F7F5", "text": "#16191D", "accent": "#C8102E"},
+        {"background": "#F2F5F8", "text": "#0F1B2D", "accent": "#CE7000"}
+      ],
+      "font_pair": {"heading": "Arial Black", "body": "Arial"},
+      "video_ideas": ["What that dashboard light really means", "Three sounds you shouldn't ignore", "What happens when you drop your car off"]
+    },
+    {
+      "id": "fitness",
+      "name": "fitness and personal training",
+      "matches": ["fitness", "personal trainer", "personal training", "gym", "coach", "strength", "pilates", "yoga studio", "bootcamp", "crossfit"],
+      "compliance_candidate": "health",
+      "suggestions": {
+        "audience_who": "People who want to get stronger or fitter but don't know where to start, or have started and stopped before.",
+        "audience_way": ["They don't have much time", "They feel out of place in a gym", "They've tried before and lost motivation"],
+        "myths": ["You need hours in the gym every day to see change", "Lifting weights makes you bulky", "Soreness means it was a good workout"],
+        "mistakes": ["Doing too much in the first week", "Skipping warm-ups", "Changing programmes before giving one a fair try"],
+        "rules": ["Never promise a specific amount of weight loss", "Don't give medical advice; suggest checking with a doctor"],
+        "platforms": ["instagram", "tiktok", "youtube", "facebook"]
+      },
+      "topic_ideas": {
+        "audience_questions": ["How many days a week should I train?", "What should I eat before a workout?", "How do I start if I'm out of shape?"],
+        "objections": ["“I don't have time.”", "“I can just follow videos online.”"],
+        "steps": ["How a first session works", "How a beginner week is put together"]
+      },
+      "palettes": [
+        {"background": "#F5F7F6", "text": "#111614", "accent": "#009A62"},
+        {"background": "#F8F6F2", "text": "#1A1A1A", "accent": "#EA521C"}
+      ],
+      "font_pair": {"heading": "Impact", "body": "Verdana"},
+      "video_ideas": ["One move most beginners do wrong", "A quick routine for busy days", "What a first session with me looks like"]
+    },
+    {
+      "id": "wellness",
+      "name": "wellness (breathwork, Reiki, coaching)",
+      "matches": ["breathwork", "reiki", "wellness", "meditation", "healer", "healing", "nervous system", "holistic", "energy work", "life coach", "mindfulness", "sound bath"],
+      "compliance_candidate": "health",
+      "suggestions": {
+        "audience_who": "People feeling stressed, stuck or overwhelmed who want a calmer, more grounded way to live.",
+        "audience_way": ["They feel stressed most of the time", "They're curious but unsure what a session involves", "They've tried other things that didn't stick"],
+        "myths": ["You have to empty your mind to meditate", "One session fixes everything", "This kind of work replaces medical care"],
+        "mistakes": ["Expecting instant results", "Only practising when things are already bad", "Comparing their experience with someone else's"],
+        "rules": ["Never claim to cure or treat a medical condition", "Don't tell anyone to stop medical treatment", "Describe what people may feel, never guarantee it"],
+        "platforms": ["instagram", "tiktok", "youtube", "facebook"]
+      },
+      "topic_ideas": {
+        "audience_questions": ["What happens in a session?", "How will I feel afterwards?", "How often should I come?"],
+        "objections": ["“Does this really work?”", "“I'm not the spiritual type.”"],
+        "steps": ["How a first session works", "A simple practice to try at home"]
+      },
+      "palettes": [
+        {"background": "#F6F3EE", "text": "#2A2622", "accent": "#758965"},
+        {"background": "#F4F1F7", "text": "#26222B", "accent": "#8E6BA8"}
+      ],
+      "font_pair": {"heading": "Georgia", "body": "Trebuchet MS"},
+      "video_ideas": ["A one-minute breathing reset", "What people ask before their first session", "How to tell you need a pause"]
+    },
+    {
+      "id": "dental-medical",
+      "name": "dental and medical",
+      "matches": ["dentist", "dental", "orthodontist", "doctor", "clinic", "medical", "physio", "physiotherapy", "chiropractor", "med spa", "medspa", "dermatology", "optometrist", "practice"],
+      "compliance_candidate": "health",
+      "suggestions": {
+        "audience_who": "Local patients and families looking for care they can trust, and people nervous about a visit.",
+        "audience_way": ["They're anxious about appointments", "They don't understand their options", "They worry about cost and what's covered"],
+        "myths": ["If it doesn't hurt, there's nothing wrong", "Check-ups are only needed when there's a problem", "Online advice is as good as an examination"],
+        "mistakes": ["Waiting until something hurts", "Skipping follow-up appointments", "Stopping a treatment plan early"],
+        "rules": ["Never promise a medical result", "No before-and-after claims without the patient's written permission", "Don't diagnose in posts; invite people to book an assessment", "Follow your professional body's advertising rules"],
+        "platforms": ["facebook", "instagram", "youtube"]
+      },
+      "topic_ideas": {
+        "audience_questions": ["Does it hurt?", "How long does it take?", "What should I expect at my first visit?"],
+        "objections": ["“It's too expensive.”", "“I'll wait and see if it gets better.”"],
+        "steps": ["What happens at a first appointment", "How a treatment plan is decided"]
+      },
+      "palettes": [
+        {"background": "#F4F8FA", "text": "#102A3A", "accent": "#1C7FA6"},
+        {"background": "#F7F9F8", "text": "#13302A", "accent": "#2E9C7E"}
+      ],
+      "font_pair": {"heading": "Segoe UI", "body": "Segoe UI"},
+      "video_ideas": ["What happens at your first visit", "A question patients are shy to ask", "Meet the team"]
+    },
+    {
+      "id": "home-services",
+      "name": "home services (landscaping, HVAC, roofing)",
+      "matches": ["landscaping", "landscaper", "gardener", "gardening", "lawn", "hvac", "heating", "air conditioning", "roofing", "roofer", "plumber", "plumbing", "electrician", "contractor", "handyman", "painter", "cleaning", "pest control", "pool"],
+      "compliance_candidate": null,
+      "suggestions": {
+        "audience_who": "Homeowners nearby who want reliable work done right, on time, without surprises.",
+        "audience_way": ["They've been let down by contractors before", "They don't know what a fair job looks like", "They can't tell if it's urgent or can wait"],
+        "myths": ["The cheapest quote is the best deal", "Maintenance is only needed when something breaks", "Any handyman can do this job"],
+        "mistakes": ["Waiting until a small problem gets expensive", "Choosing on price alone", "Skipping seasonal maintenance"],
+        "rules": ["Only show customers' homes with their permission", "Keep licences and insurance claims accurate"],
+        "platforms": ["facebook", "instagram", "youtube", "tiktok"]
+      },
+      "topic_ideas": {
+        "audience_questions": ["How much does it usually cost?", "How long will the job take?", "Is this an emergency?"],
+        "objections": ["“I'll get a few more quotes.”", "“I'll do it myself this weekend.”"],
+        "steps": ["How a quote is put together", "What happens on the day of the job"]
+      },
+      "palettes": [
+        {"background": "#F6F7F2", "text": "#1B2418", "accent": "#3E7C3A"},
+        {"background": "#F5F6F8", "text": "#1A1F2B", "accent": "#BE7225"}
+      ],
+      "font_pair": {"heading": "Arial Black", "body": "Arial"},
+      "video_ideas": ["One thing to check before the season changes", "What we look for on a first visit", "A job from start to finish"]
+    },
+    {
+      "id": "recruiting-professional",
+      "name": "recruiting and professional services",
+      "matches": ["recruiter", "recruiting", "recruitment", "staffing", "headhunter", "consultant", "consulting", "accountant", "bookkeeper", "lawyer", "attorney", "agency", "advisor", "coach for business"],
+      "compliance_candidate": null,
+      "suggestions": {
+        "audience_who": "Busy professionals and business owners who need expert help and want someone who understands their world.",
+        "audience_way": ["They're short on time", "They've had poor service before", "They find it hard to compare providers"],
+        "myths": ["Everyone in this field offers the same thing", "Doing it yourself always saves money", "A bigger firm always means better service"],
+        "mistakes": ["Waiting until it's urgent to ask for help", "Choosing on price alone", "Not explaining what they really need at the start"],
+        "rules": ["Never share client or candidate details without permission", "Don't promise outcomes you can't control"],
+        "platforms": ["linkedin", "instagram", "youtube"]
+      },
+      "topic_ideas": {
+        "audience_questions": ["How does working with you work?", "How long does it usually take?", "What do you need from me?"],
+        "objections": ["“We can handle it in-house.”", "“Your fee is too high.”"],
+        "steps": ["How a first conversation works", "What happens in the first two weeks"]
+      },
+      "palettes": [
+        {"background": "#F5F6F8", "text": "#121826", "accent": "#2F5BEA"},
+        {"background": "#F7F5F2", "text": "#1F1B16", "accent": "#B0702C"}
+      ],
+      "font_pair": {"heading": "Georgia", "body": "Segoe UI"},
+      "video_ideas": ["The question clients ask me most", "A mistake I see every week", "What working with me looks like"]
+    },
+    {
+      "id": "bakery",
+      "name": "bakery and food",
+      "matches": ["bakery", "baker", "bread", "cafe", "café", "coffee shop", "patisserie", "restaurant", "catering", "food truck"],
+      "compliance_candidate": null,
+      "suggestions": {
+        "audience_who": "Local regulars who care about good food, and visitors looking for somewhere worth the trip.",
+        "audience_way": ["They don't know what's fresh today", "They aren't sure what to choose", "They've had disappointing food from places that look good"],
+        "myths": ["Good bread needs special equipment", "Fresh-baked always means made from scratch", "Sourdough always tastes sour"],
+        "mistakes": ["Storing bread in the fridge", "Rushing the prove", "Buying the same thing every time"],
+        "rules": ["Keep allergen information accurate"],
+        "platforms": ["instagram", "facebook", "tiktok"]
+      },
+      "topic_ideas": {
+        "audience_questions": ["What's fresh today?", "Do you have gluten-free options?", "How do I keep bread fresh?"],
+        "objections": ["“It's cheaper at the supermarket.”"],
+        "steps": ["How a loaf is made from start to finish"]
+      },
+      "palettes": [
+        {"background": "#FAF6EE", "text": "#2B1D12", "accent": "#C2410C"},
+        {"background": "#F8F4EF", "text": "#2A2420", "accent": "#A16207"}
+      ],
+      "font_pair": {"heading": "Georgia", "body": "Verdana"},
+      "video_ideas": ["Why good bread takes time", "Behind the counter before opening", "How to keep a loaf fresh"]
+    }
+  ]
+}

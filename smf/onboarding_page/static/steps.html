@@ -1,0 +1,323 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Social Media Factory: set up your brand</title>
+<!-- Onboarding v2, design B: one question at a time (spec smf-spec-onboarding-v2-B-steps.md rev 3).
+     The shared engine (v2-common.js) and look (v2-common.css) are put inline by the server. -->
+<style>
+/*@V2_COMMON_CSS@*/
+main.steps { max-width:760px; margin:0 auto; padding:24px 16px 48px; display:flex; flex-direction:column; gap:16px; }
+.mapline { max-width:1180px; margin:0 auto; padding:0 16px 10px; display:flex; gap:4px 10px; flex-wrap:wrap; font-size:13px; color:var(--muted); }
+.mapline button { min-height:32px; padding:0 8px; border-radius:8px; border:0; background:none; font-size:13px; color:var(--muted); }
+.mapline button.here { color:var(--ink); font-weight:700; background:var(--panel); }
+.stepnav { display:flex; justify-content:space-between; align-items:center; gap:8px; flex-wrap:wrap; }
+.groupline { display:flex; justify-content:space-between; align-items:center; gap:8px; flex-wrap:wrap; }
+.map { position:fixed; inset:0; z-index:10; background:rgba(17,17,17,.35); display:flex; justify-content:flex-end; }
+.map > div { width:min(460px, 100%); height:100%; overflow:auto; background:var(--ground); padding:20px; display:flex; flex-direction:column; gap:14px; }
+.map ol { margin:0; padding:0; list-style:none; display:flex; flex-direction:column; gap:2px; }
+.map li button { width:100%; display:flex; justify-content:space-between; align-items:center; gap:8px; border:0; background:none; min-height:40px; padding:0 8px; border-radius:8px; text-align:left; font-size:14px; }
+.map li button:hover { background:var(--panel); }
+.map h3 { margin:8px 0 0; }
+.screen-card { display:flex; flex-direction:column; gap:12px; }
+.finish { border:2px solid var(--ink); border-radius:16px; padding:20px; display:flex; flex-direction:column; gap:12px; }
+.finish h2 { margin:8px 0 0; font-size:17px; }
+.finish ul { margin:0; padding:0; list-style:none; display:flex; flex-direction:column; gap:4px; }
+.finish li button { width:100%; display:flex; justify-content:space-between; align-items:center; gap:8px; border:0; background:none; min-height:44px; padding:0 8px; border-radius:8px; text-align:left; font-size:15px; }
+.finish li button:hover { background:var(--panel); }
+.finish details summary { min-height:44px; display:flex; align-items:center; cursor:pointer; font-weight:600; }
+.counts { display:flex; flex-wrap:wrap; gap:6px 14px; font-size:15px; }
+.counts b { font-variant-numeric:tabular-nums; }
+button.back { min-height:44px; padding:0 4px; }
+.menulist { display:flex; flex-direction:column; gap:8px; }
+.menulist button { width:100%; text-align:left; min-height:48px; }
+button.menu { display:none; }
+/* Phones: one row, the confirmed count, the bar and Menu; everything else is one tap away in Menu (audit #3). */
+@media (max-width:640px) {
+  .mapline, .subbar, .brandmark, .top .row .navbtn:not(.menu), .count .wide { display:none; }
+  button.menu { display:inline-flex; align-items:center; }
+  .top .bar { flex-wrap:nowrap; padding:8px 16px; }
+  .top .row { flex:none; }
+  .progress { flex:1 1 auto; min-width:0; flex-wrap:wrap; gap:4px 10px; }
+  .progress .track { min-width:80px; }
+}
+</style>
+</head>
+<body>
+<header class="top" id="top" hidden>
+  <div class="bar">
+    <div class="brandmark"><span class="mark" aria-hidden="true"></span><span>Social Media Factory</span></div>
+    <div class="progress"><span class="count"><span id="count">0</span> of 5 steps done</span><div class="track" aria-hidden="true"><div id="track"></div></div></div>
+    <div class="row"><button type="button" class="navbtn" id="open-map" aria-haspopup="dialog">Your steps</button><button type="button" class="navbtn" id="open-settings" aria-haspopup="dialog">Settings</button><button type="button" class="navbtn" id="finish-chat">Finish in chat</button><button type="button" class="navbtn menu" id="open-menu" aria-haspopup="dialog">Menu</button></div>
+  </div>
+  <div class="subbar"><div id="packslot"></div><nav class="mapline" id="mapline" aria-label="Sections"></nav></div>
+</header>
+<div id="app"></div>
+<div class="map" id="map" role="dialog" aria-modal="true" aria-label="Your steps" hidden><div id="map-body"></div></div>
+<div class="map" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-title" hidden><div id="sheet-body"></div></div>
+<footer class="foot"><div class="bar"><span>Runs on this computer only.</span><span>I'll never ask you to type or say a password or an account key.</span></div></footer>
+
+<script>
+/*@V2_COMMON_JS@*/
+</script>
+<script>
+(function () {
+  "use strict";
+  var V = window.V2, esc = function (t) { return V.esc(t); };
+  function $(id) { return document.getElementById(id); }
+  var F, at = null, deepOn = false;      // at: the field on screen, or "finish"
+
+  // Rev 14 (design review, Oct 22): the route is the five steps, then "one more thing", then any "Make it better" question with
+  // new material waiting. It's fixed when the questions start, so deciding new material never moves a question under
+  // the person. Every other question is in "Make it better": reachable any time, never in the main route.
+  var route = null;
+  function order() { if (!route) { route = V.fiveRoute(); V.setRoute(route); } return route.concat(deepOn ? F.deep : []); }
+  function better() { return V.betterFields(); }
+  // The list a question moves through: where it was opened from (the five steps, or Make it better). A question can be
+  // in both (new material waiting beside a Make it better question puts it in the route too).
+  var ctx = "route";
+  function listFor(f) {
+    if (ctx === "better" && better().indexOf(f) >= 0) { return better(); }
+    return order().indexOf(f) >= 0 ? order() : better().indexOf(f) >= 0 ? better() : order();
+  }
+  function showFrom(where, f) { ctx = where; show(f); }
+  var lastField = null;                  // the question shown before Finish, for Back
+  function standFields() { return F.core.filter(function (f) { return f.group === "stand"; }); }
+  function groupTitle(f) { var g = F.groups.concat(F.deep_groups).filter(function (x) { return x.id === f.group; })[0]; return g ? g.title : ""; }
+
+  // With material read (rev 13, M4) the page opens on "What we found"; without, on the first screen.
+  function mount() {
+    F = V.fields();
+    var begin = function () { route = null; ctx = "route"; $("top").hidden = false; wireTop(); show(firstOpen()); };
+    if (V.inventory() && (V.inventory().sources || []).length) {
+      $("app").innerHTML = V.foundHTML();
+      V.wireFound(begin);
+      var holder = $("found-first");
+      holder.innerHTML = V.firstScreenHTML().replace('<h1>Let\'s set up your brand</h1>', "").replace(/<p class="kicker">[\s\S]*?<\/p>/, "").replace(/<p class="lead">[\s\S]*?<\/p>/, "");
+      V.wireFirstScreen(begin);
+      return;
+    }
+    $("app").innerHTML = V.firstScreenHTML();
+    V.wireFirstScreen(begin);
+  }
+  // Where to start (rev 14, A8): the five steps first, new material in them before anything open; then new material in
+  // Make it better; with everything done, the status ("Your brand so far").
+  function firstOpen() { return V.startAt() || "finish"; }
+  function wireTop() {
+    $("open-map").onclick = openMap;
+    $("open-settings").onclick = openSettings;
+    $("finish-chat").onclick = finishChat;
+    $("open-menu").onclick = openMenu;
+    $("map").onclick = function (e) { if (e.target === $("map")) { closeMap(); } };
+    $("sheet").onclick = function (e) { if (e.target === $("sheet")) { closeSheet(); } };
+    document.addEventListener("keydown", function (e) {
+      if (e.key !== "Escape") { return; }
+      if (!$("sheet").hidden) { closeSheet(); } else if (!$("map").hidden) { closeMap(); }
+    });
+    packLine();
+  }
+  // "Suggestions for auto repair · Change" (rev 12, N3): always one tap from switching or turning them off.
+  function packLine() {
+    $("packslot").innerHTML = V.packLineHTML();
+    $("pack-change").onclick = changePack;
+  }
+  function changePack() {
+    openSheet("Type of business", '<p class="small">Suggestions are general to a trade and never count until you keep them. Switching never changes what you\'ve typed or confirmed.</p>' + V.packPickerHTML());
+    V.wirePackPicker($("sheet-body"), closeSheet);
+  }
+  function openSettings() {
+    var pk = V.pack();
+    openSheet("Settings", V.settingsHTML().replace("<details class=\"settings\">", "<div>").replace("<summary>Settings</summary>", "").replace("</details>", "</div>") +
+      '<p class="small">Type of business: ' + esc(pk ? (pk.custom ? "your own description" : pk.name) : "none chosen") + ' <button type="button" class="link" id="settings-pack">Change</button></p>');
+    V.wireSettings();
+    $("settings-pack").onclick = function () { closeSheet(); changePack(); };
+  }
+  // Leaving for the chat keeps what's typed on this screen first.
+  function finishChat() { if (at && typeof at === "object") { V.keep(at); } V.finish("chat"); }
+  // Phones: the header's buttons and the type of business, in one sheet.
+  function openMenu() {
+    var pk = V.pack();
+    openSheet("Menu", '<div class="menulist">' +
+      '<button type="button" id="m-map">Your steps</button>' +
+      '<button type="button" id="m-pack">Type of business: ' + esc(pk ? (pk.custom ? "your own description" : pk.name) : "none chosen") + "</button>" +
+      '<button type="button" id="m-settings">Settings</button>' +
+      '<button type="button" id="m-finish">Go to Finish</button>' +
+      '<button type="button" id="m-chat">Finish in chat</button></div>');
+    $("m-map").onclick = function () { closeSheet(); openMap(); };
+    $("m-pack").onclick = function () { closeSheet(); changePack(); };
+    $("m-settings").onclick = function () { closeSheet(); openSettings(); };
+    $("m-finish").onclick = function () { closeSheet(); show("finish"); };
+    $("m-chat").onclick = function () { closeSheet(); finishChat(); };
+  }
+  // A small sheet for a short decision (the content guide: pop-ups only for a decision that must be settled first).
+  var sheetFrom = null;
+  function openSheet(title, html) {
+    sheetFrom = document.activeElement;
+    $("sheet-body").innerHTML = '<div class="row" style="justify-content:space-between"><h2 id="sheet-title" style="margin:0">' + esc(title) + '</h2><button type="button" id="close-sheet">Close</button></div>' + html;
+    $("sheet").hidden = false;
+    ["top", "app"].forEach(function (id) { $(id).inert = true; }); document.querySelector("footer").inert = true;
+    $("close-sheet").onclick = closeSheet; $("close-sheet").focus();
+  }
+  function closeSheet() {
+    ["top", "app"].forEach(function (id) { $(id).inert = false; }); document.querySelector("footer").inert = false;
+    $("sheet").hidden = true; if (sheetFrom && sheetFrom.focus) { sheetFrom.focus(); }
+  }
+  function packChanged() {
+    if ($("top").hidden) { return; }
+    packLine();
+    if (at && typeof at === "object") { V.keep(at); showNow(at); }
+  }
+
+  // One question per screen. Leaving the screen stops any recording; the next screen never starts one.
+  // A save reads its answer from the screen, so the screen only changes once any save in progress is done.
+  function show(f) { return V.idle().then(function () { showNow(f); }); }
+  function showNow(f) {
+    V.stopRecording(true);
+    if (at && typeof at === "object") { V.keep(at); }        // leaving a screen never loses what's typed there
+    if (f && f.group === "stand" && V.parked()) { f = V.stepIn(listFor(f), f, 1) || "finish"; }
+    if (f && typeof f === "object") { lastField = f; }
+    at = f;
+    if (f === "finish" || !f) { return finishScreen(); }
+    var stand = f.group === "stand";
+    $("app").innerHTML = '<main class="steps"><div class="groupline"><button type="button" class="link back" id="back">‹ Back</button>' +
+      (stand ? '<button type="button" class="link" id="park">Skip the strategy part</button>' : "") + "</div>" +
+      '<div class="field screen-card" data-field="' + f.id + '">' + V.fieldHTML(f) + "</div></main>";
+    V.wire(f);
+    V.bringBack(f);
+    $("back").onclick = function () { back(f); };
+    if ($("park")) { $("park").onclick = function () { V.parkStrategy(true).then(function () { show(V.stepIn(listFor(f), f, 1) || "finish"); }); }; }
+    var h = document.querySelector("h2.ask"); if (h) { h.focus(); }
+    refresh();
+  }
+  function next(f) {
+    var list = listFor(f);
+    if (list.indexOf(f) < 0) { return show("finish"); }
+    show(V.stepIn(list, f, 1) || "finish");
+  }
+  function back(f) {
+    if (f === "finish") { order(); return show(lastField || V.stepIn(route, null, -1) || "finish"); }
+    if (f === F.deep[0]) { return show("finish"); }
+    var inBetter = ctx === "better" && better().indexOf(f) >= 0, inRoute = !inBetter && order().indexOf(f) >= 0;
+    var prev = V.stepIn(listFor(f), f, -1);
+    if (prev) { show(prev); } else if (inRoute) { $("top").hidden = true; mount(); } else { show("finish"); }
+  }
+  // "Your brand so far" (rev 14): the five steps and "one more thing", each done or not; "Make it better" and Go deeper
+  // are offered, never listed as unanswered questions. Finishing never confirms anything: only confirmed answers reach
+  // the brand; the rest become placeholders, and nothing is guessed.
+  function stepButton(f, label, state) {
+    var says = { ok: "\u2713 Done", skipped: "Skipped", check: "Draft waiting for your yes" }[state] || "Not done yet";
+    return '<li><button type="button" data-to="' + f.id + '"><span>' + esc(label) + "</span><span class=\"small\">" + says + "</span></button></li>";
+  }
+  function finishScreen() {
+    var ss = V.steps(), more = V.oneMore(), waiting = better().filter(function (f) { return V.hasCandidate(f) || V.stateOf(f) === "check" || V.typed(f); });
+    var stepsHTML = ss.map(function (st, i) { return stepButton(st.fields[0], "Step " + (i + 1) + ": " + st.title, V.stepState(i)); }).join("") +
+      more.map(function (f) { return stepButton(f, "One more thing: any rules your posts must follow", V.questionState(f)); }).join("");
+    var mine = order().filter(function (f) { return V.typed(f); });
+    $("app").innerHTML = '<main class="steps"><div class="groupline"><button type="button" class="link back" id="back">‹ Back</button></div>' +
+      '<div class="finish"><h1>Your brand so far</h1>' +
+      '<p class="lead">' + V.stepsDone() + " of " + ss.length + " steps done. You can finish now: anything not done stays empty, and you can add it any time.</p>" +
+      "<ul>" + stepsHTML + "</ul>" + V.neededLeftHTML() +
+      '<div class="row"><button type="button" class="main" id="finish-page">Finish</button><button type="button" id="finish-chat2">Finish in chat</button></div>' +
+      '<p class="small">Anything not confirmed stays a draft or a placeholder; nothing is guessed.' + (mine.length ? " Typing you haven't confirmed stays on this computer only; confirm it to use it." : "") + "</p>" +
+      (waiting.length ? '<p class="small">Some drafts from your material are waiting in Make it better. <button type="button" class="link" data-better data-to="' + waiting[0].id + '">Check them</button></p>' : "") +
+      '<details class="better"><summary>Make it better (optional)</summary><p class="small">More about you, your offers and your voice, so your posts can say more. Any time, now or later.</p>' +
+      '<div class="row"><button type="button" id="better-start">Start with ' + esc((better()[0] || {}).ask ? groupTitle(better()[0]) : "more") + '</button><button type="button" class="link" id="better-map">Choose a topic</button></div></details>' +
+      '<p class="small">Want to go deeper? <button type="button" class="link" id="deep-start">Go deeper (optional, about 20 minutes)</button></p>' +
+      "</div></main>";
+    $("finish-page").onclick = function () { V.finish("page"); };
+    $("finish-chat2").onclick = function () { V.finish("chat"); };
+    $("back").onclick = function () { back("finish"); };
+    $("better-start").onclick = function () { var b = better()[0]; if (b) { showFrom("better", b); } };
+    $("better-map").onclick = openMap;
+    $("deep-start").onclick = function () { deepOn = true; show(F.deep[0]); };
+    document.querySelectorAll("[data-to]").forEach(function (b) {
+      b.onclick = function () { showFrom(b.hasAttribute("data-better") ? "better" : "route", V.fieldById(b.getAttribute("data-to"))); };
+    });
+    $("finish-page").focus();
+    refresh();
+  }
+
+  // The map (rev 14): the five steps with a check mark when done, "one more thing", then "Make it better" by topic and
+  // Go deeper. No colours, no counts.
+  function openMap() {
+    var ss = V.steps(), opt = function (f) { var i = V.stepOf(f); return i >= 0 && ss[i].optional.indexOf(f.id) >= 0 ? " (optional)" : ""; }, mk = function (f) {
+      if (V.hasCandidate(f) || V.typed(f) || V.stateOf(f) === "check") { return ' <span class="small">Waiting for your yes</span>'; }
+      return V.stateOf(f) === "ok" ? ' <span class="small">\u2713</span>' : "";
+    };
+    var item = function (f, where) { return '<li><button type="button" data-to="' + f.id + '"' + (where ? " data-" + where : "") + (f === at ? ' aria-current="step"' : "") + "><span>" + esc(f.ask) + opt(f) + "</span>" + mk(f) + "</button></li>"; };
+    var betterItem = function (f) { return item(f, "better"); };
+    var groups = F.groups.map(function (g) { return { title: g.title, fields: better().filter(function (f) { return f.group === g.id; }) }; })
+      .filter(function (g) { return g.fields.length; });
+    $("map-body").innerHTML = '<div class="row" style="justify-content:space-between"><h2 style="margin:0">Your steps</h2><button type="button" id="close-map">Close</button></div>' +
+      ss.map(function (st, i) { return '<h3 class="kicker">Step ' + (i + 1) + ": " + esc(st.title) + (V.stepDone(i) ? " \u2713" : "") + "</h3><ol>" + st.fields.map(item).join("") + "</ol>"; }).join("") +
+      '<h3 class="kicker">One more thing</h3><ol>' + V.oneMore().map(item).join("") + "</ol>" +
+      '<button type="button" class="main" id="map-finish">Go to Finish</button>' +
+      '<h2 style="margin:12px 0 0">Make it better</h2><p class="small">Optional, any time.</p>' +
+      (V.parked() ? '<p class="parked small">What you stand for: answer later. <button type="button" class="link" id="unpark">Answer it now</button></p>' : "") +
+      groups.map(function (g) { return '<h3 class="kicker">' + esc(g.title) + "</h3><ol>" + g.fields.map(betterItem).join("") + "</ol>"; }).join("") +
+      '<h2 style="margin:12px 0 0">Go deeper</h2>' +
+      F.deep_groups.map(function (g) { return '<h3 class="kicker">' + esc(g.title) + "</h3><ol>" + F.deep.filter(function (f) { return f.group === g.id; }).map(item).join("") + "</ol>"; }).join("");
+    $("map").hidden = false;
+    // A real modal: everything behind the map is out of reach for the keyboard and screen readers.
+    ["top", "app"].forEach(function (id) { $(id).inert = true; });
+    document.querySelector("footer").inert = true;
+    $("close-map").focus();
+    $("close-map").onclick = closeMap;
+    $("map-finish").onclick = function () { closeMap(); show("finish"); };
+    if ($("unpark")) { $("unpark").onclick = function () { V.parkStrategy(false).then(function () { closeMap(); show(standFields()[0]); }); }; }
+    document.querySelectorAll("#map [data-to]").forEach(function (b) {
+      b.onclick = function () {
+        var f = V.fieldById(b.getAttribute("data-to"));
+        if (F.deep.indexOf(f) >= 0) { deepOn = true; }
+        ctx = b.hasAttribute("data-better") ? "better" : "route";
+        if (f.group === "stand" && V.parked()) { V.parkStrategy(false).then(function () { closeMap(); show(f); }); return; }
+        closeMap(); show(f);
+      };
+    });
+  }
+  function closeMap() {
+    ["top", "app"].forEach(function (id) { $(id).inert = false; });
+    document.querySelector("footer").inert = false;
+    $("map").hidden = true; $("open-map").focus();
+  }
+  function refresh() {
+    var ss = V.steps(), n = V.stepsDone();
+    $("count").textContent = String(n);
+    $("track").style.width = Math.round(n / ss.length * 100) + "%";
+    var here = at && typeof at === "object" ? V.stepOf(at) : -1;
+    $("mapline").innerHTML = ss.map(function (st, i) {
+      return '<button type="button" data-jump="' + st.fields[0].id + '"' + (here === i ? ' class="here" aria-current="step"' : "") + ">" + (i + 1) + ". " + esc(st.title) + "</button>";
+    }).join("") + '<button type="button" id="mapline-all">Make it better</button>';
+    document.querySelectorAll("[data-jump]").forEach(function (b) { b.onclick = function () { showFrom("route", V.fieldById(b.getAttribute("data-jump"))); }; });
+    $("mapline-all").onclick = openMap;
+  }
+
+  // "Confirm and continue" saves, then moves on; "Skip for now" moves on, keeping any typing unconfirmed.
+  function saved(f) {
+    if (at === f) {
+      var box = document.querySelector('[data-field="' + f.id + '"]');
+      if (box) { box.innerHTML = V.fieldHTML(f); V.wire(f); V.bringBack(f); var h = box.querySelector("h2.ask"); if (h) { h.focus({ preventScroll: true }); } }
+    }
+    refresh();
+  }
+  function finished() {
+    $("top").hidden = true;
+    $("app").innerHTML = '<div class="done-screen"><h1>Your answers are with Claude</h1><p class="lead" id="handoff" aria-live="polite">' + esc(V.handoffText()) + "</p>" +
+      '<div id="closing"></div><p>Make it better any time: say \u201cmake my brand better\u201d in the chat. Your answers so far are kept.</p></div>';
+    handoff();
+  }
+  // The result's buttons appear once (and again after a tap), never redrawn under the person's finger.
+  var closingShown = "";
+  function handoff() {
+    var h = $("handoff"); if (h) { h.textContent = V.handoffText(); }
+    var c = $("closing"), html = V.closingHTML();
+    if (c && html !== closingShown) { closingShown = html; c.innerHTML = html; V.wireClosing(handoff); }
+  }
+
+  V.start({ mount: mount, saved: saved, next: next, back: back, finished: finished, handoff: handoff, packChanged: packChanged,
+            flow: true, current: function () { return at && typeof at === "object" ? at : null; } });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,383 @@
+{
+  "schema_version": 1,
+  "id": "maple-and-main",
+  "name": "Maple & Main Bakery",
+  "goal": "authority",
+  "business": {
+    "what_we_do": "A neighbourhood sourdough bakery in a small river town. We bake naturally leavened bread every morning and teach weekend baking classes for home bakers.",
+    "industry": "food and drink",
+    "location": "Alder Falls (a made-up town)",
+    "website": "https://example.com",
+    "regulated": "none"
+  },
+  "audience": {
+    "who": "People within a few miles who care about good bread, plus home bakers anywhere who want to understand sourdough well enough to stop following recipes blindly.",
+    "problems": [
+      "Their home loaves come out dense and they do not know why",
+      "They think good bread needs equipment they do not own",
+      "They are unsure which supermarket 'sourdough' is real"
+    ],
+    "questions_they_ask": [
+      "Why is my sourdough dense?",
+      "How do I know when the dough has proofed enough?",
+      "Can I bake good bread in a normal oven?",
+      "What does 'naturally leavened' actually mean?",
+      "How do I keep a starter alive when I travel?"
+    ],
+    "by_platform": {
+      "instagram": "Locals and home bakers who save posts to try at the weekend.",
+      "facebook": "Neighbours: opening hours, specials, class dates.",
+      "linkedin": "Other small food business owners curious how a bakery runs."
+    }
+  },
+  "pillars": [
+    {
+      "id": "how-bread-works",
+      "name": "How bread actually works",
+      "about": "The why behind fermentation, hydration, heat and time, in plain words."
+    },
+    {
+      "id": "fix-my-loaf",
+      "name": "Fix my loaf",
+      "about": "One common home-baking problem, one cause, one fix."
+    },
+    {
+      "id": "behind-the-counter",
+      "name": "Behind the counter",
+      "about": "What a working bakery day looks like, including the things that go wrong."
+    },
+    {
+      "id": "bake-with-us",
+      "name": "Bake with us",
+      "about": "Weekend classes: what people learn and what they take home."
+    }
+  ],
+  "offers": [
+    {
+      "id": "starter-feeding-card",
+      "name": "Starter feeding card",
+      "what": "A one-page card: how to feed and keep a sourdough starter.",
+      "rung": "free",
+      "call_to_action": "Ask for a feeding card at the counter",
+      "link": "https://example.com/feeding-card",
+      "price": "free",
+      "keyword": "STARTER",
+      "keyword_ready": false
+    },
+    {
+      "id": "bread-subscription",
+      "name": "Weekly bread subscription",
+      "what": "One loaf a week, reserved, collected Friday or Saturday.",
+      "rung": "entry",
+      "call_to_action": "Reserve your weekly loaf",
+      "link": "https://example.com/subscribe",
+      "price": "$9 a week"
+    },
+    {
+      "id": "weekend-class",
+      "name": "Saturday sourdough class",
+      "what": "A four-hour hands-on class for eight people. You leave with a loaf, a starter and a one-page method.",
+      "rung": "main",
+      "call_to_action": "Book a Saturday class",
+      "link": "https://example.com/classes",
+      "price": "$95"
+    },
+    {
+      "id": "private-bake-day",
+      "name": "Private bake day",
+      "what": "A full day in the bakery for a team or a group of friends, up to twelve people.",
+      "rung": "premium",
+      "call_to_action": "Ask about a private bake day",
+      "link": "https://example.com/private",
+      "price": "from $900"
+    }
+  ],
+  "identities": [
+    {
+      "id": "person",
+      "kind": "person",
+      "display_name": "Ava Lindqvist",
+      "role": "Head baker and owner",
+      "credential_line": "Ava Lindqvist, Head Baker",
+      "handle": "@ava.bakes.example"
+    },
+    {
+      "id": "company",
+      "kind": "company",
+      "display_name": "Maple & Main",
+      "handle": "@mapleandmain.example"
+    }
+  ],
+  "voice": {
+    "register": "Warm, plain and specific. Sounds like a baker talking across the counter: short sentences, real quantities, no romance about flour.",
+    "do": [
+      "Give the number: grams, hours, degrees",
+      "Explain the why before the how",
+      "Admit what went wrong in our own bakes"
+    ],
+    "dont": [
+      "Call anything artisanal",
+      "Pretend good bread is hard",
+      "Shame supermarket bread buyers"
+    ],
+    "signature_phrases": [
+      "Time is an ingredient",
+      "Watch the dough, not the clock",
+      "Wet hands, light touch"
+    ],
+    "sources": [
+      "Brand/voice-samples.md"
+    ],
+    "by_identity": {
+      "person": {
+        "pov": "I",
+        "note": "Ava speaks from her own bench: what she tried, what failed, what she does now."
+      },
+      "company": {
+        "pov": "you / we",
+        "note": "Talks to the neighbour: what is fresh, what is on, how to join in."
+      }
+    }
+  },
+  "style": {
+    "no_em_dashes": true,
+    "max_sentence_words": 22,
+    "max_paragraph_words": 50,
+    "max_paragraph_sentences": 3,
+    "no_tags_on": [
+      "facebook",
+      "linkedin"
+    ],
+    "banned_words": [
+      "artisanal",
+      "mouthwatering"
+    ],
+    "banned_phrases": [
+      "baked with love"
+    ],
+    "plain_language_pack": true
+  },
+  "never_mention": [
+    "Harbour Street Cafe",
+    "Alder Falls Farm Shop"
+  ],
+  "own_brands": [
+    "Maple & Main",
+    "Maple & Main Bakery",
+    "Ava Lindqvist"
+  ],
+  "compliance": {
+    "pack": "generic",
+    "drop_terms": [
+      "gluten-free"
+    ],
+    "hold_terms": [
+      "allergen"
+    ],
+    "disclaimer": "We bake with wheat, rye, milk, eggs, nuts and sesame in one kitchen.",
+    "sign_off_by": "Ava Lindqvist"
+  },
+  "visual": {
+    "colors": {
+      "ground": "#FBF7F0",
+      "ink": "#2B1D14",
+      "accent": "#C2571A",
+      "accent2": "#3E6B4F"
+    },
+    "fonts": {
+      "display": "",
+      "body": "",
+      "mono": ""
+    },
+    "wordmark": "Maple & Main",
+    "handle": "mapleandmain.example",
+    "logo": "",
+    "formats_enabled": []
+  },
+  "accounts": {
+    "provider": "none",
+    "timezone": "America/New_York",
+    "posting_windows": [
+      "06:30",
+      "10:00",
+      "12:00",
+      "17:00",
+      "18:00"
+    ],
+    "targets": [
+      {
+        "identity": "person",
+        "platform": "instagram",
+        "connected": false
+      },
+      {
+        "identity": "person",
+        "platform": "linkedin",
+        "connected": false
+      },
+      {
+        "identity": "company",
+        "platform": "instagram",
+        "connected": false
+      },
+      {
+        "identity": "company",
+        "platform": "facebook",
+        "connected": false
+      }
+    ]
+  },
+  "video": {
+    "inbox_folder": "Inputs/Edited",
+    "music_folder": "",
+    "host_names": []
+  },
+  "positioning": {
+    "known_for": {
+      "value": "the bakery that takes two days",
+      "source": "typed"
+    },
+    "core_belief": {
+      "value": "Bread should take two days, not two hours.",
+      "source": "typed"
+    },
+    "contrarian": [
+      {
+        "id": "c-1",
+        "value": "Sourdough is a process, not a flavour.",
+        "source": "typed",
+        "experience": "Years of customers asking for 'the sour one'."
+      }
+    ],
+    "for": [
+      {
+        "id": "for-1",
+        "value": "slow bread",
+        "source": "typed",
+        "experience": "Our loaves sell out because people taste the difference."
+      },
+      {
+        "id": "for-2",
+        "value": "the people who make it",
+        "source": "typed"
+      }
+    ],
+    "against": [
+      {
+        "id": "against-1",
+        "value": "'fresh-baked' from frozen dough",
+        "source": "typed",
+        "experience": "We tried frozen dough once, in our first month."
+      },
+      {
+        "id": "against-2",
+        "value": "sugar in savoury bread",
+        "source": "typed"
+      }
+    ],
+    "differentiation": [
+      {
+        "id": "diff-1",
+        "others": "bake from frozen at 5am",
+        "us": "start the dough two days ahead",
+        "source": "typed"
+      },
+      {
+        "id": "diff-2",
+        "others": "hide the kitchen",
+        "us": "bake where you can watch",
+        "source": "typed"
+      }
+    ],
+    "non_negotiables": [
+      {
+        "id": "nn-1",
+        "value": "show real hands and real ovens",
+        "source": "typed"
+      },
+      {
+        "id": "nn-2",
+        "value": "never call frozen 'fresh'",
+        "source": "typed"
+      }
+    ],
+    "story": {
+      "catalyst": {
+        "value": "Every bakery on the high street sold the same frozen loaf.",
+        "source": "typed"
+      },
+      "core_truth": {
+        "value": "Time is the ingredient nobody can fake.",
+        "source": "typed"
+      },
+      "proof": [
+        {
+          "id": "sp-1",
+          "value": "Two-day dough, every loaf, since the day we opened.",
+          "source": "typed"
+        }
+      ]
+    },
+    "home_medium": "video",
+    "stage": "under_100k"
+  },
+  "myths": [
+    {
+      "id": "myth-1",
+      "value": "Sourdough has to taste sour.",
+      "source": "typed"
+    },
+    {
+      "id": "myth-2",
+      "value": "You need special flour to start.",
+      "source": "typed"
+    }
+  ],
+  "mistakes": [
+    {
+      "id": "mistake-1",
+      "value": "Rushing the prove.",
+      "source": "typed"
+    },
+    {
+      "id": "mistake-2",
+      "value": "Feeding the starter cold water.",
+      "source": "typed"
+    }
+  ],
+  "steps_to_result": [
+    {
+      "id": "step-1",
+      "value": "Feed the starter at the same time each day.",
+      "source": "typed"
+    },
+    {
+      "id": "step-2",
+      "value": "Mix the dough the evening before.",
+      "source": "typed"
+    },
+    {
+      "id": "step-3",
+      "value": "Bake hot, with steam.",
+      "source": "typed"
+    }
+  ],
+  "intended_platforms": {
+    "by_speaker": {
+      "person": [
+        "instagram",
+        "tiktok"
+      ],
+      "company": [
+        "facebook",
+        "instagram"
+      ]
+    },
+    "other": ""
+  },
+  "capacity": {
+    "hours_per_week": 3,
+    "helpers": "one weekend helper",
+    "posts_per_week": 4
+  }
+}

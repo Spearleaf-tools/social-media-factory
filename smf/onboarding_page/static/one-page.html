@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Social Media Factory: set up your brand</title>
+<!-- Onboarding v2, design A: one long page (spec smf-spec-onboarding-v2-A-one-page.md rev 3).
+     Every question visible, answered in any order. The shared engine (v2-common.js) and look
+     (v2-common.css) are put inline by the server where the markers are. -->
+<style>
+/*@V2_COMMON_CSS@*/
+main.page { max-width:1180px; margin:0 auto; padding:20px 16px 48px; display:grid; grid-template-columns:minmax(0, 1fr) 300px; gap:28px; align-items:start; }
+aside.side { position:sticky; top:84px; display:flex; flex-direction:column; gap:12px; }
+.panel { background:var(--panel); border-radius:16px; padding:16px; display:flex; flex-direction:column; gap:10px; }
+section.group { display:flex; flex-direction:column; gap:14px; margin-bottom:28px; scroll-margin-top:84px; }
+.group-head { display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:8px; padding:8px 0; }
+.group-head h2 { margin:0; font-size:24px; }
+.group-head.sticky { position:sticky; top:62px; z-index:3; background:var(--ground); border-bottom:1px solid var(--line); }
+.parked { background:var(--panel); border-radius:14px; padding:14px 16px; display:flex; flex-wrap:wrap; gap:8px 16px; align-items:center; justify-content:space-between; }
+details.deeper { border:1px solid var(--line); border-radius:16px; }
+details.deeper > summary { min-height:56px; display:flex; align-items:center; justify-content:space-between; padding:0 18px; font-weight:700; font-size:18px; cursor:pointer; }
+details.deeper > div { padding:0 18px 18px; display:flex; flex-direction:column; gap:14px; }
+.invite { background:var(--okbg); border-radius:16px; padding:18px; display:flex; flex-direction:column; gap:10px; }
+.finish { border:2px solid var(--ink); border-radius:16px; padding:20px; display:flex; flex-direction:column; gap:12px; }
+.jump { display:flex; flex-direction:column; gap:2px; }
+.jump button { justify-content:space-between; display:flex; align-items:center; min-height:36px; border:0; background:none; padding:0 6px; border-radius:8px; text-align:left; font-size:14px; }
+.jump button:hover { background:#fff; }
+@media (max-width:900px) {
+  main.page { grid-template-columns:1fr; }
+  aside.side { position:static; order:-1; }
+  .jump { display:none; }
+  .group-head.sticky { top:96px; }
+}
+@media (max-width:640px) { header.top { position:static; } .group-head.sticky { top:0; } }
+</style>
+</head>
+<body>
+<header class="top" id="top" hidden>
+  <div class="bar">
+    <div class="brandmark"><span class="mark" aria-hidden="true"></span><span>Social Media Factory</span></div>
+    <div class="progress"><span class="count" id="count">0 of 5 steps done</span><div class="track" aria-hidden="true"><div id="track"></div></div></div>
+    <div class="row"><button type="button" class="link" id="to-finish">Finish</button><button type="button" class="link" id="finish-chat">Finish in chat</button></div>
+  </div>
+</header>
+<div id="app"></div>
+<footer class="foot"><div class="bar"><span>Runs on this computer only.</span><span>I'll never ask you to type or say a password or an account key.</span></div></footer>
+
+<script>
+/*@V2_COMMON_JS@*/
+</script>
+<script>
+(function () {
+  "use strict";
+  var V = window.V2, esc = function (t) { return V.esc(t); };
+  function $(id) { return document.getElementById(id); }
+  var F;
+
+  // The core in page order, with rev 12's optional questions (filming) placed after the one they follow.
+  // Rev 14 (design review, Oct 22): the five steps as five sections, then "one more thing" (rules), then "Make it better"
+  // (every other question, by topic, collapsed) and Go deeper. Each question keeps its own Confirm.
+  function betterIn(gid) { return V.betterFields().filter(function (f) { return f.group === gid; }); }
+  function deepFields(gid) { return F.deep.filter(function (f) { return f.group === gid; }); }
+
+  // With material read (rev 13, M4) the page opens on "What we found"; without, on the first screen.
+  function mount() {
+    F = V.fields();
+    if (V.inventory() && (V.inventory().sources || []).length) {
+      $("app").innerHTML = V.foundHTML();
+      V.wireFound(page);
+      $("found-first").innerHTML = V.firstScreenHTML().replace('<h1>Let\'s set up your brand</h1>', "").replace(/<p class="kicker">[\s\S]*?<\/p>/, "").replace(/<p class="lead">[\s\S]*?<\/p>/, "");
+      V.wireFirstScreen(page);
+      return;
+    }
+    $("app").innerHTML = V.firstScreenHTML();
+    V.wireFirstScreen(page);
+  }
+
+  function page() {
+    $("top").hidden = false;
+    var five = V.steps().map(function (st, i) {
+      return '<section class="group" id="g-step-' + i + '" aria-labelledby="h-step-' + i + '"><div class="group-head" id="h-step-' + i + '"><h2>Step ' + (i + 1) + ": " + esc(st.title) + "</h2></div>" +
+        '<div class="group-fields">' + st.fields.map(card).join("") + "</div></section>";
+    }).join("") + '<section class="group" id="g-more" aria-labelledby="h-more"><div class="group-head" id="h-more"><h2>One more thing</h2></div>' +
+      '<div class="group-fields">' + V.oneMore().map(card).join("") + "</div></section>";
+    var groups = F.groups.filter(function (g) { return betterIn(g.id).length; }).map(function (g) {
+      var head = '<div class="group-head' + (g.strategy ? " sticky" : "") + '" id="h-' + g.id + '"><h3>' + esc(g.title) + "</h3>" +
+        (g.strategy ? '<button type="button" class="link" id="park">Skip the strategy part</button>' : "") + "</div>";
+      var parked = g.strategy ? '<div class="parked" id="parked" hidden><span><b>What you stand for</b>: answer later, in the chat or when you come back.</span><button type="button" class="link" id="unpark">Answer it now</button></div>' : "";
+      return '<section class="group" id="g-' + g.id + '" aria-labelledby="h-' + g.id + '">' + head + parked +
+        '<div class="group-fields" id="gf-' + g.id + '">' + betterIn(g.id).map(card).join("") + "</div></section>";
+    }).join("");
+    var waiting = V.betterFields().some(function (f) { return V.hasCandidate(f) || V.stateOf(f) === "check" || V.typed(f); });
+    var better = '<details class="deeper" id="better"' + (waiting ? " open" : "") + '><summary><span>Make it better <span class="small">(optional, any time)</span></span><span class="small">Open</span></summary>' +
+      '<p class="small">More about you, your offers and your voice, so your posts can say more.' + (waiting ? " Some drafts from your material are waiting here." : "") + "</p>" + groups + "</details>";
+    var deep = '<details class="deeper" id="deeper"><summary><span>Go deeper <span class="small">(optional, about 20 minutes)</span></span><span class="small">Open</span></summary><div id="deep-body"></div></details>';
+    $("app").innerHTML = '<main class="page"><div class="col">' + five + better +
+      deep + '<div class="finish" id="finish-box"></div></div>' +
+      '<aside class="side"><div class="panel"><div class="kicker">Your brand so far</div><div class="tiles" id="tiles"></div></div>' +
+      '<div class="panel jump" id="jump" aria-label="Jump to a section"></div></aside></main>';
+    // Typing kept from an earlier visit (#43, gap 8) goes back into its boxes, as on design B.
+    V.coreOrder().forEach(function (f) { V.wire(f); V.bringBack(f); });
+    // The person moving into a card (a click, a tap, Tab) says where they are: a card in Make it better moves on through
+    // it, even one also in the route for its new material. Next and Back moving focus keep the list they were on.
+    $("app").addEventListener("focusin", function (e) {
+      if (steering) { return; }
+      if (e.target.closest && e.target.closest("[data-act]")) { return; }   // Skip, Confirm, Talk: acting, not moving
+      var card = e.target.closest && e.target.closest(".field[data-field]"); if (!card) { return; }
+      var f = V.fieldById(card.getAttribute("data-field"));
+      if (f && $("better").contains(card) && V.betterFields().indexOf(f) >= 0) { ctx = "better"; }
+      else if (f && order().indexOf(f) >= 0) { ctx = "route"; }
+    });
+    if ($("park")) { $("park").onclick = function () { V.parkStrategy(true).then(drawParked); }; }
+    if ($("unpark")) { $("unpark").onclick = function () { V.parkStrategy(false).then(drawParked); }; }
+    $("deeper").addEventListener("toggle", function () { if ($("deeper").open && !$("deep-body").innerHTML) { drawDeep(); } });
+    $("to-finish").onclick = function () { $("finish-box").scrollIntoView({ behavior: "smooth" }); };
+    $("finish-chat").onclick = function () { V.finish("chat"); };
+    drawParked(); refresh();
+    // Where to start (rev 14, A8, as design B): the five steps first, new material in them before anything open; then
+    // new material in Make it better; with everything done, Finish (the status).
+    var start = V.startAt();
+    if (!start) { $("finish-box").scrollIntoView(); return; }
+    if (start && start !== F.core[0]) { goTo(start); }
+    else { var first = document.querySelector(".field h2.ask"); if (first) { first.focus(); } }
+  }
+  function card(f) { return '<div class="field" data-field="' + f.id + '" id="card-' + f.id + '">' + V.fieldHTML(f) + "</div>"; }
+
+  function drawDeep() {
+    $("deep-body").innerHTML = F.deep_groups.map(function (g) {
+      return '<h3 class="kicker" style="margin:10px 0 0">' + esc(g.title) + "</h3>" + deepFields(g.id).map(card).join("");
+    }).join("") + '<p class="small">Where you are now (followers and views per platform) is done in the chat for now.</p>';
+    F.deep.forEach(function (f) { V.wire(f); V.bringBack(f); });
+  }
+  function drawParked() {
+    var parked = V.parked();
+    if ($("parked")) { $("parked").hidden = !parked; $("gf-stand").hidden = parked; $("park").hidden = parked; }
+    refresh();
+  }
+
+  function refresh() {
+    var ss = V.steps(), n = V.stepsDone();
+    $("count").textContent = n + " of " + ss.length + " steps done";
+    $("track").style.width = Math.round(n / ss.length * 100) + "%";
+    $("tiles").innerHTML = ss.map(function (st, i) {
+      return '<button type="button" class="tile" data-go="step-' + i + '"><b>' + (i + 1) + ". " + esc(st.title) + "</b>" + (V.stepDone(i) ? '<span class="small">\u2713 Done</span>' : "") + "</button>";
+    }).join("");
+    $("jump").innerHTML = '<div class="kicker">Jump to</div>' + ss.map(function (st, i) {
+      return '<button type="button" data-go="step-' + i + '"><span>' + (i + 1) + ". " + esc(st.title) + "</span></button>";
+    }).join("") + '<button type="button" data-go="more"><span>One more thing</span></button><button type="button" data-go="better"><span>Make it better</span></button>' +
+      '<button type="button" data-go="deeper"><span>Go deeper</span></button><button type="button" data-go="finish"><span>Finish</span></button>';
+    document.querySelectorAll("[data-go]").forEach(function (b) {
+      b.onclick = function () {
+        var g = b.getAttribute("data-go");
+        var el = g === "deeper" ? $("deeper") : g === "better" ? $("better") : g === "finish" ? $("finish-box") : $("g-" + g);
+        if (g === "better") { $("better").open = true; ctx = "better"; } else { ctx = "route"; }
+        el.scrollIntoView({ behavior: "smooth" });
+      };
+    });
+    drawFinish();
+  }
+  // Finish (rev 14): the five steps and "one more thing", each done or not; never a list of every open question.
+  function drawFinish() {
+    var ss = V.steps(), says = function (st) { return { ok: "\u2713 Done", skipped: "Skipped", check: "Draft waiting for your yes" }[st] || "Not done yet"; };
+    var rows = ss.map(function (st, i) { return '<li><button type="button" class="link" data-to="' + st.fields[0].id + '">Step ' + (i + 1) + ": " + esc(st.title) + "</button> " + '<span class="small">' + says(V.stepState(i)) + "</span></li>"; }).join("") +
+      V.oneMore().map(function (f) { return '<li><button type="button" class="link" data-to="' + f.id + '">One more thing: any rules your posts must follow</button> <span class="small">' + says(V.questionState(f)) + "</span></li>"; }).join("");
+    $("finish-box").innerHTML = '<h2 style="margin:0">Finish</h2><p>' + V.stepsDone() + " of " + ss.length + " steps done. You can finish now: anything not done stays empty, never guessed, and you can add it any time.</p>" +
+      '<ul class="missing">' + rows + "</ul>" + V.neededLeftHTML() +
+      (V.betterFields().some(function (f) { return V.hasCandidate(f) || V.typed(f) || V.stateOf(f) === "check"; })
+        ? '<p class="small">Some drafts from your material are waiting in Make it better. <button type="button" class="link" id="to-better">Check them</button></p>' : "") +
+      '<div class="row"><button type="button" class="main" id="finish-page">Finish</button><button type="button" id="finish-chat2">Finish in the chat</button></div>';
+    $("finish-page").onclick = function () { V.finish("page"); };
+    $("finish-chat2").onclick = function () { V.finish("chat"); };
+    if ($("to-better")) { $("to-better").onclick = function () { ctx = "better"; $("better").open = true; $("better").scrollIntoView({ behavior: "smooth" }); }; }
+    document.querySelectorAll("#finish-box [data-to]").forEach(function (b) { b.onclick = function () { goTo(V.fieldById(b.getAttribute("data-to"))); }; });
+  }
+
+  // Saving never moves the page: only the saved card is redrawn, in place, and focus stays in it.
+  // Question 29 shows where each confirmed speaker posts, so it's redrawn when "Who speaks" is saved too.
+  function keysOf(f) { return [f.key].concat((f.parts || []).map(function (p) { return p.key; }), f.id === "goal_platforms" ? ["identities"] : []).filter(Boolean); }
+  function saved(f) {
+    var mine = keysOf(f);
+    V.coreOrder().forEach(function (g) {
+      if (g === f || g._dirty || V.typed(g)) { return; }
+      if (!keysOf(g).some(function (k) { return mine.indexOf(k) >= 0; })) { return; }
+      var other = $("card-" + g.id);
+      if (other && !other.contains(document.activeElement)) { other.innerHTML = V.fieldHTML(g); V.wire(g); V.bringBack(g); }
+    });
+    var el = $("card-" + f.id);
+    if (el) {
+      var hadFocus = el.contains(document.activeElement);
+      if (f._dirty || V.typed(f)) { V.keep(f); }                 // typing not confirmed yet survives the redraw
+      el.innerHTML = V.fieldHTML(f); V.wire(f); V.bringBack(f);     // anything still typed there stays (as design B)
+      if (hadFocus) { var h = el.querySelector("h2.ask"); if (h) { h.focus({ preventScroll: true }); } }
+    }
+    refresh();
+  }
+  function goTo(f) {
+    if (!f) { return; }
+    if (f.group === "stand" && V.parked()) { V.parkStrategy(false).then(drawParked); }
+    var el = $("card-" + f.id); if (!el) { return; }
+    if ($("better") && $("better").contains(el)) { $("better").open = true; }
+    document.querySelectorAll(".field.highlight").forEach(function (x) { x.classList.remove("highlight"); });
+    el.classList.add("highlight");
+    el.scrollIntoView({ behavior: "smooth", block: "start" });
+    var h = el.querySelector("h2.ask"); if (h) { h.focus({ preventScroll: true }); }
+  }
+  // The same route as design B: the five steps, "one more thing", then any Make it better question with new material.
+  var route = null;
+  function order() { if (!route) { route = V.fiveRoute(); } return route.concat($("deeper") && $("deeper").open ? F.deep : []); }
+  // Next and Back pass over "what you stand for" while it's set aside (goTo would bring it back), as on design B;
+  // a Make it better question moves on through the others.
+  // Where a question was reached from: the route (Next from the five steps, a step link) or Make it better (its
+  // section, its link, or scrolling there). A question can be in both: new material beside it puts it in the route.
+  var ctx = "route";
+  function listFor(f) {
+    if (ctx === "better" && V.betterFields().indexOf(f) >= 0) { return V.betterFields(); }
+    return order().indexOf(f) >= 0 ? order() : V.betterFields().indexOf(f) >= 0 ? V.betterFields() : order();
+  }
+  var steering = false;
+  function steer(f) { steering = true; try { goTo(f); } finally { steering = false; } }
+  function next(f) { var l = listFor(f), n = l.indexOf(f) >= 0 ? V.stepIn(l, f, 1) : null; if (n) { steer(n); } else { $("finish-box").scrollIntoView({ behavior: "smooth" }); } }
+  function back(f) { var l = listFor(f), p = l.indexOf(f) > 0 ? V.stepIn(l, f, -1) : null; if (p) { steer(p); } }
+  function finished() {
+    $("top").hidden = true;
+    $("app").innerHTML = '<div class="done-screen"><h1>Your answers are with Claude</h1><p class="lead" id="handoff" aria-live="polite">' + esc(V.handoffText()) + "</p>" +
+      '<div id="closing"></div><p>Make it better any time: say \u201cmake my brand better\u201d in the chat. Your answers so far are kept.</p></div>';
+    handoff();
+  }
+  // The result's buttons appear once (and again after a tap), never redrawn under the person's finger.
+  var closingShown = "";
+  function handoff() {
+    var h = $("handoff"); if (h) { h.textContent = V.handoffText(); }
+    var c = $("closing"), html = V.closingHTML();
+    if (c && html !== closingShown) { closingShown = html; c.innerHTML = html; V.wireClosing(handoff); }
+  }
+
+  // A new starter pack redraws the questions; anything typed but not yet saved stays (rev 12, N3).
+  function packChanged() { if ($("top").hidden) { return; } V.coreOrder().forEach(function (f) { V.keep(f); saved(f); V.bringBack(f); }); }
+  V.start({ mount: mount, saved: saved, next: next, back: back, finished: finished, handoff: handoff, packChanged: packChanged });
+})();
+</script>
+</body>
+</html>

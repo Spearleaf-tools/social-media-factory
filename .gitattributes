@@ -1,0 +1,3 @@
+# The keys guard runs before every shell command Claude starts. With Windows line endings
+# bash cannot run it, and a hook that cannot run lets the command through. Keep it plain.
+.claude/hooks/*.sh text eol=lf

@@ -1,0 +1,11 @@
+# core tier - what everyone needs: write, make visuals, review, export.
+# Edit THIS file, then re-lock:  uv pip compile requirements/core.in --universal --python-version 3.12 -o requirements/core.txt
+Pillow>=13.0
+numpy>=1.26
+Flask>=3.0
+# security floor (GitHub advisory, Oct 2026): Flask's own minimum still allows an affected Werkzeug
+werkzeug>=3.1.9
+requests>=2.32
+tzdata>=2024.1
+Markdown>=3.6
+playwright>=1.47

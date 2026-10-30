@@ -1,0 +1,141 @@
+{
+ "answers": {
+  "business_start": {
+   "what": "Sourdough bakery",
+   "where": "Portland",
+   "website": "sunrise-sourdough.test",
+   "status": "unconfirmed",
+   "source": "draft",
+   "origin": "website",
+   "refs": [
+    "website: / (home page)"
+   ]
+  },
+  "name": {
+   "value": "Sunrise Sourdough",
+   "status": "unconfirmed",
+   "source": "draft",
+   "origin": "website",
+   "refs": [
+    "website: / (home page)"
+   ]
+  },
+  "what_you_do": {
+   "value": "A neighbourhood sourdough bakery: bread every morning, and weekend classes for home bakers.",
+   "status": "unconfirmed",
+   "source": "draft",
+   "origin": "document",
+   "refs": [
+    "src-1 rev 7f3a p.3"
+   ]
+  },
+  "positioning": {
+   "core_belief": {
+    "value": "Bread should take two days, not two hours.",
+    "status": "unconfirmed",
+    "source": "draft",
+    "origin": "document",
+    "quoted": true,
+    "said_by": "owner",
+    "excerpt": "I have always said that bread should take two days, not two hours.",
+    "refs": [
+     "src-1 rev 7f3a p.12 (printed 10)"
+    ],
+    "generator": "claude-from-document"
+   },
+   "non_negotiables": [
+    {
+     "id": "nn-1",
+     "value": "Real hands and real ovens.",
+     "status": "unconfirmed",
+     "source": "draft",
+     "origin": "document",
+     "quoted": true,
+     "said_by": "owner",
+     "excerpt": "Every photo we share shows real hands and real ovens.",
+     "refs": [
+      "src-1 rev 7f3a p.31"
+     ],
+     "generator": "claude-from-document"
+    },
+    {
+     "id": "nn-2",
+     "value": "Never call frozen dough fresh.",
+     "status": "unconfirmed",
+     "source": "draft",
+     "origin": "document",
+     "quoted": true,
+     "said_by": "owner",
+     "excerpt": "We will never call frozen dough fresh.",
+     "refs": [
+      "src-1 rev 7f3a p.32"
+     ],
+     "generator": "claude-from-document"
+    }
+   ]
+  },
+  "inventory": {
+   "made": "2026-10-20T09:30",
+   "sources": [
+    {
+     "id": "src-1",
+     "name": "Two-Day Bread.pdf",
+     "kind": "pdf",
+     "status": "read",
+     "covered": "pages 1-48 of 52",
+     "revision": "7f3a"
+    },
+    {
+     "id": "src-2",
+     "name": "sunrise-sourdough.test",
+     "kind": "web",
+     "status": "read",
+     "covered": "Home, About, Classes"
+    },
+    {
+     "id": "src-3",
+     "name": "staff-notes.docx",
+     "kind": "document",
+     "status": "not read yet",
+     "dont_use": true
+    },
+    {
+     "id": "src-4",
+     "name": "workshop.mp4",
+     "kind": "video",
+     "status": "not read yet",
+     "note": "recordings can be turned into text after onboarding"
+    }
+   ],
+   "fields": {
+    "name": {
+     "coverage": "found"
+    },
+    "what_you_do": {
+     "coverage": "found"
+    },
+    "beliefs": {
+     "coverage": "found"
+    },
+    "non_negotiables": {
+     "coverage": "found"
+    },
+    "differentiation": {
+     "coverage": "partly"
+    },
+    "audience_who": {
+     "coverage": "partly"
+    },
+    "why_started": {
+     "coverage": "your words needed"
+    },
+    "story": {
+     "coverage": "your words needed"
+    },
+    "known_for": {
+     "coverage": "your words needed"
+    }
+   }
+  }
+ }
+}

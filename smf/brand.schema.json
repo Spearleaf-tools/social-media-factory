@@ -1,0 +1,1355 @@
+{
+  "$comment": "brand-master.json: the ONE file of stable brand settings. Onboarding writes it; `factory.py sync-brand` derives every tool-specific settings file from it. Evidence (proof, photos, transcripts), per-job decisions and posting state live elsewhere and are never derived from this file.",
+  "schema_version": 1,
+  "type": "object",
+  "required": [
+    "schema_version",
+    "id",
+    "name",
+    "business",
+    "audience",
+    "identities",
+    "voice",
+    "visual"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "integer",
+      "enum": [
+        1
+      ]
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]{1,40}$",
+      "about": "short lowercase id, letters numbers and dashes"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 2,
+      "about": "the brand's name as people say it"
+    },
+    "goal": {
+      "type": "string",
+      "enum": [
+        "reach",
+        "leads",
+        "authority"
+      ],
+      "about": "what a win looks like: more people seeing it, more enquiries, or being the trusted name"
+    },
+    "business": {
+      "type": "object",
+      "required": [
+        "what_we_do",
+        "industry"
+      ],
+      "properties": {
+        "what_we_do": {
+          "type": "string",
+          "minLength": 10
+        },
+        "industry": {
+          "type": "string"
+        },
+        "location": {
+          "type": "string"
+        },
+        "website": {
+          "type": "string"
+        },
+        "regulated": {
+          "type": "string",
+          "enum": [
+            "none",
+            "health",
+            "finance",
+            "legal",
+            "other"
+          ]
+        }
+      }
+    },
+    "audience": {
+      "type": "object",
+      "required": [
+        "who"
+      ],
+      "properties": {
+        "who": {
+          "type": "string",
+          "minLength": 10
+        },
+        "problems": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "questions_they_ask": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "by_platform": {
+          "type": "object",
+          "about": "optional: how the audience differs per platform"
+        },
+        "objections": {
+          "type": "array",
+          "about": "the objections they hear, each with how they answer it",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "value": {
+                "type": "string"
+              },
+              "reply": {
+                "type": "string"
+              },
+              "source": {
+                "type": "string",
+                "enum": [
+                  "typed",
+                  "pasted",
+                  "spoken",
+                  "drafted-from-website",
+                  "quoted",
+                  "drafted",
+                  "mixed"
+                ],
+                "about": "('drafted': suggested by a starter pack or Claude and kept by the person; 'mixed': the person combined a suggestion with their own words; spec rev 12)"
+              }
+            }
+          }
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "commercial",
+            "retail",
+            "both"
+          ]
+        },
+        "where": {
+          "type": "string",
+          "enum": [
+            "shop",
+            "online",
+            "both"
+          ]
+        },
+        "hangouts": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "trust_triggers": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "alternatives": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "about": "what customers would do if the brand didn't exist"
+        }
+      }
+    },
+    "pillars": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "name"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9-]+$"
+          },
+          "name": {
+            "type": "string"
+          },
+          "about": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "offers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "name"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9-]+$"
+          },
+          "name": {
+            "type": "string"
+          },
+          "what": {
+            "type": "string"
+          },
+          "call_to_action": {
+            "type": "string"
+          },
+          "link": {
+            "type": "string"
+          },
+          "guarantee": {
+            "type": "string"
+          },
+          "rung": {
+            "type": "string",
+            "enum": [
+              "free",
+              "entry",
+              "main",
+              "premium"
+            ],
+            "about": "its place on the offer ladder (F4)"
+          },
+          "price": {
+            "type": "string"
+          },
+          "keyword": {
+            "type": "string",
+            "pattern": "^[A-Z0-9]{1,10}$",
+            "about": "one word, capitals, at most 10 letters (\"comment WORD\")"
+          },
+          "keyword_ready": {
+            "type": "boolean",
+            "about": "true only when the reply is really set up"
+          }
+        }
+      }
+    },
+    "identities": {
+      "type": "array",
+      "minItems": 1,
+      "about": "who speaks. A person says I; a company says you/we. Ids are local to this brand.",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "kind",
+          "display_name"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9-]+$"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "person",
+              "company"
+            ]
+          },
+          "display_name": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string"
+          },
+          "credential_line": {
+            "type": "string",
+            "about": "the exact line shown under their face in video"
+          },
+          "handle": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "voice": {
+      "type": "object",
+      "required": [
+        "register"
+      ],
+      "properties": {
+        "register": {
+          "type": "string",
+          "minLength": 10,
+          "about": "how it sounds, in a sentence or two"
+        },
+        "do": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "dont": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "signature_phrases": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "about": "phrases the brand really uses, exactly as said"
+        },
+        "sources": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "about": "files of their own words, relative to the brand folder"
+        },
+        "by_identity": {
+          "type": "object"
+        },
+        "by_platform": {
+          "type": "object"
+        },
+        "analogies": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "examples": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "style": {
+      "type": "object",
+      "properties": {
+        "no_em_dashes": {
+          "type": "boolean"
+        },
+        "max_sentence_words": {
+          "type": "integer",
+          "minimum": 8,
+          "maximum": 60
+        },
+        "max_paragraph_words": {
+          "type": "integer",
+          "minimum": 20,
+          "maximum": 300
+        },
+        "max_paragraph_sentences": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 12
+        },
+        "no_tags_on": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "facebook",
+              "linkedin",
+              "instagram",
+              "twitter",
+              "tiktok",
+              "youtube",
+              "threads"
+            ]
+          }
+        },
+        "banned_words": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "banned_phrases": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "plain_language_pack": {
+          "type": "boolean",
+          "about": "block the usual filler and hype words. On by default."
+        },
+        "strict_craft_checks": {
+          "type": "boolean",
+          "about": "when true, craft advice (a first line that promises something, a concrete move) blocks a post instead of advising. Off by default."
+        }
+      }
+    },
+    "never_mention": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "about": "customers, partners or people who must never be named in public copy"
+    },
+    "own_brands": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "about": "names that ARE fine to say: the brand, its products, its people"
+    },
+    "compliance": {
+      "type": "object",
+      "properties": {
+        "pack": {
+          "type": "string",
+          "enum": [
+            "generic",
+            "health"
+          ]
+        },
+        "drop_terms": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "about": "claims that must never publish"
+        },
+        "hold_terms": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "about": "claims that need a disclaimer and a named sign-off"
+        },
+        "disclaimer": {
+          "type": "string"
+        },
+        "sign_off_by": {
+          "type": "string"
+        }
+      }
+    },
+    "visual": {
+      "type": "object",
+      "required": [
+        "colors",
+        "wordmark"
+      ],
+      "properties": {
+        "colors": {
+          "type": "object",
+          "required": [
+            "ground",
+            "ink",
+            "accent"
+          ],
+          "properties": {
+            "ground": {
+              "type": "string",
+              "pattern": "^#[0-9a-fA-F]{6}$",
+              "about": "page background"
+            },
+            "surface": {
+              "type": "string",
+              "pattern": "^#[0-9a-fA-F]{6}$"
+            },
+            "ink": {
+              "type": "string",
+              "pattern": "^#[0-9a-fA-F]{6}$",
+              "about": "headline colour"
+            },
+            "text": {
+              "type": "string",
+              "pattern": "^#[0-9a-fA-F]{6}$"
+            },
+            "muted": {
+              "type": "string",
+              "pattern": "^#[0-9a-fA-F]{6}$"
+            },
+            "rule": {
+              "type": "string",
+              "pattern": "^#[0-9a-fA-F]{6}$"
+            },
+            "accent": {
+              "type": "string",
+              "pattern": "^#[0-9a-fA-F]{6}$",
+              "about": "the one colour people remember"
+            },
+            "accent2": {
+              "type": "string",
+              "pattern": "^#[0-9a-fA-F]{6}$"
+            }
+          }
+        },
+        "fonts": {
+          "type": "object",
+          "properties": {
+            "display": {
+              "type": "string"
+            },
+            "body": {
+              "type": "string"
+            },
+            "mono": {
+              "type": "string"
+            },
+            "poster": {
+              "type": "string"
+            }
+          }
+        },
+        "wordmark": {
+          "type": "string",
+          "about": "the name as stamped on every visual"
+        },
+        "handle": {
+          "type": "string",
+          "about": "the footer line on visuals: a handle or a website"
+        },
+        "logo": {
+          "type": "string",
+          "about": "path relative to the brand folder"
+        },
+        "formats_enabled": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "extra_colors": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^#[0-9a-fA-F]{6}$"
+          }
+        },
+        "identity_line": {
+          "type": "string"
+        },
+        "avatar": {
+          "type": "string"
+        },
+        "likes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "dislikes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "accounts": {
+      "type": "object",
+      "properties": {
+        "provider": {
+          "type": "string",
+          "enum": [
+            "none",
+            "metricool"
+          ]
+        },
+        "timezone": {
+          "type": "string"
+        },
+        "posting_windows": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[0-2][0-9]:[0-5][0-9]$"
+          }
+        },
+        "targets": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "identity",
+              "platform"
+            ],
+            "properties": {
+              "identity": {
+                "type": "string"
+              },
+              "platform": {
+                "type": "string",
+                "enum": [
+                  "linkedin",
+                  "facebook",
+                  "instagram",
+                  "twitter",
+                  "tiktok",
+                  "youtube",
+                  "threads",
+                  "bluesky",
+                  "pinterest",
+                  "gmb"
+                ]
+              },
+              "provider_brand_id": {
+                "type": "integer"
+              },
+              "destination": {
+                "type": "string",
+                "about": "which page, profile or channel the scheduling service points this network at, written down when the account is linked. A send stops if it changes, so one brand's posts cannot land on an account that was reconnected to someone else."
+              },
+              "connected": {
+                "type": "boolean"
+              }
+            }
+          }
+        }
+      }
+    },
+    "video": {
+      "type": "object",
+      "properties": {
+        "inbox_folder": {
+          "type": "string",
+          "about": "where finished videos arrive; any folder, relative to the brand folder or absolute"
+        },
+        "music_folder": {
+          "type": "string",
+          "about": "a folder of music you have the right to use, played quietly under some versions of a clip; leave empty for none"
+        },
+        "allow_mirror": {
+          "type": "boolean",
+          "about": "allow some versions of a clip to be flipped left to right. Off by default, because a flipped picture reverses any writing in it (a sign, a logo, a shirt)."
+        },
+        "host_names": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "about": "off-camera voices to cut around"
+        },
+        "voice": {
+          "type": "object",
+          "about": "the brand's own narration voice, used by every film: {\"elevenlabs\": {\"voice_id\": ..., \"model\": \"eleven_v4\", \"settings\": {\"stability\": \"natural\"}, \"styles\": {\"confident\": \"[confident]\"}, \"style\": \"confident\"}, \"say_as\": {\"brioche\": \"/briˈɔʃ/\"}}. A voice cloned from a real person needs that person's consent.",
+          "properties": {
+            "elevenlabs": {
+              "type": "object",
+              "properties": {
+                "voice_id": {"type": "string"},
+                "model": {"type": "string"},
+                "settings": {"type": "object"},
+                "styles": {"type": "object", "about": "named deliveries, each an audio tag (v3 and v4 models only)"},
+                "style": {"type": "string", "about": "the style every line gets unless it names its own"}
+              }
+            },
+            "say_as": {"type": "object", "about": "how the brand's own words are said: a respelling, or on v4 IPA between slashes"}
+          }
+        },
+        "test_and_promote": {
+          "type": "boolean",
+          "about": "advanced: post every variant of a clip to TikTok first and promote the winner. Off by default."
+        },
+        "shorts_per_day": {
+          "type": "object",
+          "about": "how many shorts a day per platform, for example {\"tiktok\": 3}. Whole numbers 1 to 10; 1 everywhere by default."
+        },
+        "promote_min_views": {
+          "type": "integer",
+          "minimum": 0,
+          "about": "the fewest views a test version needs before it can be called a winner. A starting point to tune; default 100."
+        }
+      }
+    },
+    "wants": {
+      "type": "array",
+      "about": "what this brand wants the Social Media Factory to make; drives the menu and the accounts checklist",
+      "items": {
+        "type": "string",
+        "enum": [
+          "posts",
+          "visuals",
+          "short-form-scripts",
+          "clips",
+          "descriptions",
+          "long-form-youtube",
+          "scheduling",
+          "research"
+        ]
+      }
+    },
+    "positioning": {
+      "type": "object",
+      "about": "what the brand stands for (card F8, Caleb Ralston's method). Every part optional; never invented",
+      "properties": {
+        "known_for": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "value": {
+              "type": "string"
+            },
+            "source": {
+              "type": "string",
+              "enum": [
+                "typed",
+                "pasted",
+                "spoken",
+                "drafted-from-website",
+                "quoted",
+                "drafted",
+                "mixed"
+              ],
+              "about": "how the words got here: the person's own, or drafted from their website (then confirmed) ('drafted': suggested by a starter pack or Claude and kept by the person; 'mixed': the person combined a suggestion with their own words; spec rev 12)"
+            }
+          },
+          "about": "when someone hears the name, what they should think of first"
+        },
+        "core_belief": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "value": {
+              "type": "string"
+            },
+            "source": {
+              "type": "string",
+              "enum": [
+                "typed",
+                "pasted",
+                "spoken",
+                "drafted-from-website",
+                "quoted",
+                "drafted",
+                "mixed"
+              ],
+              "about": "how the words got here: the person's own, or drafted from their website (then confirmed) ('drafted': suggested by a starter pack or Claude and kept by the person; 'mixed': the person combined a suggestion with their own words; spec rev 12)"
+            },
+            "experience": {
+              "type": "string",
+              "about": "the experience behind it, in their words"
+            }
+          },
+          "about": "what the brand believes about its industry that most in it don't, in one sentence"
+        },
+        "contrarian": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "value": {
+                "type": "string"
+              },
+              "source": {
+                "type": "string",
+                "enum": [
+                  "typed",
+                  "pasted",
+                  "spoken",
+                  "drafted-from-website",
+                  "quoted",
+                  "drafted",
+                  "mixed"
+                ],
+                "about": "how the words got here: the person's own, or drafted from their website (then confirmed) ('drafted': suggested by a starter pack or Claude and kept by the person; 'mixed': the person combined a suggestion with their own words; spec rev 12)"
+              },
+              "experience": {
+                "type": "string",
+                "about": "the experience behind it, in their words"
+              }
+            },
+            "about": "up to three more beliefs against the grain"
+          }
+        },
+        "for": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "value": {
+                "type": "string"
+              },
+              "source": {
+                "type": "string",
+                "enum": [
+                  "typed",
+                  "pasted",
+                  "spoken",
+                  "drafted-from-website",
+                  "quoted",
+                  "drafted",
+                  "mixed"
+                ],
+                "about": "how the words got here: the person's own, or drafted from their website (then confirmed) ('drafted': suggested by a starter pack or Claude and kept by the person; 'mixed': the person combined a suggestion with their own words; spec rev 12)"
+              },
+              "experience": {
+                "type": "string",
+                "about": "the experience behind it, in their words"
+              }
+            },
+            "about": "what the brand wants to be known for"
+          }
+        },
+        "against": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "value": {
+                "type": "string"
+              },
+              "source": {
+                "type": "string",
+                "enum": [
+                  "typed",
+                  "pasted",
+                  "spoken",
+                  "drafted-from-website",
+                  "quoted",
+                  "drafted",
+                  "mixed"
+                ],
+                "about": "how the words got here: the person's own, or drafted from their website (then confirmed) ('drafted': suggested by a starter pack or Claude and kept by the person; 'mixed': the person combined a suggestion with their own words; spec rev 12)"
+              },
+              "experience": {
+                "type": "string",
+                "about": "the experience behind it, in their words"
+              }
+            },
+            "about": "what the brand wants to be known as being against"
+          }
+        },
+        "differentiation": {
+          "type": "array",
+          "about": "what others in the space do or say / what we do instead",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "others": {
+                "type": "string"
+              },
+              "us": {
+                "type": "string"
+              },
+              "source": {
+                "type": "string",
+                "enum": [
+                  "typed",
+                  "pasted",
+                  "spoken",
+                  "drafted-from-website",
+                  "quoted",
+                  "drafted",
+                  "mixed"
+                ],
+                "about": "how the words got here: the person's own, or drafted from their website (then confirmed) ('drafted': suggested by a starter pack or Claude and kept by the person; 'mixed': the person combined a suggestion with their own words; spec rev 12)"
+              }
+            }
+          }
+        },
+        "non_negotiables": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "value": {
+                "type": "string"
+              },
+              "source": {
+                "type": "string",
+                "enum": [
+                  "typed",
+                  "pasted",
+                  "spoken",
+                  "drafted-from-website",
+                  "quoted",
+                  "drafted",
+                  "mixed"
+                ],
+                "about": "how the words got here: the person's own, or drafted from their website (then confirmed) ('drafted': suggested by a starter pack or Claude and kept by the person; 'mixed': the person combined a suggestion with their own words; spec rev 12)"
+              }
+            },
+            "about": "what every piece of content must show, no matter what"
+          }
+        },
+        "story": {
+          "type": "object",
+          "about": "the brand story in three parts",
+          "properties": {
+            "catalyst": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "value": {
+                  "type": "string"
+                },
+                "source": {
+                  "type": "string",
+                  "enum": [
+                    "typed",
+                    "pasted",
+                    "spoken",
+                    "drafted-from-website",
+                    "quoted",
+                    "drafted",
+                    "mixed"
+                  ],
+                  "about": "how the words got here: the person's own, or drafted from their website (then confirmed) ('drafted': suggested by a starter pack or Claude and kept by the person; 'mixed': the person combined a suggestion with their own words; spec rev 12)"
+                }
+              },
+              "about": "what they saw that others didn't"
+            },
+            "core_truth": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "value": {
+                  "type": "string"
+                },
+                "source": {
+                  "type": "string",
+                  "enum": [
+                    "typed",
+                    "pasted",
+                    "spoken",
+                    "drafted-from-website",
+                    "quoted",
+                    "drafted",
+                    "mixed"
+                  ],
+                  "about": "how the words got here: the person's own, or drafted from their website (then confirmed) ('drafted': suggested by a starter pack or Claude and kept by the person; 'mixed': the person combined a suggestion with their own words; spec rev 12)"
+                }
+              },
+              "about": "what they believe"
+            },
+            "proof": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "value": {
+                    "type": "string"
+                  },
+                  "source": {
+                    "type": "string",
+                    "enum": [
+                      "typed",
+                      "pasted",
+                      "spoken",
+                      "drafted-from-website",
+                      "quoted",
+                      "drafted",
+                      "mixed"
+                    ],
+                    "about": "how the words got here: the person's own, or drafted from their website (then confirmed) ('drafted': suggested by a starter pack or Claude and kept by the person; 'mixed': the person combined a suggestion with their own words; spec rev 12)"
+                  }
+                },
+                "about": "how they've proved it, again and again"
+              }
+            }
+          }
+        },
+        "home_medium": {
+          "type": "string",
+          "enum": [
+            "video",
+            "audio",
+            "writing",
+            "images"
+          ]
+        },
+        "stage": {
+          "type": "string",
+          "enum": [
+            "under_100k",
+            "100k_1m",
+            "1m_10m",
+            "10m_plus"
+          ],
+          "about": "audience size, by followers on the biggest platform"
+        },
+        "journey": {
+          "type": "object",
+          "about": "the brand journey, worked back from the end",
+          "properties": {
+            "want": {
+              "type": "string"
+            },
+            "known_for": {
+              "type": "string"
+            },
+            "do": {
+              "type": "string"
+            },
+            "learn": {
+              "type": "string"
+            }
+          }
+        },
+        "formats": {
+          "type": "object",
+          "properties": {
+            "repeatable": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "enjoyable": {
+              "type": "string"
+            }
+          },
+          "about": "two repeatable formats and one they enjoy"
+        },
+        "adjacent_topics": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "compliments": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "about": "what people compliment them on that they could lean into"
+        },
+        "world": {
+          "type": "object",
+          "about": "the brand world: recurring people and places, interests, the enemy",
+          "properties": {
+            "people": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "places": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "interests": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "enemy": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "person": {
+      "type": "object",
+      "about": "the person behind the brand",
+      "properties": {
+        "why_started": {
+          "type": "string"
+        },
+        "values": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "timeline": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "beliefs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "never_compromise": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "early_signs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "ambitions": {
+          "type": "string"
+        },
+        "stories": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "kind": {
+                "type": "string",
+                "enum": [
+                  "origin",
+                  "failure",
+                  "success",
+                  "customer",
+                  "industry"
+                ]
+              },
+              "text": {
+                "type": "string"
+              },
+              "source": {
+                "type": "string",
+                "enum": [
+                  "typed",
+                  "pasted",
+                  "spoken",
+                  "drafted-from-website",
+                  "quoted",
+                  "drafted",
+                  "mixed"
+                ],
+                "about": "how the words got here: the person's own, or drafted from their website (then confirmed) ('drafted': suggested by a starter pack or Claude and kept by the person; 'mixed': the person combined a suggestion with their own words; spec rev 12)"
+              }
+            }
+          }
+        }
+      }
+    },
+    "myths": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          },
+          "source": {
+            "type": "string",
+            "enum": [
+              "typed",
+              "pasted",
+              "spoken",
+              "drafted-from-website",
+              "quoted",
+              "drafted",
+              "mixed"
+            ],
+            "about": "how the words got here: the person's own, or drafted from their website (then confirmed) ('drafted': suggested by a starter pack or Claude and kept by the person; 'mixed': the person combined a suggestion with their own words; spec rev 12)"
+          }
+        },
+        "about": "myths the audience believes (F4)"
+      }
+    },
+    "mistakes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          },
+          "source": {
+            "type": "string",
+            "enum": [
+              "typed",
+              "pasted",
+              "spoken",
+              "drafted-from-website",
+              "quoted",
+              "drafted",
+              "mixed"
+            ],
+            "about": "how the words got here: the person's own, or drafted from their website (then confirmed) ('drafted': suggested by a starter pack or Claude and kept by the person; 'mixed': the person combined a suggestion with their own words; spec rev 12)"
+          }
+        },
+        "about": "mistakes the audience makes (F4)"
+      }
+    },
+    "steps_to_result": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          },
+          "source": {
+            "type": "string",
+            "enum": [
+              "typed",
+              "pasted",
+              "spoken",
+              "drafted-from-website",
+              "quoted",
+              "drafted",
+              "mixed"
+            ],
+            "about": "how the words got here: the person's own, or drafted from their website (then confirmed) ('drafted': suggested by a starter pack or Claude and kept by the person; 'mixed': the person combined a suggestion with their own words; spec rev 12)"
+          }
+        },
+        "about": "steps to the result the brand helps them get (F4)"
+      }
+    },
+    "customer_journey": {
+      "type": "string"
+    },
+    "dream_result": {
+      "type": "string"
+    },
+    "dm_tool": {
+      "type": "string"
+    },
+    "vocabulary": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          },
+          "source": {
+            "type": "string",
+            "enum": [
+              "typed",
+              "pasted",
+              "spoken",
+              "drafted-from-website",
+              "quoted",
+              "drafted",
+              "mixed"
+            ],
+            "about": "how the words got here: the person's own, or drafted from their website (then confirmed) ('drafted': suggested by a starter pack or Claude and kept by the person; 'mixed': the person combined a suggestion with their own words; spec rev 12)"
+          }
+        },
+        "about": "the brand's own words for its ideas, to be used exactly"
+      }
+    },
+    "intended_platforms": {
+      "type": "object",
+      "about": "where each speaker posts or wants to; separate from linked accounts",
+      "properties": {
+        "by_speaker": {
+          "type": "object"
+        },
+        "other": {
+          "type": "string"
+        }
+      }
+    },
+    "capacity": {
+      "type": "object",
+      "about": "what they can keep up each week",
+      "properties": {
+        "hours_per_week": {
+          "type": "number"
+        },
+        "helpers": {
+          "type": "string"
+        },
+        "posts_per_week": {
+          "type": "number"
+        }
+      }
+    },
+    "content_source": {
+      "type": "string",
+      "about": "the long piece they make regularly, if any"
+    },
+    "baseline": {
+      "type": "object",
+      "about": "followers and typical views per platform, with the date"
+    },
+    "proof_summary": {
+      "type": "array",
+      "about": "what they can show (core); items link to the proof library",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "text": {
+            "type": "string"
+          },
+          "proof_id": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "influences": {
+      "type": "array",
+      "about": "the people who inspire the owner: reference for structure and format only, never words to copy (onboarding 'Who inspires you?'). Only the owner's own answers.",
+      "items": {
+        "about": "a name on its own, or {id, name, why, source}; brands.validate checks which",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "why": {
+            "type": "string"
+          },
+          "source": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

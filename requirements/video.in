@@ -1,0 +1,13 @@
+# video tier - installed the first time someone picks a video task.
+# Re-lock:  uv pip compile requirements/video.in --universal --python-version 3.12 -o requirements/video.txt
+-c core.txt
+faster-whisper>=1.0.3
+opencv-python-headless>=4.10
+scipy>=1.13
+static-ffmpeg>=2.7
+requests>=2.32
+# security floor (GitHub advisory, Oct 2026): faster-whisper's model download still allows an affected filelock
+filelock>=4.2.1
+# research: fetch ONE video from a link so it can be mined for facts (smf/research/video_miner.py).
+# Imported as a library, never run as a program, so it does not need to be on the PATH.
+yt-dlp>=2025.1.15

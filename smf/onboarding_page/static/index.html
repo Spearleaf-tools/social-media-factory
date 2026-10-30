@@ -1,0 +1,990 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Set up your brand</title>
+<!-- The onboarding page (card F5). One question at a time; the agent does the thinking before and
+     after. Everything is inline: the page loads nothing from anywhere, and the server's security
+     policy forbids it. The eight questions come from questions.json via /api/questions, so the
+     page and the onboard-brand skill cannot drift apart. -->
+<style>
+  :root { --ink:#111111; --soft:#3F3F46; --muted:#52525B; --line:#E4E4E7; --line2:#D4D4D8; --card:#FFFFFF;
+          --panel:#F4F4F5; --ground:#FFFFFF;
+          --wait:#A1A1AA; --check:#C2410C; --checkbg:#FFF7ED; --ok:#1D4ED8; --okbg:#EFF6FF; --saved:#15803D; --bad:#B91C1C; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--ground); color:var(--ink);
+         font-family: system-ui, -apple-system, "Segoe UI", "Helvetica Neue", sans-serif; font-size:16px; line-height:1.5; }
+  button, input, textarea { font:inherit; color:inherit; }
+  header { border-bottom:1px solid var(--line); }
+  .bar { max-width:1120px; margin:0 auto; padding:14px 16px; display:flex; flex-wrap:wrap; align-items:center;
+         justify-content:space-between; gap:12px; }
+  .brandmark { display:flex; align-items:center; gap:10px; font-weight:700; font-size:15px; }
+  .mark { width:28px; height:28px; border-radius:7px; background:var(--ink); flex:none; }
+  .progress { display:flex; align-items:center; gap:14px; flex:1 1 240px; max-width:420px; }
+  .kicker { font-size:12px; letter-spacing:.08em; font-weight:600; color:var(--muted); text-transform:uppercase; white-space:nowrap; }
+  .track { flex:1; height:6px; background:var(--line); border-radius:3px; overflow:hidden; }
+  .track > div { height:100%; background:var(--ink); border-radius:3px; width:0; }
+  main { max-width:1120px; margin:0 auto; padding:28px 16px 48px; display:flex; flex-wrap:wrap; gap:24px; align-items:flex-start; }
+  .col { flex:999 1 540px; min-width:0; display:flex; flex-direction:column; gap:16px; }
+  aside { flex:1 1 280px; min-width:0; display:flex; flex-direction:column; gap:12px; }
+  .panel { background:var(--panel); border-radius:16px; padding:24px; display:flex; flex-direction:column; gap:16px; }
+  .box { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:18px; display:flex; flex-direction:column; gap:12px; }
+  h1 { margin:0; font-size:28px; line-height:1.2; }
+  h1.big { font-size:40px; line-height:1.1; }
+  p { margin:0; }
+  .lead { font-size:17px; color:var(--soft); max-width:600px; }
+  .small { font-size:13px; color:var(--muted); }
+  label.f { font-size:13px; font-weight:600; display:block; margin-bottom:4px; }
+  input[type=text], textarea { width:100%; border:1px solid #A1A1AA; border-radius:10px; padding:10px 12px; font-size:16px; background:#fff; color:#111; }
+  textarea { resize:vertical; line-height:1.5; }
+  .row { display:flex; flex-wrap:wrap; gap:10px; align-items:center; }
+  .grid2 { display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:10px; }
+  button { cursor:pointer; border-radius:12px; min-height:48px; padding:0 20px; font-size:15px; font-weight:500;
+           border:1px solid var(--line2); background:#fff; color:#111; }
+  button.main { background:var(--ink); color:#fff; border-color:var(--ink); font-weight:600; }
+  button.link { border:0; background:none; min-height:44px; padding:0 4px; text-decoration:underline; text-underline-offset:3px; color:inherit; }
+  button.choice { min-height:64px; display:flex; flex-direction:column; align-items:flex-start; justify-content:center; text-align:left; padding:10px 14px; }
+  button.choice[aria-pressed=true] { background:var(--ink); color:#fff; border-color:var(--ink); }
+  button.choice .sub { font-size:13px; opacity:.75; }
+  button.tapped { background:var(--okbg); color:var(--ok); border-color:var(--ok); font-weight:600; }
+  button:focus-visible, input:focus-visible, textarea:focus-visible, a:focus-visible { outline:3px solid var(--ok); outline-offset:2px; }
+  .chip { display:inline-flex; align-items:center; gap:6px; font-size:13px; font-weight:600; padding:4px 10px; border-radius:999px; }
+  .dot { width:8px; height:8px; border-radius:50%; display:inline-block; flex:none; background:var(--wait); }
+  .s-wait .dot { background:var(--wait); } .s-check .dot { background:var(--check); } .s-ok .dot { background:var(--ok); } .s-saved .dot { background:var(--saved); }
+  .chip.s-check { background:var(--checkbg); color:var(--check); } .chip.s-ok { background:var(--okbg); color:var(--ok); }
+  .chip.s-wait { background:#F4F4F5; color:var(--muted); } .chip.s-saved { background:#F0FDF4; color:var(--saved); }
+  .tiles { display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:8px; }
+  .tile { border:1px solid var(--line); border-radius:12px; padding:10px 12px; display:flex; flex-direction:column; gap:3px;
+          min-height:72px; background:#fff; text-align:left; align-items:flex-start; font-weight:500; color:#111; }
+  .tile.now { border-color:var(--ink); border-width:2px; }
+  .tile .st { font-size:12px; color:var(--muted); font-weight:400; }
+  .legend { display:flex; flex-wrap:wrap; gap:6px 14px; font-size:12px; color:var(--muted); }
+  .legend span { display:flex; align-items:center; gap:6px; }
+  .catchup { background:var(--checkbg); border:1px solid #FDBA74; border-radius:14px; padding:12px 14px; text-align:left;
+             display:flex; flex-direction:column; align-items:flex-start; min-height:0; }
+  .spelled { font-family: ui-monospace, Menlo, Consolas, monospace; letter-spacing:.1em; font-size:14px; color:var(--soft); word-break:break-all; }
+  .meaning { font-size:13px; color:var(--muted); }
+  .meaning b { color:var(--ink); }
+  .error { color:var(--bad); font-weight:500; }
+  .swatch { width:44px; height:44px; border-radius:10px; border:1px solid rgba(0,0,0,.2); padding:0; cursor:pointer; background:none; }
+  .sample { border:1px solid var(--line); border-radius:12px; padding:12px; display:flex; flex-direction:column; gap:8px; background:#fff; }
+  details.example { border:1px solid var(--line); border-radius:14px; background:#fff; }
+  details.example summary { min-height:52px; display:flex; align-items:center; padding:0 18px; font-weight:600; cursor:pointer; }
+  details.example div { padding:0 18px 16px; display:flex; flex-direction:column; gap:6px; color:var(--soft); font-size:15px; }
+  .navrow { display:flex; flex-wrap:wrap; gap:8px 20px; font-size:14px; }
+  footer { border-top:1px solid var(--line); }
+  footer .bar { font-size:13px; color:var(--muted); }
+  ol.prep { margin:0; padding-left:22px; display:flex; flex-direction:column; gap:8px; }
+  button.recording { background:#FEF2F2; color:#991B1B; border:2px solid #B91C1C; font-weight:600; }
+  .recdot { width:10px; height:10px; border-radius:50%; background:#B91C1C; display:inline-block; margin-right:6px; }
+  select { font:inherit; padding:8px; border-radius:8px; border:1px solid #A1A1AA; }
+  [hidden] { display:none !important; }
+  @media (max-width: 600px) { h1 { font-size:24px; } h1.big { font-size:32px; } .panel { padding:18px; } }
+  @media (prefers-reduced-motion: reduce) { * { transition:none !important; animation:none !important; } }
+</style>
+</head>
+<body>
+<header>
+  <div class="bar">
+    <div class="brandmark"><span class="mark" aria-hidden="true"></span><span>Brand setup</span></div>
+    <div class="progress"><span class="kicker" id="progress">Brand basics 0 of 8</span><div class="track" aria-hidden="true"><div id="track"></div></div></div>
+    <span class="row" style="gap:4px"><button class="link" id="voice-toggle" type="button" hidden aria-expanded="false">Voice settings</button>
+    <button class="link" id="finish-chat" type="button">Finish in chat</button></span>
+  </div>
+</header>
+
+<div class="bar" id="voice-settings" hidden style="justify-content:flex-end"></div>
+<main>
+  <div class="col" id="screen" aria-live="polite"></div>
+  <aside id="aside" hidden>
+    <button class="catchup" id="catchup" type="button" hidden></button>
+    <div class="box">
+      <div class="kicker">Your brand so far</div>
+      <div class="tiles" id="tiles"></div>
+      <div class="legend">
+        <span><i class="dot" style="background:var(--wait)"></i>Waiting</span>
+        <span><i class="dot" style="background:var(--check)"></i>Please check</span>
+        <span><i class="dot" style="background:var(--ok)"></i>Confirmed</span>
+        <span><i class="dot" style="background:var(--saved)"></i>Saved to your brand</span>
+      </div>
+    </div>
+  </aside>
+</main>
+
+<footer><div class="bar"><span>Runs on this computer only. No account, nothing sent anywhere.</span>
+  <span>I'll never ask you to type or say a password or an account key.</span></div></footer>
+
+<script>
+(function () {
+  "use strict";
+  var code = location.pathname.split("/").filter(Boolean)[0] || "";
+  var base = "/" + code + "/api/";
+  var Q = [], S = null, view = "welcome", at = 0, polling = null;
+  var buf = {};          // what the person has typed on each question, before it is saved
+  var $ = function (id) { return document.getElementById(id); };
+
+  // ---------------------------------------------------------------------------- talking to the server
+  function api(path, data) {
+    var opts = data === undefined ? {} : { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) };
+    return fetch(base + path, opts).then(function (res) {
+      return res.json().catch(function () { return {}; }).then(function (body) {
+        if (!res.ok) { var e = new Error(body.error || "Something went wrong. Your confirmed answers are safe."); e.status = res.status; throw e; }
+        return body;
+      });
+    });
+  }
+
+  // ---------------------------------------------------------------------------- small helpers
+  function esc(t) { return String(t == null ? "" : t).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
+  function spell(t) { t = (t || "").trim(); return t ? t.toUpperCase().split(/\s+/).map(function (w) { return w.split("").join("-"); }).join("  ") : "-"; }
+  function lines(t) { return (t || "").split("\n").map(function (s) { return s.trim(); }).filter(Boolean); }
+  function answer(key) { return S && S.answers ? S.answers[key] : null; }
+  function statusOf(key) {
+    var a = answer(key);
+    if (S && S.result && S.result.ok && S.result.steps && S.result.steps.saved && S.placeholders.indexOf(key) < 0) { return "saved"; }
+    if (S && S.skipped && S.skipped.indexOf(key) >= 0) { return "skipped"; }
+    if (!a) { return "wait"; }
+    if (Array.isArray(a)) { if (!a.length) { return "wait"; } a = a.some(function (x) { return x.status === "confirmed"; }) ? { status: "confirmed" } : a[0]; }
+    return { confirmed: "ok", unconfirmed: "check", skipped: "skipped", for_chat: "chat" }[a.status] || "wait";
+  }
+  var LABEL = { wait: "Waiting", check: "Please check", ok: "Confirmed", saved: "Saved to your brand", skipped: "Skipped", chat: "In the chat" };
+  var CLS = { wait: "s-wait", check: "s-check", ok: "s-ok", saved: "s-saved", skipped: "s-check", chat: "s-wait" };
+  function chip(key) { var s = statusOf(key); return '<span class="chip ' + CLS[s] + '"><span class="dot"></span>' + LABEL[s] + "</span>"; }
+
+  // ---------------------------------------------------------------------------- the frame around every screen
+  function frame() {
+    brandColours();
+    var done = S ? 8 - S.placeholders.length : 0;
+    $("progress").textContent = "Brand basics " + done + " of 8";
+    $("track").style.width = (done / 8 * 100) + "%";
+    var asking = view === "question" || view === "review";
+    $("aside").hidden = !asking;
+    $("finish-chat").hidden = !(asking || view === "welcome" || view === "guide");
+    $("tiles").innerHTML = Q.map(function (q, i) {
+      var s = statusOf(q.key);
+      return '<button type="button" class="tile ' + (view === "question" && i === at ? "now" : "") + '" data-go="' + i + '">' +
+             '<span class="' + CLS[s] + '"><span class="dot"></span></span><span>' + esc(q.tile) + '</span><span class="st">' + LABEL[s] + "</span></button>";
+    }).join("");
+    var skipped = Q.map(function (q, i) { return [q, i]; }).filter(function (x) { return statusOf(x[0].key) === "skipped"; });
+    $("catchup").hidden = !skipped.length;
+    if (skipped.length) {
+      $("catchup").dataset.go = skipped[0][1];
+      $("catchup").innerHTML = '<b>Skipped one? Fill it in</b><span class="small">' + esc(skipped.map(function (x) { return x[0].tile; }).join(" · ")) + "</span>";
+    }
+  }
+
+  function show(name, index) {
+    view = name;
+    if (index !== undefined) { at = index; }
+    ({ welcome: welcome, guide: guide, question: question, review: review, finishing: finishing })[name]();
+    frame();
+    var h = document.querySelector("#screen h1");
+    if (h) { h.setAttribute("tabindex", "-1"); h.focus({ preventScroll: false }); }
+  }
+
+  // ---------------------------------------------------------------------------- welcome and the guide
+  function welcome() {
+    $("screen").innerHTML =
+      '<div class="kicker">Welcome</div>' +
+      '<h1 class="big">Let’s set up your brand.</h1>' +
+      '<p class="lead">I’ll ask eight short questions, one at a time, and show you everything before it’s saved. Anything I drafted from your website is marked <b>Please check</b> until you say it’s right.</p>' +
+      (voiceOK ? '<div class="box"><span class="kicker">How do you want to answer?</span><div class="row" role="group" aria-label="Answer by">' +
+        '<button type="button" class="choice" id="pick-talk" aria-pressed="' + (mode === "talk") + '">Talk</button>' +
+        '<button type="button" class="choice" id="pick-type" aria-pressed="' + (mode === "type") + '">Type</button></div>' +
+        '<p class="small">' + (mode === "talk" ? "I’ll check your microphone and ask your OK first. You can switch to typing on any question." : "You’ll type each answer. You can switch to talking on any question.") + "</p></div>" : "") +
+      '<div class="row"><button class="main" type="button" id="start">Let’s set up your brand</button>' +
+      '<button class="link" type="button" id="to-guide">Read the guide first</button></div>' +
+      '<p class="small">About 15 minutes. Skip anything and fill it in later. Nothing is guessed.</p>';
+    $("start").onclick = function () { return mode === "talk" ? startTalk() : begin(); };
+    if ($("pick-talk")) {
+      $("pick-talk").onclick = function () { mode = "talk"; welcome(); };
+      $("pick-type").onclick = function () { mode = "type"; welcome(); };
+    }
+    $("to-guide").onclick = function () { show("guide"); };
+  }
+
+  function guide() {
+    $("screen").innerHTML =
+      '<div class="kicker">The guide</div><h1>What I’ll ask, and what to have ready</h1>' +
+      '<p class="lead">This page only helps you prepare. You answer on the next pages. It takes about 15 minutes.</p>' +
+      '<div class="box"><b>Have these to hand</b><ul style="margin:0;padding-left:20px">' +
+      "<li>Three to five things you’ve really written or said: posts, emails to customers, a transcript. Untidied.</li>" +
+      "<li>The exact spelling of every name and handle that appears in your posts.</li>" +
+      "<li>Any claims you must never make, and who signs off if your industry is regulated.</li>" +
+      "<li>Anyone you must never name in public, and words you hate in marketing.</li></ul></div>" +
+      '<div class="box"><b>The eight questions</b><ol class="prep">' +
+      Q.map(function (q) { return "<li><b>" + esc(q.tile) + ".</b> " + esc(q.ask) + (q.example ? ' <span class="small">The kind of answer: ' + esc(q.example) + "</span>" : "") + "</li>"; }).join("") +
+      "</ol></div>" +
+      '<div class="row"><button class="main" type="button" id="start">Let’s set up your brand</button></div>';
+    $("start").onclick = begin;
+  }
+
+  function begin() { var i = firstOpen(); return i < 0 ? show("review") : show("question", i); }
+
+  function firstOpen() {
+    for (var i = 0; i < Q.length; i++) { if (statusOf(Q[i].key) !== "ok") { return i; } }
+    return -1;
+  }
+
+  // ---------------------------------------------------------------------------- one question
+  function question() {
+    var q = Q[at];
+    var a = answer(q.key);
+    var drafted = a && (Array.isArray(a) ? a.some(function (x) { return x.status === "unconfirmed"; }) : a.status === "unconfirmed");
+    $("screen").innerHTML =
+      '<div class="panel">' +
+        '<div class="row" style="justify-content:space-between"><span class="kicker">Right now · question ' + (at + 1) + " of 8</span>" + chip(q.key) + "</div>" +
+        "<h1>" + esc(q.ask) + "</h1>" +
+        '<p class="lead">' + (drafted ? "I drafted this from your website. Check it, then confirm or fix it. " : "") + esc(q.do) + "</p>" +
+        '<div class="box" id="voicebar" hidden></div>' +
+        '<div class="box" id="body"></div>' +
+        '<p class="error" id="error" role="alert" hidden></p>' +
+        '<div class="row" id="own" hidden><button type="button" id="own-yes">Yes, these are my own words</button><button class="link" type="button" id="own-no">Let me change it</button></div>' +
+      "</div>" +
+      (q.example ? '<details class="example"><summary>What goes here? Show an example</summary><div><span>' + esc(q.example) +
+        '</span><span class="small">Use your own words. If your answer reads like the example, I’ll ask if it’s really yours.</span></div></details>' : "") +
+      '<div class="navrow">' + (at > 0 ? '<button class="link" type="button" id="back">← Back</button>' : '<button class="link" type="button" id="back">← Start</button>') +
+      '<button class="link" type="button" id="skip">Skip for now</button></div>';
+    RENDER[q.key](q, a);
+    if (mode === "talk") { voiceBar(q); } else if (voiceOK) {
+      var sw = document.createElement("button"); sw.type = "button"; sw.className = "link"; sw.textContent = "Talk instead";
+      sw.onclick = function () { mode = "talk"; consented ? show("question", at) : startTalk(); };
+      document.querySelector("#screen .navrow").appendChild(sw);
+    }
+    $("back").onclick = function () { at > 0 ? show("question", at - 1) : show("welcome"); };
+    // A list answer (who speaks, voice samples) is skipped as an empty list; the server records the skip.
+    $("skip").onclick = function () { save(q.key, q.key === "identities" || q.key === "voice_samples" ? [] : { status: "skipped" }, true); };
+  }
+
+  function err(msg) { var e = $("error"); if (!e) { return; } e.textContent = msg || ""; e.hidden = !msg; }
+
+  function next() {
+    // The next question that is not confirmed yet, after this one; when none is left, the end.
+    for (var i = at + 1; i < Q.length; i++) { if (statusOf(Q[i].key) !== "ok") { return show("question", i); } }
+    return show("review");
+  }
+
+  function save(key, value) {
+    err("");
+    $("own").hidden = true;
+    var body = value;
+    return api("answer", { key: key, answer: body }).then(function (s) { S = s; delete buf[key]; lastSaved = key; next(); }).catch(function (e) {
+      if (e.status === 409 && /example/.test(e.message)) {
+        err(e.message);
+        $("own").hidden = false;
+        $("own-yes").onclick = function () { var v = JSON.parse(JSON.stringify(body)); v.own_words = true; save(key, v); };
+        $("own-no").onclick = function () { err(""); $("own").hidden = true; };
+        return;
+      }
+      if (e.status === 422 && /deleted/.test(e.message)) { clearInputs(); delete buf[key]; }
+      err(e.message);
+    });
+  }
+
+  function clearInputs() { Array.prototype.forEach.call(document.querySelectorAll("#body input[type=text], #body textarea"), function (el) { el.value = ""; }); }
+
+  function sourceFor(a, value) {
+    if (!a || !a.source || a.source === "typed") { return "typed"; }
+    return (a.value || "").trim() === value.trim() ? "draft" : "draft-edited";
+  }
+
+  // ---------------------------------------------------------------------------- the eight bodies
+  var RENDER = {};
+
+  RENDER.name = function (q, a) {
+    var v = buf.name != null ? buf.name : (a && a.value) || "";
+    $("body").innerHTML =
+      '<p class="meaning">I’ll save this as: <b>Your brand name</b></p>' +
+      '<div><label class="f" for="in">Brand name</label><input type="text" id="in" maxlength="120" autocomplete="off" value="' + esc(v) + '"></div>' +
+      '<p class="small">Spelled out: <span class="spelled" id="sp">' + esc(spell(v)) + "</span></p>" +
+      '<div class="row"><button class="main" type="button" id="ok">Spelled right</button></div>';
+    $("in").oninput = function () { buf.name = this.value; $("sp").textContent = spell(this.value); };
+    $("ok").onclick = function () {
+      var val = $("in").value.trim();
+      if (!val) { return err("Type the name first, or tap Skip for now."); }
+      save("name", { value: val, spelled: spell(val), status: "confirmed", tapped: true, source: sourceFor(a, val) });
+    };
+  };
+
+  RENDER.what_you_do = function (q, a) {
+    var v = buf.what_you_do != null ? buf.what_you_do : (a && a.value) || "";
+    $("body").innerHTML =
+      '<p class="meaning">I’ll save this as: <b>What you do</b></p>' +
+      '<div><label class="f" for="in">Your words</label><textarea id="in" rows="4" maxlength="800">' + esc(v) + "</textarea></div>" +
+      (a && a.source === "draft" ? '<p class="small">From: your website</p>' : "") +
+      '<div class="row"><button class="main" type="button" id="ok">Yes, that’s right</button></div>';
+    $("in").oninput = function () { buf.what_you_do = this.value; };
+    $("ok").onclick = function () {
+      var val = $("in").value.trim();
+      if (!val) { return err("Write a sentence or two first, or tap Skip for now."); }
+      save("what_you_do", { value: val, status: "confirmed", source: sourceFor(a, val) });
+    };
+  };
+
+  RENDER.audience = function (q, a) {
+    var b = buf.audience || { value: (a && a.value) || "", questions: (a && a.questions) || [] };
+    var qs = b.questions.concat(["", "", "", ""]).slice(0, 4);
+    $("body").innerHTML =
+      '<p class="meaning">I’ll save this as: <b>Who you reach</b>, and their questions word for word</p>' +
+      '<div><label class="f" for="in">Who they are, and what’s in their way</label><textarea id="in" rows="3" maxlength="800">' + esc(b.value) + "</textarea></div>" +
+      '<div class="grid2">' + qs.map(function (t, i) {
+        return '<div><label class="f" for="aq' + i + '">A real question they ask (' + (i + 1) + ")</label><input type=\"text\" id=\"aq" + i + '" maxlength="200" value="' + esc(t) + '"></div>';
+      }).join("") + "</div>" +
+      '<div class="row"><button class="main" type="button" id="ok">Yes, that’s right</button></div>';
+    function grab() {
+      return { value: $("in").value, questions: [0, 1, 2, 3].map(function (i) { return $("aq" + i).value; }) };
+    }
+    Array.prototype.forEach.call(document.querySelectorAll("#body input, #body textarea"), function (el) { el.oninput = function () { buf.audience = grab(); }; });
+    $("ok").onclick = function () {
+      var g = grab(), val = g.value.trim();
+      if (!val) { return err("Describe who you’re trying to reach first, or tap Skip for now."); }
+      save("audience", { value: val, questions: g.questions.map(function (t) { return t.trim(); }).filter(Boolean), status: "confirmed", source: sourceFor(a, val) });
+    };
+  };
+
+  RENDER.identities = function (q, a) {
+    var list = Array.isArray(a) ? a : [];
+    var b = buf.identities;
+    if (!b) {
+      var person = list.filter(function (x) { return x.kind === "person"; })[0] || null;
+      var company = list.filter(function (x) { return x.kind === "company"; })[0] || null;
+      var other = list.filter(function (x) { return x.kind === "other"; })[0] || null;
+      b = { pick: other ? "other" : person && company ? "both" : person ? "person" : company ? "company" : "",
+            person: person || {}, company: company || {}, other: other || {}, tapped: {} };
+      ["person", "company", "other"].forEach(function (k) { if (b[k].status === "confirmed") { b.tapped[k] = true; } });
+    }
+    buf.identities = b;
+    function rows() {
+      var want = b.pick === "both" ? ["person", "company"] : b.pick ? [b.pick] : [];
+      return want.map(function (k) {
+        var r = b[k];
+        var title = { person: "The person", company: "The company", other: "Who speaks" }[k];
+        return '<div class="sample">' +
+          '<b>' + title + "</b>" +
+          (k === "other" ? '<div><label class="f" for="' + k + '-other">Tell me in your own words</label><input type="text" id="' + k + '-other" data-k="' + k + '" data-f="other" maxlength="200" value="' + esc(r.other || "") + '"></div>' : "") +
+          '<div class="grid2"><div><label class="f" for="' + k + '-name">Name shown</label><input type="text" id="' + k + '-name" data-k="' + k + '" data-f="name" maxlength="120" value="' + esc(r.name || "") + '"></div>' +
+          (k !== "company" ? '<div><label class="f" for="' + k + '-role">Role</label><input type="text" id="' + k + '-role" data-k="' + k + '" data-f="role" maxlength="120" value="' + esc(r.role || "") + '"></div>' : "") +
+          '<div><label class="f" for="' + k + '-handle">Handle or web address</label><input type="text" id="' + k + '-handle" data-k="' + k + '" data-f="handle" maxlength="200" value="' + esc(r.handle || "") + '"></div>' +
+          (k === "person" ? '<div><label class="f" for="' + k + '-video">Line under their face in video</label><input type="text" id="' + k + '-video" data-k="' + k + '" data-f="video_line" maxlength="160" value="' + esc(r.video_line || "") + '"></div>' : "") +
+          "</div>" +
+          '<p class="small">Spelled out: <span class="spelled" id="' + k + '-sp">' + esc(spell(r.name) + (r.handle ? "   " + spell(r.handle) : "")) + "</span></p>" +
+          '<div class="row"><button type="button" class="' + (b.tapped[k] ? "tapped" : "") + '" data-tap="' + k + '" aria-pressed="' + (b.tapped[k] ? "true" : "false") + '">' + (b.tapped[k] ? "Spelled right ✓" : "Spelled right") + "</button></div></div>";
+      }).join("");
+    }
+    function draw() {
+      $("body").innerHTML =
+        '<p class="meaning">I’ll save this as: <b>Who speaks</b>. Names are never saved without your tap.</p>' +
+        '<div class="grid2" role="group" aria-label="Who speaks">' + q.choices.map(function (c) {
+          return '<button type="button" class="choice" data-pick="' + c.id + '" aria-pressed="' + (b.pick === c.id) + '"><span>' + esc(c.label) + '</span><span class="sub">' + esc(c.sub) + "</span></button>";
+        }).join("") + "</div>" + rows() +
+        '<div class="row"><button class="main" type="button" id="ok">Save who speaks</button></div>';
+      Array.prototype.forEach.call(document.querySelectorAll("[data-pick]"), function (el) { el.onclick = function () { b.pick = el.dataset.pick; draw(); }; });
+      Array.prototype.forEach.call(document.querySelectorAll("#body input[data-k]"), function (el) {
+        el.oninput = function () {
+          var k = el.dataset.k; b[k][el.dataset.f] = el.value;
+          if (el.dataset.f === "name" || el.dataset.f === "handle") {
+            b.tapped[k] = false;                          // a changed spelling needs a fresh tap
+            $(k + "-sp").textContent = spell(b[k].name) + (b[k].handle ? "   " + spell(b[k].handle) : "");
+            var t = document.querySelector('[data-tap="' + k + '"]');
+            t.className = ""; t.textContent = "Spelled right"; t.setAttribute("aria-pressed", "false");
+          }
+        };
+      });
+      Array.prototype.forEach.call(document.querySelectorAll("[data-tap]"), function (el) {
+        el.onclick = function () { var k = el.dataset.tap; if (!(b[k].name || "").trim()) { return err("Type the name first."); } b.tapped[k] = !b.tapped[k]; err(""); draw(); };
+      });
+      $("ok").onclick = function () {
+        if (!b.pick) { return err("Tap who speaks first, or tap Skip for now."); }
+        var want = b.pick === "both" ? ["person", "company"] : [b.pick];
+        var out = [];
+        for (var i = 0; i < want.length; i++) {
+          var k = want[i], r = b[k];
+          if (!(r.name || "").trim()) { return err("Type the name shown for " + { person: "the person", company: "the company", other: "who speaks" }[k] + "."); }
+          if (!b.tapped[k]) { return err("Check the spelling and tap Spelled right for each name."); }
+          var item = { kind: k, name: r.name.trim(), spelled: spell(r.name), status: "confirmed", tapped: true };
+          ["role", "handle", "video_line", "other"].forEach(function (f) { if ((r[f] || "").trim()) { item[f] = r[f].trim(); } });
+          out.push(item);
+        }
+        save("identities", out);
+      };
+    }
+    draw();
+  };
+
+  RENDER.voice_samples = function (q, a) {
+    var list = buf.voice_samples || (Array.isArray(a) && a.length ? a.map(function (x) { return { text: x.text, source: x.source || "pasted" }; }) : []);
+    while (list.length < 3) { list.push({ text: "", source: "pasted" }); }
+    buf.voice_samples = list;
+    function draw() {
+      $("body").innerHTML =
+        '<p class="meaning">I’ll save these as: <b>How you sound</b>, word for word, exactly as you give them</p>' +
+        list.map(function (s, i) {
+          return '<div class="sample"><label class="f" for="vs' + i + '">Sample ' + (i + 1) + '</label><textarea id="vs' + i + '" data-i="' + i + '" rows="4" maxlength="6000">' + esc(s.text) + "</textarea>" +
+            '<div class="row" role="group" aria-label="Where sample ' + (i + 1) + ' came from">' +
+            ["pasted", "typed"].map(function (src) { return '<button type="button" class="choice" style="min-height:44px" data-i="' + i + '" data-src="' + src + '" aria-pressed="' + (s.source === src) + '">' + (src === "pasted" ? "Pasted" : "Typed now") + "</button>"; }).join("") +
+            "</div></div>";
+        }).join("") +
+        '<div class="row"><button type="button" id="more">Add another</button><button class="main" type="button" id="ok">Save these word for word</button></div>';
+      Array.prototype.forEach.call(document.querySelectorAll("#body textarea"), function (el) { el.oninput = function () { list[+el.dataset.i].text = el.value; }; });
+      Array.prototype.forEach.call(document.querySelectorAll("[data-src]"), function (el) { el.onclick = function () { list[+el.dataset.i].source = el.dataset.src; draw(); }; });
+      $("more").onclick = function () { list.push({ text: "", source: "pasted" }); draw(); };
+      $("ok").onclick = function () {
+        var out = list.filter(function (s) { return s.text.trim(); }).map(function (s) { return { text: s.text, source: s.source, verbatim: true, status: "confirmed" }; });
+        if (!out.length) { return err("Paste at least one thing you’ve written, or tap Skip for now."); }
+        save("voice_samples", out);
+      };
+    }
+    draw();
+  };
+
+  function lum(hex) {
+    var c = [1, 3, 5].map(function (i) { var v = parseInt(hex.substr(i, 2), 16) / 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); });
+    return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2];
+  }
+  function contrast(a, b) { var x = lum(a), y = lum(b); return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05); }
+
+  RENDER.colours = function (q, a) {
+    var b = buf.colours || { background: (a && a.background) || "#FFFFFF", text: (a && a.text) || "#111111", accent: (a && a.accent) || "#1D4ED8" };
+    buf.colours = b;
+    var jobs = [["background", "Background"], ["text", "Main text"], ["accent", "The colour people remember"]];
+    function draw() {
+      var c1 = contrast(b.text, b.background), c2 = contrast("#FFFFFF", b.accent);
+      $("body").innerHTML =
+        '<p class="meaning">I’ll save these as: <b>Your colours</b>. The rest of the palette is mixed from these three.</p>' +
+        '<div class="grid2">' + jobs.map(function (j) {
+          return '<div class="sample"><label class="f" for="c-' + j[0] + '">' + j[1] + '</label><div class="row"><input type="color" class="swatch" id="c-' + j[0] + '" data-j="' + j[0] + '" value="' + esc(b[j[0]].toLowerCase()) + '"><span class="small">Tap the square to change it</span></div></div>';
+        }).join("") + "</div>" +
+        '<div class="sample" style="background:' + esc(b.background) + ";color:" + esc(b.text) + '"><b>How it reads</b><span>Your main text on your background.</span>' +
+        '<span style="background:' + esc(b.accent) + ';color:#fff;padding:6px 10px;border-radius:8px;align-self:flex-start">A button in your colour</span></div>' +
+        '<p class="small">' + (c1 >= 4.5 ? "Text on your background: easy to read." : "Text on your background is hard to read. I’ll keep small text darker so it stays readable.") +
+        " " + (c2 >= 3 ? "White on your colour: fine for buttons." : "White on your colour is faint, so buttons will use dark text.") + "</p>" +
+        '<div class="row"><button class="main" type="button" id="ok">Yes, use these</button></div>';
+      Array.prototype.forEach.call(document.querySelectorAll("input[type=color]"), function (el) { el.oninput = function () { b[el.dataset.j] = el.value.toUpperCase(); draw(); $("c-" + el.dataset.j).focus(); }; });
+      $("ok").onclick = function () { save("colours", { background: b.background.toUpperCase(), text: b.text.toUpperCase(), accent: b.accent.toUpperCase(), status: "confirmed" }); };
+    }
+    draw();
+  };
+
+  RENDER.rules = function (q, a) {
+    var b = buf.rules || { industry: (a && a.industry) || "", industry_other: (a && a.industry_other) || "",
+                           never_claim: ((a && a.never_claim) || []).join("\n"), sign_off: ((a && a.sign_off) || []).join("\n"),
+                           never_name: ((a && a.never_name) || []).join("\n"), hated_words: ((a && a.hated_words) || []).join("\n") };
+    buf.rules = b;
+    function draw() {
+      var regulated = b.industry && b.industry !== "none";
+      $("body").innerHTML =
+        '<p class="meaning">I’ll save these as: <b>Your brand’s rules</b>. They’re only saved with your tap.</p>' +
+        '<div><span class="f">Is this a regulated industry?</span><div class="row" role="group" aria-label="Regulated industry">' +
+        q.industries.map(function (c) { return '<button type="button" class="choice" style="min-height:44px" data-ind="' + c.id + '" aria-pressed="' + (b.industry === c.id) + '">' + esc(c.label) + "</button>"; }).join("") + "</div></div>" +
+        (b.industry === "other" ? '<div><label class="f" for="ind-other">Which industry?</label><input type="text" id="ind-other" data-f="industry_other" maxlength="120" value="' + esc(b.industry_other) + '"></div>' : "") +
+        (regulated ? '<div><label class="f" for="r-claim">What must you never claim? One per line</label><textarea id="r-claim" data-f="never_claim" rows="3">' + esc(b.never_claim) + "</textarea></div>" +
+          '<div><label class="f" for="r-sign">What needs a disclaimer and sign-off, and who signs off? One per line</label><textarea id="r-sign" data-f="sign_off" rows="2">' + esc(b.sign_off) + "</textarea></div>" : "") +
+        '<div><label class="f" for="r-name">Anyone we must never name in public: customers, partners, suppliers? One per line</label><textarea id="r-name" data-f="never_name" rows="2">' + esc(b.never_name) + "</textarea></div>" +
+        '<div><label class="f" for="r-hate">Words you hate seeing in your marketing? One per line</label><textarea id="r-hate" data-f="hated_words" rows="2">' + esc(b.hated_words) + "</textarea></div>" +
+        '<p class="small" id="r-check"></p>' +
+        '<div class="row"><button class="main" type="button" id="ok">These are my rules</button></div>';
+      Array.prototype.forEach.call(document.querySelectorAll("[data-ind]"), function (el) { el.onclick = function () { b.industry = el.dataset.ind; draw(); }; });
+      Array.prototype.forEach.call(document.querySelectorAll("#body [data-f]"), function (el) { el.oninput = function () { b[el.dataset.f] = el.value; recap(); }; });
+      recap();
+      $("ok").onclick = function () {
+        if (!b.industry) { return err("Tap whether this is a regulated industry first (None is fine), or tap Skip for now."); }
+        var out = { industry: b.industry, never_claim: lines(b.never_claim), sign_off: lines(b.sign_off),
+                    never_name: lines(b.never_name), hated_words: lines(b.hated_words), status: "confirmed", tapped: true };
+        if (b.industry === "other" && b.industry_other.trim()) { out.industry_other = b.industry_other.trim(); }
+        if (b.industry === "none") { out.never_claim = []; out.sign_off = []; }
+        save("rules", out);
+      };
+    }
+    function recap() {
+      // The meaning card: show exactly where each line will be filed, so a hated word is never filed as copy.
+      var parts = [];
+      lines(b.never_claim).forEach(function (t) { parts.push("Never claim: “" + t + "”"); });
+      lines(b.never_name).forEach(function (t) { parts.push("Never name: " + t); });
+      lines(b.hated_words).forEach(function (t) { parts.push("Never use the word: “" + t + "”"); });
+      $("r-check").textContent = parts.length ? "I’ll save: " + parts.join(" · ") : "";
+    }
+    draw();
+  };
+
+  RENDER.make = function (q, a) {
+    var b = buf.make || { value: (a && a.value) || [], other: (a && a.other) || "", otherOn: !!(a && a.other) };
+    buf.make = b;
+    function draw() {
+      $("body").innerHTML =
+        '<p class="meaning">I’ll save this as: <b>What to make</b>. Writing, visuals and review need no accounts at all.</p>' +
+        '<div class="grid2" role="group" aria-label="What to make">' + q.choices.map(function (c) {
+          return '<button type="button" class="choice" data-m="' + c.id + '" aria-pressed="' + (b.value.indexOf(c.id) >= 0) + '">' + esc(c.label) + "</button>";
+        }).join("") + '<button type="button" class="choice" id="m-other" aria-pressed="' + b.otherOn + '">Something else</button></div>' +
+        (b.otherOn ? '<div><label class="f" for="m-other-text">Tell me in your own words</label><input type="text" id="m-other-text" maxlength="200" value="' + esc(b.other) + '"></div>' : "") +
+        '<div class="row"><button class="main" type="button" id="ok">Save my choices</button></div>';
+      Array.prototype.forEach.call(document.querySelectorAll("[data-m]"), function (el) {
+        el.onclick = function () { var i = b.value.indexOf(el.dataset.m); if (i >= 0) { b.value.splice(i, 1); } else { b.value.push(el.dataset.m); } draw(); };
+      });
+      $("m-other").onclick = function () { b.otherOn = !b.otherOn; draw(); };
+      if ($("m-other-text")) { $("m-other-text").oninput = function () { b.other = this.value; }; }
+      $("ok").onclick = function () {
+        var other = b.otherOn ? b.other.trim() : "";
+        if (!b.value.length && !other) { return err("Tap at least one, or tap Skip for now."); }
+        var out = { value: b.value.slice(), status: "confirmed" };
+        if (other) { out.other = other; }
+        save("make", out);
+      };
+    }
+    draw();
+  };
+
+  // ---------------------------------------------------------------------------- the end of the questions
+  function review() {
+    var open = Q.filter(function (q) { return statusOf(q.key) !== "ok"; });
+    $("screen").innerHTML =
+      '<div class="panel"><span class="kicker">That’s all eight</span><h1>Ready to finish?</h1>' +
+      (open.length ? '<p class="lead">Still open: ' + esc(open.map(function (q) { return q.tile; }).join(", ")) +
+         ". They stay as placeholders, never guesses, and you can fill them in any time.</p>"
+         : '<p class="lead">Every answer is confirmed. When you finish, Claude saves your brand, checks it and makes a first sample.</p>') +
+      '<div class="row"><button class="main" type="button" id="finish">Finish</button>' +
+      (open.length ? '<button type="button" id="fill">Fill in what’s open</button>' : "") + "</div>" +
+      '<p class="error" id="error" role="alert" hidden></p></div>';
+    $("finish").onclick = function () { finish("page"); };
+    if ($("fill")) { $("fill").onclick = function () { show("question", Q.indexOf(open[0])); }; }
+  }
+
+  function finish(via) {
+    return api("finish", { via: via }).then(function (s) { S = s; show("finishing"); }).catch(function (e) { err(e.message); });
+  }
+
+  function finishing() {
+    var s = S;
+    if (s.handoff === "finished" && s.result) {
+      if (s.result.ok) { ready(s); } else {
+        $("screen").innerHTML = '<div class="kicker">Almost</div><h1>' + esc(s.result.message || "I need one more thing from you in the chat.") +
+          '</h1><p class="lead">Go back to the chat to finish. Your confirmed answers are safe.</p>';
+      }
+      stopPolling();
+      return;
+    }
+    var title, text, trouble = false;
+    if (s.via === "chat") { title = "Your confirmed answers are kept."; text = "Go back to the chat. Claude will finish the rest with you there."; }
+    else if (s.handoff === "backstop") { title = "Your answers are safe."; text = "Go back to the chat and say “I’m done”."; }
+    else if (s.handoff === "trouble") { title = "I’m having trouble finishing this."; text = "Your confirmed answers are safe. Try again, or finish in the chat."; trouble = true; }
+    else { title = "I have your answers. Finishing your brand..."; text = s.handoff === "building" ? "Claude is saving your brand, checking it and making a sample." : "Waiting for Claude to pick up your answers."; }
+    $("screen").innerHTML = '<div class="panel"><span class="kicker">Finishing</span><h1>' + esc(title) + '</h1><p class="lead">' + esc(text) + "</p>" +
+      (trouble ? '<div class="row"><button type="button" id="retry">Try again</button></div>' : "") + "</div>";
+    if (trouble) { $("retry").onclick = refresh; }
+    startPolling();
+  }
+
+  // ---------------------------------------------------------------------------- your brand is ready
+  var REFLECT = ["What surprised you?", "What’s the first thing you can’t wait to make?",
+                 "What would make this even better?", "Where did you pause or get stuck?"];
+  var reflectAt = Math.floor(Math.random() * REFLECT.length);
+
+  function ready(s) {
+    var steps = s.result.steps || {};
+    var ticks = [["saved", "Saved your brand"], ["checked", "Checked it"], ["sample", "Made a first sample"]]
+      .filter(function (x) { return steps[x[0]]; })
+      .map(function (x) { return '<span class="chip s-saved"><span class="dot"></span>' + x[1] + "</span>"; }).join("");
+    var closed = s.closing === "first-post" ? "Go back to the chat: Claude is ready to write your first post with you."
+               : s.closing === "done" ? "All done. You can close this page." : "";
+    $("screen").innerHTML =
+      '<div class="kicker">Done</div><h1 class="big">' + esc(s.result.message || "Your brand is ready.") + "</h1>" +
+      '<p class="lead">Here’s what the Social Media Factory made using your colours and your own words. It’s built only from what you confirmed and the material you gave me.</p>' +
+      '<div class="row">' + ticks + "</div>" +
+      (s.result.has_sample ? '<div class="box"><img src="/' + code + '/sample" alt="Your first sample, in your colours" style="max-width:100%;border-radius:12px"></div>' : "") +
+      '<div class="row">' +
+        (closed ? "" : '<button class="main" type="button" id="first-post">Write my first post</button>') +
+        '<button type="button" id="open-folder">Open my brand folder</button>' +
+        (s.result.has_summary ? '<a href="/' + code + '/summary" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;min-height:48px;padding:0 20px;border:1px solid var(--line2);border-radius:12px;color:inherit;text-decoration:none;background:#fff">My one-page summary</a>' : "") +
+      "</div>" +
+      '<p class="small" id="folder-note" role="status"></p>' +
+      (closed ? '<p class="lead" role="status"><b>' + esc(closed) + "</b></p>" : "") +
+      '<p class="small">Everything stays in your brand folder on this computer. Accounts and keys come later, never on this page.</p>' +
+      (s.reflected ? (closed ? "" : '<div class="row"><button type="button" id="all-done">I’m done</button></div>') : '<div class="panel" id="reflect">' +
+        '<div class="row" style="justify-content:space-between"><span class="kicker">One quick question · optional</span>' +
+        '<button class="link" type="button" id="r-next">Ask me a different one</button></div>' +
+        '<label class="f" for="r-text" style="font-size:20px" id="r-q">' + esc(REFLECT[reflectAt]) + "</label>" +
+        '<textarea id="r-text" rows="2" maxlength="1000" placeholder="A word or a sentence is plenty"></textarea>' +
+        '<div class="row"><button type="button" id="r-save">Save</button><button class="link" type="button" id="r-skip">Skip</button>' +
+        '<span class="small" id="r-note">Saved on this computer only. Never sent anywhere.</span></div>' +
+      "</div>");
+    if ($("first-post")) {
+      $("first-post").onclick = function () {
+        api("closing", { choice: "first-post" }).then(function (x) { S = x; ready(S); }).catch(function (e) { $("folder-note").textContent = e.message; });
+      };
+    }
+    $("open-folder").onclick = function () {
+      api("open-folder", {}).then(function (r) {
+        $("folder-note").textContent = r.opened ? "Opened your brand folder." : "I couldn’t open it from here. It’s in " + r.where + ".";
+      }).catch(function (e) { $("folder-note").textContent = e.message; });
+    };
+    if ($("all-done")) { $("all-done").onclick = done; }
+    if (s.reflected) { return; }
+    $("r-next").onclick = function () { reflectAt = (reflectAt + 1) % REFLECT.length; $("r-q").textContent = REFLECT[reflectAt]; };
+    function reflect(answer) {
+      api("reflection", { question: REFLECT[reflectAt], answer: answer }).then(function () {
+        S.reflected = true;
+        $("reflect").innerHTML = '<p class="lead">' + (answer ? "Thank you. Saved on this computer only." : "No problem.") + "</p>" +
+          (closed ? "" : '<div class="row"><button type="button" id="all-done">I’m done</button></div>');
+        if ($("all-done")) { $("all-done").onclick = done; }
+      }).catch(function (e) { $("r-note").textContent = e.message; if (/deleted/.test(e.message)) { $("r-text").value = ""; } });
+    }
+    $("r-save").onclick = function () { reflect($("r-text").value.trim()); };
+    $("r-skip").onclick = function () { reflect(""); };
+  }
+
+  function done() {
+    api("closing", { choice: "done" }).then(function (x) { S = x; ready(S); }).catch(function (e) { $("folder-note").textContent = e.message; });
+  }
+
+  // ---------------------------------------------------------------------------- the brand's own colours
+  function lumOk(hex) { return /^#[0-9A-Fa-f]{6}$/.test(hex || ""); }
+  function brandColours() {
+    // Once the colours are confirmed the page takes them on, but only where text stays readable.
+    var c = answer("colours"), root = document.documentElement.style;
+    if (!c || c.status !== "confirmed" || !lumOk(c.background) || !lumOk(c.text) || !lumOk(c.accent)) {
+      ["--ground", "--ink"].forEach(function (v) { root.removeProperty(v); });
+      document.body.style.color = "";
+      if (document.querySelector(".mark")) { document.querySelector(".mark").style.background = ""; }
+      return;
+    }
+    // The page's white cards and grey panels sit on top, so the text colour must read on them too.
+    if (contrast(c.text, c.background) >= 4.5 && contrast(c.text, "#F4F4F5") >= 4.5) {
+      root.setProperty("--ground", c.background);
+      root.setProperty("--ink", contrast(c.accent, "#FFFFFF") >= 4.5 ? c.accent : c.text);
+      document.body.style.color = c.text;
+    }
+    var mark = document.querySelector(".mark");
+    if (mark) { mark.style.background = c.accent; }
+  }
+
+  function refresh() {
+    return api("session").then(function (s) {
+      var was = S && S.handoff; S = s;
+      if (view === "finishing" && (s.handoff !== was || s.result)) { finishing(); frame(); }
+    }).catch(function () {
+      $("screen").innerHTML = '<div class="panel"><span class="kicker">Finishing</span><h1>I’m having trouble finishing this.</h1>' +
+        '<p class="lead">Your confirmed answers are safe. Try again, or go back to the chat.</p><div class="row"><button type="button" id="retry">Try again</button></div></div>';
+      $("retry").onclick = refresh;
+    });
+  }
+  function startPolling() { if (!polling) { polling = setInterval(refresh, 1500); } }
+  function stopPolling() { if (polling) { clearInterval(polling); polling = null; } }
+
+  // ---------------------------------------------------------------------------- talking (card F6)
+  // Talk or type, always. The microphone is checked before consent, consent is asked every session,
+  // recording is tap to talk with a short-pause auto-stop, and the audio goes from memory to the local
+  // server and on to the speech service. Speech never saves an answer: the words come back to check.
+  var mode = "type", voiceOK = false, consented = false, lastSaved = null;
+  var rec = null, recStream = null, recState = "off";          // off | recording | working
+  var prefs = { speak: true, voice: "" };
+  try { var saved = JSON.parse(localStorage.getItem("smf-onboarding-voice") || "{}"); if (saved && typeof saved === "object") { prefs.speak = saved.speak !== false; prefs.voice = saved.voice || ""; } } catch (e) {}
+  function savePrefs() { try { localStorage.setItem("smf-onboarding-voice", JSON.stringify(prefs)); } catch (e) {} }
+
+  function speak(text) {
+    // Nova reads with the browser's own voice. Every spoken line is also on screen.
+    if (mode !== "talk" || !prefs.speak || !window.speechSynthesis || !text) { return; }
+    // Never over an open microphone: Nova's own voice would be recorded as their answer.
+    if (recState === "recording") { return; }
+    try {
+      window.speechSynthesis.cancel();
+      var u = new SpeechSynthesisUtterance(text);
+      var v = window.speechSynthesis.getVoices().filter(function (x) { return x.name === prefs.voice; })[0];
+      if (v) { u.voice = v; }
+      window.speechSynthesis.speak(u);
+    } catch (e) {}
+  }
+  function caption(text) { var c = $("caption"); if (c) { c.textContent = text ? "Nova: " + text : ""; c.hidden = !text; } }
+  function say(text) { caption(text); speak(text); }
+
+  function micCheck() {
+    // Never show a recording state when no audio can be captured.
+    if (!window.isSecureContext) { return Promise.resolve("insecure"); }
+    if (!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia) || !window.MediaRecorder) { return Promise.resolve("unsupported"); }
+    return navigator.mediaDevices.getUserMedia({ audio: true }).then(function (s) {
+      s.getTracks().forEach(function (t) { t.stop(); });        // checked, then off again until they tap
+      return "ok";
+    }).catch(function (e) { return e && (e.name === "NotFoundError" || e.name === "OverconstrainedError") ? "missing" : "denied"; });
+  }
+
+  var MIC_WORDS = {
+    denied: "Your browser said no to the microphone. Allow it for this page (the microphone icon in the address bar), then try again.",
+    missing: "I can't find a microphone on this computer. Plug one in, or type instead.",
+    unsupported: "This browser can't record here. Try Chrome or Edge, or type instead.",
+    insecure: "The page wasn't opened at its own address, so the browser won't share the microphone. Type instead, or ask Claude to reopen the page."
+  };
+
+  function startTalk() {
+    $("screen").innerHTML = '<div class="panel"><span class="kicker">Microphone</span><h1>Checking your microphone…</h1><p class="lead">Your browser may ask to use it. Choose Allow.</p></div>';
+    micCheck().then(function (state) {
+      api("microphone", { state: state }).catch(function () {});
+      if (state !== "ok") {
+        $("screen").innerHTML = '<div class="panel"><span class="kicker">Microphone</span><h1>I can’t hear you yet.</h1><p class="lead">' + esc(MIC_WORDS[state]) +
+          '</p><div class="row"><button class="main" type="button" id="mic-retry">Try again</button><button type="button" id="mic-type">Type instead</button></div></div>';
+        $("mic-retry").onclick = startTalk;
+        $("mic-type").onclick = function () { mode = "type"; begin(); };
+        return;
+      }
+      consent();
+    });
+  }
+
+  function consent() {
+    if (consented) { return begin(); }
+    $("screen").innerHTML = '<div class="panel"><span class="kicker">Before I listen</span><h1>Talking to set up your brand</h1>' +
+      '<p class="lead">Your voice is sent securely to our speech-to-text service so I can turn it into words. The Social Media Factory keeps the words, not the recording.</p>' +
+      '<p class="small">I only listen after you tap Tap to talk, and I stop when you pause. Never say a password or an account key.</p>' +
+      '<div class="row"><button class="main" type="button" id="use-voice">Use voice</button><button type="button" id="no-voice">Type instead</button></div></div>';
+    $("use-voice").onclick = function () {
+      api("consent", { recording: true }).then(function () { consented = true; begin(); }).catch(function (e) { mode = "type"; begin(); });
+    };
+    $("no-voice").onclick = function () { mode = "type"; begin(); };
+  }
+
+  function voiceBar(q) {
+    var box = $("voicebar");
+    if (!box || mode !== "talk") { return; }
+    box.hidden = false;
+    box.innerHTML =
+      '<div class="row"><button type="button" id="mic" class="main" aria-live="polite"></button>' +
+      '<button type="button" id="mic-pause">Pause</button><button type="button" id="mic-type">Type instead</button></div>' +
+      '<p class="small" id="mic-note"></p><p class="small" id="caption" hidden></p>' +
+      '<p class="small" id="say-hint"></p><div id="heard"></div>';
+    $("mic").onclick = function () { micToggle(q); };
+    $("mic-pause").onclick = function () { stopRecording(true); micUI(); say("Microphone off. Tap to talk when you're ready."); };
+    $("mic-type").onclick = function () { stopRecording(true); mode = "type"; show("question", at); };
+    micUI();
+    hint(q, false);
+    say(q.ask + " " + q.do + " Tap to talk, or press the space bar, when you're ready.");
+  }
+
+  function micToggle(q) { recState === "recording" ? stopRecording() : (recState === "off" ? startRecording(q) : null); }
+
+  // What needs a tap, and why: a misheard name or rule would go straight into the brand (spec 3b).
+  var TAP_ONLY = { name: "the spelling", identities: "each name", rules: "your rules", colours: "your colours", make: "your choices" };
+
+  function hint(q, heardOpen) {
+    var h = $("say-hint");
+    if (!h) { return; }
+    var can = heardOpen ? ["yes", "try again"] : ["skip", "go back", "repeat the question", "give me an example"];
+    if (!heardOpen && !TAP_ONLY[q.key]) { can.unshift("yes, that's right"); }
+    if (q.key === "voice_samples" && !heardOpen) { can.unshift("save them"); }
+    h.innerHTML = "<b>You can say:</b> " + can.map(esc).join(" · ") +
+      (TAP_ONLY[q.key] ? '<br><span>' + esc("Then tap to confirm " + TAP_ONLY[q.key] + ". Speech can mishear these, so they always need a tap.") + "</span>" : "");
+  }
+
+  function micUI() {
+    var b = $("mic"), n = $("mic-note");
+    if (!b) { return; }
+    b.disabled = recState === "working" || recState === "starting";
+    b.innerHTML = recState === "recording" ? '<span class="recdot" aria-hidden="true"></span> Recording now · tap when finished'
+                : recState === "working" ? "Getting your words…" : recState === "starting" ? "Getting ready…" : "Tap to talk";
+    b.className = recState === "recording" ? "recording" : "main";
+    n.textContent = recState === "recording" ? "Microphone on. It stops on its own after a short pause."
+                  : recState === "working" ? "Microphone off." : "Microphone off.";
+  }
+
+  function hush() {
+    // Silence Nova and give the speakers a moment to go quiet, so her voice is never recorded.
+    var talking = window.speechSynthesis && (window.speechSynthesis.speaking || window.speechSynthesis.pending);
+    if (window.speechSynthesis) { window.speechSynthesis.cancel(); }
+    return new Promise(function (done) { setTimeout(done, talking ? 400 : 0); });
+  }
+
+  function startRecording(q) {
+    recState = "starting";
+    hush().then(function () {
+      return navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true } });
+    }).then(function (stream) {
+      recStream = stream;
+      var chunks = [];
+      rec = new MediaRecorder(stream);
+      rec.ondataavailable = function (e) { if (e.data && e.data.size) { chunks.push(e.data); } };
+      rec.onstop = function () {
+        stream.getTracks().forEach(function (t) { t.stop(); });       // the microphone is really off now
+        recStream = null;
+        if (rec && rec.discard) { recState = "off"; micUI(); return; }
+        var blob = new Blob(chunks, { type: rec.mimeType || "audio/webm" });
+        chunks = [];
+        sendRecording(blob, q);
+      };
+      rec.start();
+      recState = "recording";
+      micUI();
+      watchSilence(stream);
+    }).catch(function () {
+      api("microphone", { state: "denied" }).catch(function () {});
+      recState = "off"; micUI();
+      $("mic-note").textContent = MIC_WORDS.denied;
+    });
+  }
+
+  function watchSilence(stream) {
+    // Auto-stop after about 1.5 seconds of quiet once they have started speaking; never always-listening.
+    var Ctx = window.AudioContext || window.webkitAudioContext;
+    if (!Ctx) { return; }
+    var ctx = new Ctx(), src = ctx.createMediaStreamSource(stream), an = ctx.createAnalyser();
+    an.fftSize = 1024; src.connect(an);
+    var data = new Uint8Array(an.fftSize), heard = false, quietSince = null, started = Date.now();
+    (function tick() {
+      if (recState !== "recording") { ctx.close(); return; }
+      an.getByteTimeDomainData(data);
+      var sum = 0;
+      for (var i = 0; i < data.length; i++) { var v = (data[i] - 128) / 128; sum += v * v; }
+      var loud = Math.sqrt(sum / data.length) > 0.04;
+      if (loud) { heard = true; quietSince = null; } else if (heard && quietSince === null) { quietSince = Date.now(); }
+      if ((heard && quietSince && Date.now() - quietSince > 1500) || Date.now() - started > 90000) { stopRecording(); return; }
+      requestAnimationFrame(tick);
+    })();
+  }
+
+  function stopRecording(discard) {
+    if (rec && rec.state !== "inactive") { rec.discard = !!discard; recState = discard ? "off" : "working"; rec.stop(); micUI(); }
+  }
+
+  function sendRecording(blob, q) {
+    recState = "working"; micUI();
+    fetch(base + "listen?q=" + encodeURIComponent(q.key), { method: "POST", headers: { "Content-Type": blob.type || "audio/webm" }, body: blob })
+      .then(function (res) { return res.json().catch(function () { return {}; }).then(function (b) { if (!res.ok) { throw new Error(b.error || "I didn’t catch that. Try again, or type it."); } return b; }); })
+      .then(function (r) { recState = "off"; micUI(); heard(r, q); })
+      .catch(function (e) { recState = "off"; micUI(); say(e.message); });
+  }
+
+  function heard(r, q) {
+    var box = $("heard");
+    if (r.kind === "secret") { box.innerHTML = ""; return say(r.message); }
+    if (r.kind === "command") { return command(r.command, q); }
+    if (r.kind === "for_chat") {
+      say(r.message);
+      return api("answer", { key: q.key, answer: forChat(q.key, r.heard) }).then(function (s) { S = s; next(); }).catch(function (e) { err(e.message); });
+    }
+    // An answer: shown for them to check. Speech alone never confirms anything.
+    var target = speechTarget(q.key);
+    box.innerHTML = '<div class="sample"><label class="f" for="heard-text">I heard</label><textarea id="heard-text" rows="3">' + esc(r.text) + "</textarea>" +
+      (target ? '<div class="row"><button type="button" class="main" id="heard-use">Use these words</button><button type="button" id="heard-again">Try again</button></div>'
+              : '<p class="small">For this one, tap your choices above. I can’t set them from speech.</p><div class="row"><button type="button" id="heard-again">Try again</button></div>') + "</div>";
+    if ($("heard-use")) { $("heard-use").onclick = function () { keepHeard(q); }; }
+    $("heard-again").onclick = function () { retry(q); };
+    hint(q, true);
+    say(target ? "I heard: " + r.text + ". Say yes to use it, or try again." : "I heard: " + r.text + ". For this one, tap your choices above.");
+  }
+
+  function keepHeard(q) {
+    var t = $("heard-text");
+    if (!t) { return false; }
+    useWords(q.key, t.value);
+    $("heard").innerHTML = "";
+    hint(q, false);
+    if (q.key === "voice_samples") { say("Added, word for word. Tap to talk for another, or say save them."); return true; }
+    if (TAP_ONLY[q.key]) { say("Check " + TAP_ONLY[q.key] + " on screen, then tap to confirm."); return true; }
+    // An everyday answer they have seen and said yes to: one yes keeps it and confirms it.
+    if ($("ok")) { say("Got it."); $("ok").click(); }
+    return true;
+  }
+
+  function retry(q) { $("heard").innerHTML = ""; hint(q, false); say("Okay. Tap to talk and say it again."); }
+
+  function speechTarget(key) { return { name: 1, what_you_do: 1, audience: 1, voice_samples: 1 }[key] ? key : null; }
+
+  function useWords(key, text) {
+    if (key === "voice_samples") {
+      var list = (buf.voice_samples || []).filter(function (s) { return s.text.trim(); });
+      list.push({ text: text, source: "spoken" });
+      buf.voice_samples = list;
+      return show("question", at);
+    }
+    var el = $("in");
+    if (el) { el.value = text; el.dispatchEvent(new Event("input", { bubbles: true })); el.focus(); }
+  }
+
+  function forChat(key, heardText) {
+    if (key === "voice_samples") { return []; }
+    if (key === "identities") { return [{ status: "for_chat" }]; }
+    return { status: "for_chat" };
+  }
+
+  function command(name, q) {
+    var heardOpen = !!$("heard-text");
+    if (name === "confirm") {
+      if (heardOpen) { return keepHeard(q); }
+      if (TAP_ONLY[q.key]) { return say("This one needs a tap: check " + TAP_ONLY[q.key] + " on screen, then tap to confirm."); }
+      var ok = $("ok");
+      return ok ? ok.click() : say("There's nothing to confirm yet. Tap to talk and give your answer.");
+    }
+    if (name === "retry") { return heardOpen ? retry(q) : say("Tap to talk and say it again."); }
+    if (name === "save") {
+      if (q.key !== "voice_samples") { return command("confirm", q); }
+      return $("ok") ? $("ok").click() : null;
+    }
+    if (name === "back") { return $("back").click(); }
+    if (name === "skip" || name === "next") { return $("skip").click(); }
+    if (name === "pause") { recState = "off"; micUI(); return say("Microphone off. Tap to talk, or say continue, when you're ready."); }
+    if (name === "continue") { return say(q.ask); }
+    if (name === "type") { mode = "type"; return show("question", at); }
+    if (name === "repeat") { return say(q.ask + " " + q.do); }
+    if (name === "explain") {
+      var d = document.querySelector("details.example"); if (d) { d.open = true; }
+      return say(q.example ? "The kind of answer: " + q.example : q.do);
+    }
+    if (name === "finish_chat") { return finish("chat"); }
+    if (name === "undo") {
+      if (!lastSaved) { return say("There's nothing to undo yet."); }
+      var key = lastSaved, a = answer(key);
+      var back = Array.isArray(a) ? a.map(function (x) { var y = JSON.parse(JSON.stringify(x)); y.status = "unconfirmed"; delete y.tapped; return y; })
+                                  : Object.assign({}, a || {}, { status: "unconfirmed" });
+      if (!Array.isArray(back)) { delete back.tapped; delete back.own_words; }
+      return api("answer", { key: key, answer: back }).then(function (s) { S = s; lastSaved = null; say("Done. That answer isn't confirmed any more."); show("question", Q.map(function (x) { return x.key; }).indexOf(key)); });
+    }
+    if (name === "start_over") {
+      var box = $("heard");
+      box.innerHTML = '<div class="sample"><b>Start over and clear your answers?</b><div class="row"><button type="button" class="main" id="over-yes">Yes, start over</button><button type="button" id="over-no">No, keep them</button></div></div>';
+      say("Start over and clear your answers? Tap yes to confirm.");
+      $("over-no").onclick = function () { box.innerHTML = ""; };
+      $("over-yes").onclick = function () {
+        var jobs = Q.map(function (x) { return api("answer", { key: x.key, answer: (x.key === "identities" || x.key === "voice_samples") ? [] : { status: "unconfirmed" } }); });
+        Promise.all(jobs).then(function () { return api("session"); }).then(function (s) { S = s; buf = {}; show("question", 0); });
+      };
+      return;
+    }
+  }
+
+  function voiceSettings() {
+    var d = $("voice-settings");
+    if (!d) { return; }
+    var voices = window.speechSynthesis ? window.speechSynthesis.getVoices() : [];
+    d.innerHTML = '<label class="row" style="gap:8px"><input type="checkbox" id="vs-speak"' + (prefs.speak ? " checked" : "") + "> Speak aloud</label>" +
+      (voices.length ? '<label class="f" for="vs-voice">Change voice</label><select id="vs-voice"><option value="">Browser default</option>' +
+        voices.map(function (v) { return '<option value="' + esc(v.name) + '"' + (v.name === prefs.voice ? " selected" : "") + ">" + esc(v.name + " (" + v.lang + ")") + "</option>"; }).join("") + "</select>" : "");
+    $("vs-speak").onchange = function () { prefs.speak = this.checked; savePrefs(); if (!prefs.speak && window.speechSynthesis) { window.speechSynthesis.cancel(); } };
+    if ($("vs-voice")) { $("vs-voice").onchange = function () { prefs.voice = this.value; savePrefs(); speak("This is how I sound now."); }; }
+  }
+
+  // ---------------------------------------------------------------------------- wiring
+  document.addEventListener("click", function (e) {
+    var t = e.target.closest("[data-go]");
+    if (t && (t.classList.contains("tile") || t.id === "catchup")) { show("question", +t.dataset.go); }
+  });
+  $("finish-chat").onclick = function () { finish("chat"); };
+  // The space bar starts and stops talking, so nobody needs the mouse for it. Never while typing in a box.
+  document.addEventListener("keydown", function (e) {
+    if (e.code !== "Space" || mode !== "talk" || view !== "question" || !$("mic")) { return; }
+    var t = e.target && e.target.tagName;
+    if (t === "INPUT" || t === "TEXTAREA" || t === "SELECT" || t === "BUTTON") { return; }
+    e.preventDefault();
+    micToggle(Q[at]);
+  });
+  $("voice-toggle").onclick = function () {
+    var d = $("voice-settings"); d.hidden = !d.hidden; this.setAttribute("aria-expanded", String(!d.hidden)); if (!d.hidden) { voiceSettings(); }
+  };
+  if (window.speechSynthesis) { window.speechSynthesis.onvoiceschanged = function () { if (!$("voice-settings").hidden) { voiceSettings(); } }; }
+
+  Promise.all([api("questions"), api("session"), api("voice").catch(function () { return {}; })]).then(function (r) {
+    Q = r[0].questions; S = r[1]; voiceOK = !!r[2].available;
+    if (voiceOK) { $("voice-toggle").hidden = false; }
+    show(S.state === "complete" ? "finishing" : "welcome");
+  }).catch(function (e) {
+    $("screen").innerHTML = '<div class="panel"><h1>This page can’t start.</h1><p class="lead">' + esc(e.message) + "</p></div>";
+  });
+})();
+</script>
+</body>
+</html>

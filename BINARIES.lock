@@ -1,0 +1,32 @@
+{
+  "binaries": {
+    "smf/studio/render/fonts/inter/Inter-Variable.ttf": {
+      "sha256": "29160a80ff49ddcab2c97711247e08b1fab27a484a329ce8b813d820dc559031",
+      "shows": "font file: Inter variable (weight 100-900, optical size 14-32), upright",
+      "source": "https://raw.githubusercontent.com/google/fonts/e44c4b011a820c2cbe2fd2cfa8052037d7edb571/ofl/inter/Inter%5Bopsz%2Cwght%5D.ttf",
+      "licence": "SIL OFL 1.1 (text in smf/studio/render/fonts/inter/OFL.txt)",
+      "approved_by": "automated: official upstream font release; licence bundled; pending owner read-through"
+    },
+    "smf/studio/render/fonts/geist-mono/GeistMono-Variable.ttf": {
+      "sha256": "d00e590b8eb3a59acc329b2d044fd143ae935090b7da33199ebee27cc7de8196",
+      "shows": "font file: Geist Mono variable (weight 100-900), upright",
+      "source": "https://raw.githubusercontent.com/google/fonts/e44c4b011a820c2cbe2fd2cfa8052037d7edb571/ofl/geistmono/GeistMono%5Bwght%5D.ttf",
+      "licence": "SIL OFL 1.1 (text in smf/studio/render/fonts/geist-mono/OFL.txt)",
+      "approved_by": "automated: official upstream font release; licence bundled; pending owner read-through"
+    },
+    "smf/studio/render/fonts/anton/Anton-Regular.ttf": {
+      "sha256": "a4ba3a92350ebb031da0cb47630ac49eb265082ca1bc0450442f4a83ab947cab",
+      "shows": "font file: Anton Regular",
+      "source": "https://raw.githubusercontent.com/google/fonts/e44c4b011a820c2cbe2fd2cfa8052037d7edb571/ofl/anton/Anton-Regular.ttf",
+      "licence": "SIL OFL 1.1 (text in smf/studio/render/fonts/anton/OFL.txt)",
+      "approved_by": "automated: official upstream font release; licence bundled; pending owner read-through"
+    },
+    "smf/video/models/face_detection_yunet_2023mar.onnx": {
+      "sha256": "8f2383e4dd3cfbb4553ea8718107fc0423210dc964f9f4280604804ed2552fa4",
+      "shows": "face-finder model (YuNet, March 2023): finds where a face is in a video frame so a tall crop lands on the speaker. It holds numbers only, no pictures of anyone.",
+      "source": "https://github.com/opencv/opencv_zoo/blob/f12e12798e8314f7c074a6656816c048dcc95b7a/models/face_detection_yunet/face_detection_yunet_2023mar.onnx",
+      "licence": "MIT (text in smf/video/models/LICENSE-yunet.txt)",
+      "approved_by": "automated: official upstream OpenCV Zoo release; licence bundled; tested on real footage; pending owner read-through"
+    }
+  }
+}

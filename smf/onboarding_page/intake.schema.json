@@ -1,0 +1,3527 @@
+{
+  "about": "The answers file: the contract between the onboarding page and the agent. Written only by the page. Version 2 holds every core and deeper answer; version 1 files (the eight answers) still read. Anything whose status is not 'confirmed' is a placeholder to the agent, exactly like a skipped answer in the chat.",
+  "type": "object",
+  "required": [
+    "version",
+    "state"
+  ],
+  "properties": {
+    "version": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 2
+    },
+    "state": {
+      "type": "string",
+      "enum": [
+        "in_progress",
+        "complete"
+      ]
+    },
+    "brand": {
+      "type": "string",
+      "minLength": 1
+    },
+    "consent": {
+      "type": "object"
+    },
+    "answers": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "object",
+          "required": [
+            "status"
+          ],
+          "properties": {
+            "value": {
+              "type": "string"
+            },
+            "spelled": {
+              "type": "string"
+            },
+            "status": {
+              "type": "string",
+              "enum": [
+                "confirmed",
+                "skipped",
+                "unconfirmed",
+                "for_chat"
+              ]
+            },
+            "source": {
+              "type": "string",
+              "enum": [
+                "typed",
+                "draft",
+                "draft-edited"
+              ]
+            },
+            "tapped": {
+              "type": "boolean"
+            },
+            "own_words": {
+              "type": "boolean"
+            },
+            "origin": {
+              "type": "string",
+              "enum": [
+                "website",
+                "document",
+                "chat",
+                "person",
+                "starter-pack",
+                "description",
+                "brand"
+              ],
+              "about": "where the content came from (source says how the text was entered)"
+            },
+            "handle": {
+              "type": "string",
+              "about": "the handle or website shown on pictures (core 2)"
+            }
+          }
+        },
+        "what_you_do": {
+          "type": "object",
+          "required": [
+            "status"
+          ],
+          "properties": {
+            "value": {
+              "type": "string"
+            },
+            "status": {
+              "type": "string",
+              "enum": [
+                "confirmed",
+                "skipped",
+                "unconfirmed",
+                "for_chat"
+              ]
+            },
+            "source": {
+              "type": "string",
+              "enum": [
+                "typed",
+                "draft",
+                "draft-edited"
+              ]
+            },
+            "own_words": {
+              "type": "boolean"
+            },
+            "origin": {
+              "type": "string",
+              "enum": [
+                "website",
+                "document",
+                "chat",
+                "person",
+                "starter-pack",
+                "description",
+                "brand"
+              ],
+              "about": "where the content came from (source says how the text was entered)"
+            }
+          }
+        },
+        "audience": {
+          "type": "object",
+          "required": [
+            "status"
+          ],
+          "properties": {
+            "value": {
+              "type": "string"
+            },
+            "questions": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "status": {
+              "type": "string",
+              "enum": [
+                "confirmed",
+                "skipped",
+                "unconfirmed",
+                "for_chat"
+              ]
+            },
+            "source": {
+              "type": "string",
+              "enum": [
+                "typed",
+                "draft",
+                "draft-edited"
+              ]
+            },
+            "own_words": {
+              "type": "boolean"
+            },
+            "origin": {
+              "type": "string",
+              "enum": [
+                "website",
+                "document",
+                "chat",
+                "person",
+                "starter-pack",
+                "description",
+                "brand"
+              ],
+              "about": "where the content came from (source says how the text was entered)"
+            },
+            "in_the_way": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "about": "what's in their way (core 5)"
+            },
+            "objections": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "id",
+                  "status"
+                ],
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "pattern": "^[a-z0-9-]+$",
+                    "about": "stable: never changes when the list is reordered or the item edited"
+                  },
+                  "remove": {
+                    "type": "boolean",
+                    "about": "true: the person removed this item and confirmed it"
+                  },
+                  "value": {
+                    "type": "string"
+                  },
+                  "reply": {
+                    "type": "string",
+                    "about": "how they answer it"
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "confirmed",
+                      "skipped",
+                      "unconfirmed",
+                      "for_chat"
+                    ]
+                  },
+                  "source": {
+                    "type": "string",
+                    "enum": [
+                      "typed",
+                      "draft",
+                      "draft-edited"
+                    ]
+                  },
+                  "origin": {
+                    "type": "string",
+                    "enum": [
+                      "website",
+                      "document",
+                      "chat",
+                      "person",
+                      "starter-pack",
+                      "description",
+                      "brand"
+                    ],
+                    "about": "where the content came from (source says how the text was entered)"
+                  }
+                }
+              },
+              "about": "the objections they hear, and how they answer them (core 7)"
+            },
+            "type": {
+              "type": "string",
+              "enum": [
+                "commercial",
+                "retail",
+                "both"
+              ]
+            },
+            "where": {
+              "type": "string",
+              "enum": [
+                "shop",
+                "online",
+                "both"
+              ]
+            }
+          }
+        },
+        "identities": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "status"
+            ],
+            "properties": {
+              "kind": {
+                "type": "string",
+                "enum": [
+                  "person",
+                  "company",
+                  "other"
+                ]
+              },
+              "name": {
+                "type": "string"
+              },
+              "spelled": {
+                "type": "string"
+              },
+              "role": {
+                "type": "string"
+              },
+              "handle": {
+                "type": "string"
+              },
+              "video_line": {
+                "type": "string"
+              },
+              "status": {
+                "type": "string",
+                "enum": [
+                  "confirmed",
+                  "skipped",
+                  "unconfirmed",
+                  "for_chat"
+                ]
+              },
+              "source": {
+                "type": "string",
+                "enum": [
+                  "typed",
+                  "draft",
+                  "draft-edited"
+                ]
+              },
+              "tapped": {
+                "type": "boolean"
+              },
+              "other": {
+                "type": "string"
+              },
+              "origin": {
+                "type": "string",
+                "enum": [
+                  "website",
+                  "document",
+                  "chat",
+                  "person",
+                  "starter-pack",
+                  "description",
+                  "brand"
+                ],
+                "about": "where the content came from (source says how the text was entered)"
+              },
+              "id": {
+                "type": "string",
+                "pattern": "^[a-z0-9-]+$",
+                "about": "stable: never changes when the list is reordered or the item edited"
+              }
+            }
+          }
+        },
+        "voice_samples": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "text",
+              "status"
+            ],
+            "properties": {
+              "text": {
+                "type": "string",
+                "minLength": 1
+              },
+              "source": {
+                "type": "string",
+                "enum": [
+                  "typed",
+                  "pasted",
+                  "spoken"
+                ]
+              },
+              "verbatim": {
+                "type": "boolean"
+              },
+              "status": {
+                "type": "string",
+                "enum": [
+                  "confirmed",
+                  "skipped",
+                  "unconfirmed",
+                  "for_chat"
+                ]
+              },
+              "id": {
+                "type": "string",
+                "pattern": "^[a-z0-9-]+$",
+                "about": "stable: never changes when the list is reordered or the item edited"
+              },
+              "origin": {
+                "type": "string",
+                "enum": [
+                  "website",
+                  "document",
+                  "chat",
+                  "person",
+                  "starter-pack",
+                  "description",
+                  "brand"
+                ],
+                "about": "where the content came from (source says how the text was entered)"
+              },
+              "topic": {
+                "type": "string",
+                "about": "optional: samples are grouped by topic"
+              }
+            }
+          }
+        },
+        "colours": {
+          "type": "object",
+          "required": [
+            "status"
+          ],
+          "properties": {
+            "found": {
+              "type": "array",
+              "maxItems": 12,
+              "items": {
+                "type": "string",
+                "pattern": "^#[0-9A-Fa-f]{6}$"
+              },
+              "about": "colours Claude collected from the website's styles: offered as suggestions, the person picks which plays which part"
+            },
+            "background": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$",
+              "about": "a colour like #1A2B3C"
+            },
+            "text": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$",
+              "about": "a colour like #1A2B3C"
+            },
+            "accent": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$",
+              "about": "a colour like #1A2B3C"
+            },
+            "status": {
+              "type": "string",
+              "enum": [
+                "confirmed",
+                "skipped",
+                "unconfirmed",
+                "for_chat"
+              ]
+            },
+            "source": {
+              "type": "string",
+              "enum": [
+                "typed",
+                "draft",
+                "draft-edited"
+              ]
+            },
+            "origin": {
+              "type": "string",
+              "enum": [
+                "website",
+                "document",
+                "chat",
+                "person",
+                "starter-pack",
+                "description",
+                "brand"
+              ],
+              "about": "where the content came from (source says how the text was entered)"
+            }
+          }
+        },
+        "rules": {
+          "type": "object",
+          "required": [
+            "status"
+          ],
+          "properties": {
+            "industry": {
+              "type": "string"
+            },
+            "never_claim": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "sign_off": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "never_name": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "hated_words": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "status": {
+              "type": "string",
+              "enum": [
+                "confirmed",
+                "skipped",
+                "unconfirmed",
+                "for_chat"
+              ]
+            },
+            "source": {
+              "type": "string",
+              "enum": [
+                "typed",
+                "draft",
+                "draft-edited"
+              ]
+            },
+            "tapped": {
+              "type": "boolean"
+            },
+            "industry_other": {
+              "type": "string"
+            },
+            "origin": {
+              "type": "string",
+              "enum": [
+                "website",
+                "document",
+                "chat",
+                "person",
+                "starter-pack",
+                "description",
+                "brand"
+              ],
+              "about": "where the content came from (source says how the text was entered)"
+            }
+          }
+        },
+        "make": {
+          "type": "object",
+          "required": [
+            "status"
+          ],
+          "properties": {
+            "value": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "posts",
+                  "visuals",
+                  "short-form-scripts",
+                  "clips",
+                  "descriptions",
+                  "long-form-youtube",
+                  "scheduling",
+                  "research"
+                ]
+              }
+            },
+            "status": {
+              "type": "string",
+              "enum": [
+                "confirmed",
+                "skipped",
+                "unconfirmed",
+                "for_chat"
+              ]
+            },
+            "source": {
+              "type": "string",
+              "enum": [
+                "typed",
+                "draft",
+                "draft-edited"
+              ]
+            },
+            "other": {
+              "type": "string"
+            },
+            "origin": {
+              "type": "string",
+              "enum": [
+                "website",
+                "document",
+                "chat",
+                "person",
+                "starter-pack",
+                "description",
+                "brand"
+              ],
+              "about": "where the content came from (source says how the text was entered)"
+            }
+          }
+        },
+        "why_started": {
+          "type": "object",
+          "required": [
+            "status"
+          ],
+          "properties": {
+            "value": {
+              "type": "string"
+            },
+            "status": {
+              "type": "string",
+              "enum": [
+                "confirmed",
+                "skipped",
+                "unconfirmed",
+                "for_chat"
+              ]
+            },
+            "source": {
+              "type": "string",
+              "enum": [
+                "typed",
+                "draft",
+                "draft-edited"
+              ]
+            },
+            "origin": {
+              "type": "string",
+              "enum": [
+                "website",
+                "document",
+                "chat",
+                "person",
+                "starter-pack",
+                "description",
+                "brand"
+              ],
+              "about": "where the content came from (source says how the text was entered)"
+            }
+          },
+          "about": "why they started, in a few sentences (core 9)"
+        },
+        "voice": {
+          "type": "object",
+          "required": [
+            "status"
+          ],
+          "properties": {
+            "register": {
+              "type": "string"
+            },
+            "do": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "dont": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "signature_phrases": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "status": {
+              "type": "string",
+              "enum": [
+                "confirmed",
+                "skipped",
+                "unconfirmed",
+                "for_chat"
+              ]
+            },
+            "source": {
+              "type": "string",
+              "enum": [
+                "typed",
+                "draft",
+                "draft-edited"
+              ]
+            },
+            "origin": {
+              "type": "string",
+              "enum": [
+                "website",
+                "document",
+                "chat",
+                "person",
+                "starter-pack",
+                "description",
+                "brand"
+              ],
+              "about": "where the content came from (source says how the text was entered)"
+            }
+          },
+          "about": "how they sound, do and don't, signature phrases (core 11-12)"
+        },
+        "positioning": {
+          "type": "object",
+          "about": "what the brand stands for (core 13-19, card F8)",
+          "properties": {
+            "parked": {
+              "type": "boolean",
+              "about": "true: 'skip the strategy part', answer later"
+            },
+            "known_for": {
+              "type": "object",
+              "required": [
+                "status"
+              ],
+              "properties": {
+                "value": {
+                  "type": "string"
+                },
+                "status": {
+                  "type": "string",
+                  "enum": [
+                    "confirmed",
+                    "skipped",
+                    "unconfirmed",
+                    "for_chat"
+                  ]
+                },
+                "source": {
+                  "type": "string",
+                  "enum": [
+                    "typed",
+                    "draft",
+                    "draft-edited"
+                  ]
+                },
+                "origin": {
+                  "type": "string",
+                  "enum": [
+                    "website",
+                    "document",
+                    "chat",
+                    "person",
+                    "starter-pack",
+                    "description",
+                    "brand"
+                  ],
+                  "about": "where the content came from (source says how the text was entered)"
+                }
+              },
+              "about": "F8 A: what people should think of first"
+            },
+            "core_belief": {
+              "type": "object",
+              "required": [
+                "status"
+              ],
+              "properties": {
+                "value": {
+                  "type": "string"
+                },
+                "experience": {
+                  "type": "string",
+                  "about": "the experience behind it, in their words"
+                },
+                "status": {
+                  "type": "string",
+                  "enum": [
+                    "confirmed",
+                    "skipped",
+                    "unconfirmed",
+                    "for_chat"
+                  ]
+                },
+                "source": {
+                  "type": "string",
+                  "enum": [
+                    "typed",
+                    "draft",
+                    "draft-edited"
+                  ]
+                },
+                "origin": {
+                  "type": "string",
+                  "enum": [
+                    "website",
+                    "document",
+                    "chat",
+                    "person",
+                    "starter-pack",
+                    "description",
+                    "brand"
+                  ],
+                  "about": "where the content came from (source says how the text was entered)"
+                },
+                "quoted": {
+                  "type": "boolean",
+                  "about": "rev 13 M6: the owner's own writing, quoted, never reworded"
+                },
+                "said_by": {
+                  "type": "string",
+                  "enum": [
+                    "owner",
+                    "brand"
+                  ],
+                  "about": "who wrote or said it"
+                },
+                "excerpt": {
+                  "type": "string",
+                  "about": "the exact supporting words"
+                },
+                "refs": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "about": "source id, revision and page"
+                },
+                "generator": {
+                  "type": "string"
+                },
+                "derived_from": {
+                  "type": "object",
+                  "about": "an edited quote: the owner's own words now, but where they came from is kept"
+                },
+                "accepted": {
+                  "type": "boolean",
+                  "about": "the owner's own yes for this quote"
+                },
+                "quoted_parts": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "value",
+                      "others",
+                      "us"
+                    ]
+                  },
+                  "about": "the parts that are quoted (the rest the owner typed)"
+                }
+              },
+              "about": "F8 B: never drafted, only the person's own words"
+            },
+            "contrarian": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "id",
+                  "status"
+                ],
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "pattern": "^[a-z0-9-]+$",
+                    "about": "stable: never changes when the list is reordered or the item edited"
+                  },
+                  "remove": {
+                    "type": "boolean",
+                    "about": "true: the person removed this item and confirmed it"
+                  },
+                  "value": {
+                    "type": "string"
+                  },
+                  "experience": {
+                    "type": "string",
+                    "about": "the experience behind it, in their words"
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "confirmed",
+                      "skipped",
+                      "unconfirmed",
+                      "for_chat"
+                    ]
+                  },
+                  "source": {
+                    "type": "string",
+                    "enum": [
+                      "typed",
+                      "draft",
+                      "draft-edited"
+                    ]
+                  },
+                  "origin": {
+                    "type": "string",
+                    "enum": [
+                      "website",
+                      "document",
+                      "chat",
+                      "person",
+                      "starter-pack",
+                      "description",
+                      "brand"
+                    ],
+                    "about": "where the content came from (source says how the text was entered)"
+                  },
+                  "quoted": {
+                    "type": "boolean",
+                    "about": "rev 13 M6: the owner's own writing, quoted, never reworded"
+                  },
+                  "said_by": {
+                    "type": "string",
+                    "enum": [
+                      "owner",
+                      "brand"
+                    ],
+                    "about": "who wrote or said it"
+                  },
+                  "excerpt": {
+                    "type": "string",
+                    "about": "the exact supporting words"
+                  },
+                  "refs": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "about": "source id, revision and page"
+                  },
+                  "generator": {
+                    "type": "string"
+                  },
+                  "derived_from": {
+                    "type": "object",
+                    "about": "an edited quote: the owner's own words now, but where they came from is kept"
+                  },
+                  "accepted": {
+                    "type": "boolean",
+                    "about": "the owner's own yes for this quote"
+                  },
+                  "quoted_parts": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "enum": [
+                        "value",
+                        "others",
+                        "us"
+                      ]
+                    },
+                    "about": "the parts that are quoted (the rest the owner typed)"
+                  }
+                }
+              },
+              "maxItems": 3,
+              "about": "F8 B: up to three more beliefs; never drafted"
+            },
+            "for": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "id",
+                  "status"
+                ],
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "pattern": "^[a-z0-9-]+$",
+                    "about": "stable: never changes when the list is reordered or the item edited"
+                  },
+                  "remove": {
+                    "type": "boolean",
+                    "about": "true: the person removed this item and confirmed it"
+                  },
+                  "value": {
+                    "type": "string"
+                  },
+                  "experience": {
+                    "type": "string",
+                    "about": "the experience behind it, in their words"
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "confirmed",
+                      "skipped",
+                      "unconfirmed",
+                      "for_chat"
+                    ]
+                  },
+                  "source": {
+                    "type": "string",
+                    "enum": [
+                      "typed",
+                      "draft",
+                      "draft-edited"
+                    ]
+                  },
+                  "origin": {
+                    "type": "string",
+                    "enum": [
+                      "website",
+                      "document",
+                      "chat",
+                      "person",
+                      "starter-pack",
+                      "description",
+                      "brand"
+                    ],
+                    "about": "where the content came from (source says how the text was entered)"
+                  }
+                }
+              },
+              "maxItems": 2,
+              "about": "F8 C: two things to be known for"
+            },
+            "against": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "id",
+                  "status"
+                ],
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "pattern": "^[a-z0-9-]+$",
+                    "about": "stable: never changes when the list is reordered or the item edited"
+                  },
+                  "remove": {
+                    "type": "boolean",
+                    "about": "true: the person removed this item and confirmed it"
+                  },
+                  "value": {
+                    "type": "string"
+                  },
+                  "experience": {
+                    "type": "string",
+                    "about": "the experience behind it, in their words"
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "confirmed",
+                      "skipped",
+                      "unconfirmed",
+                      "for_chat"
+                    ]
+                  },
+                  "source": {
+                    "type": "string",
+                    "enum": [
+                      "typed",
+                      "draft",
+                      "draft-edited"
+                    ]
+                  },
+                  "origin": {
+                    "type": "string",
+                    "enum": [
+                      "website",
+                      "document",
+                      "chat",
+                      "person",
+                      "starter-pack",
+                      "description",
+                      "brand"
+                    ],
+                    "about": "where the content came from (source says how the text was entered)"
+                  }
+                }
+              },
+              "maxItems": 2,
+              "about": "F8 C: two things they're against"
+            },
+            "differentiation": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "id",
+                  "status"
+                ],
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "pattern": "^[a-z0-9-]+$",
+                    "about": "stable: never changes when the list is reordered or the item edited"
+                  },
+                  "remove": {
+                    "type": "boolean",
+                    "about": "true: the person removed this item and confirmed it"
+                  },
+                  "others": {
+                    "type": "string"
+                  },
+                  "us": {
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "confirmed",
+                      "skipped",
+                      "unconfirmed",
+                      "for_chat"
+                    ]
+                  },
+                  "source": {
+                    "type": "string",
+                    "enum": [
+                      "typed",
+                      "draft",
+                      "draft-edited"
+                    ]
+                  },
+                  "origin": {
+                    "type": "string",
+                    "enum": [
+                      "website",
+                      "document",
+                      "chat",
+                      "person",
+                      "starter-pack",
+                      "description",
+                      "brand"
+                    ],
+                    "about": "where the content came from (source says how the text was entered)"
+                  },
+                  "quoted": {
+                    "type": "boolean",
+                    "about": "rev 13 M6: the owner's own writing, quoted, never reworded"
+                  },
+                  "said_by": {
+                    "type": "string",
+                    "enum": [
+                      "owner",
+                      "brand"
+                    ],
+                    "about": "who wrote or said it"
+                  },
+                  "excerpt": {
+                    "type": "string",
+                    "about": "the exact supporting words"
+                  },
+                  "refs": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "about": "source id, revision and page"
+                  },
+                  "generator": {
+                    "type": "string"
+                  },
+                  "derived_from": {
+                    "type": "object",
+                    "about": "an edited quote: the owner's own words now, but where they came from is kept"
+                  },
+                  "accepted": {
+                    "type": "boolean",
+                    "about": "the owner's own yes for this quote"
+                  },
+                  "quoted_parts": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "enum": [
+                        "value",
+                        "others",
+                        "us"
+                      ]
+                    },
+                    "about": "the parts that are quoted (the rest the owner typed)"
+                  }
+                }
+              },
+              "maxItems": 4,
+              "about": "F8 D: up to four pairs; never drafted"
+            },
+            "non_negotiables": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "id",
+                  "status"
+                ],
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "pattern": "^[a-z0-9-]+$",
+                    "about": "stable: never changes when the list is reordered or the item edited"
+                  },
+                  "remove": {
+                    "type": "boolean",
+                    "about": "true: the person removed this item and confirmed it"
+                  },
+                  "value": {
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "confirmed",
+                      "skipped",
+                      "unconfirmed",
+                      "for_chat"
+                    ]
+                  },
+                  "source": {
+                    "type": "string",
+                    "enum": [
+                      "typed",
+                      "draft",
+                      "draft-edited"
+                    ]
+                  },
+                  "origin": {
+                    "type": "string",
+                    "enum": [
+                      "website",
+                      "document",
+                      "chat",
+                      "person",
+                      "starter-pack",
+                      "description",
+                      "brand"
+                    ],
+                    "about": "where the content came from (source says how the text was entered)"
+                  },
+                  "quoted": {
+                    "type": "boolean",
+                    "about": "rev 13 M6: the owner's own writing, quoted, never reworded"
+                  },
+                  "said_by": {
+                    "type": "string",
+                    "enum": [
+                      "owner",
+                      "brand"
+                    ],
+                    "about": "who wrote or said it"
+                  },
+                  "excerpt": {
+                    "type": "string",
+                    "about": "the exact supporting words"
+                  },
+                  "refs": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "about": "source id, revision and page"
+                  },
+                  "generator": {
+                    "type": "string"
+                  },
+                  "derived_from": {
+                    "type": "object",
+                    "about": "an edited quote: the owner's own words now, but where they came from is kept"
+                  },
+                  "accepted": {
+                    "type": "boolean",
+                    "about": "the owner's own yes for this quote"
+                  },
+                  "quoted_parts": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "enum": [
+                        "value",
+                        "others",
+                        "us"
+                      ]
+                    },
+                    "about": "the parts that are quoted (the rest the owner typed)"
+                  }
+                }
+              },
+              "maxItems": 5,
+              "about": "F8 E: three to five; never drafted"
+            },
+            "story": {
+              "type": "object",
+              "required": [
+                "status"
+              ],
+              "properties": {
+                "catalyst": {
+                  "type": "string"
+                },
+                "core_truth": {
+                  "type": "string"
+                },
+                "proof": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "id",
+                      "status"
+                    ],
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "pattern": "^[a-z0-9-]+$",
+                        "about": "stable: never changes when the list is reordered or the item edited"
+                      },
+                      "remove": {
+                        "type": "boolean",
+                        "about": "true: the person removed this item and confirmed it"
+                      },
+                      "value": {
+                        "type": "string"
+                      },
+                      "status": {
+                        "type": "string",
+                        "enum": [
+                          "confirmed",
+                          "skipped",
+                          "unconfirmed",
+                          "for_chat"
+                        ]
+                      },
+                      "source": {
+                        "type": "string",
+                        "enum": [
+                          "typed",
+                          "draft",
+                          "draft-edited"
+                        ]
+                      },
+                      "origin": {
+                        "type": "string",
+                        "enum": [
+                          "website",
+                          "document",
+                          "chat",
+                          "person",
+                          "starter-pack",
+                          "description",
+                          "brand"
+                        ],
+                        "about": "where the content came from (source says how the text was entered)"
+                      }
+                    }
+                  },
+                  "about": "how they've proved it: each item confirmed on its own"
+                },
+                "status": {
+                  "type": "string",
+                  "enum": [
+                    "confirmed",
+                    "skipped",
+                    "unconfirmed",
+                    "for_chat"
+                  ]
+                },
+                "source": {
+                  "type": "string",
+                  "enum": [
+                    "typed",
+                    "draft",
+                    "draft-edited"
+                  ]
+                },
+                "origin": {
+                  "type": "string",
+                  "enum": [
+                    "website",
+                    "document",
+                    "chat",
+                    "person",
+                    "starter-pack",
+                    "description",
+                    "brand"
+                  ],
+                  "about": "where the content came from (source says how the text was entered)"
+                }
+              },
+              "about": "F8 F: what they saw, what they believe, how they've proved it"
+            },
+            "home_medium": {
+              "type": "object",
+              "required": [
+                "status"
+              ],
+              "properties": {
+                "value": {
+                  "type": "string",
+                  "enum": [
+                    "video",
+                    "audio",
+                    "writing",
+                    "images"
+                  ]
+                },
+                "status": {
+                  "type": "string",
+                  "enum": [
+                    "confirmed",
+                    "skipped",
+                    "unconfirmed",
+                    "for_chat"
+                  ]
+                },
+                "source": {
+                  "type": "string",
+                  "enum": [
+                    "typed",
+                    "draft",
+                    "draft-edited"
+                  ]
+                },
+                "origin": {
+                  "type": "string",
+                  "enum": [
+                    "website",
+                    "document",
+                    "chat",
+                    "person",
+                    "starter-pack",
+                    "description",
+                    "brand"
+                  ],
+                  "about": "where the content came from (source says how the text was entered)"
+                }
+              },
+              "about": "F8 G: where they're most at home"
+            },
+            "stage": {
+              "type": "object",
+              "required": [
+                "status"
+              ],
+              "properties": {
+                "value": {
+                  "type": "string",
+                  "enum": [
+                    "under_100k",
+                    "100k_1m",
+                    "1m_10m",
+                    "10m_plus"
+                  ]
+                },
+                "status": {
+                  "type": "string",
+                  "enum": [
+                    "confirmed",
+                    "skipped",
+                    "unconfirmed",
+                    "for_chat"
+                  ]
+                },
+                "source": {
+                  "type": "string",
+                  "enum": [
+                    "typed",
+                    "draft",
+                    "draft-edited"
+                  ]
+                },
+                "origin": {
+                  "type": "string",
+                  "enum": [
+                    "website",
+                    "document",
+                    "chat",
+                    "person",
+                    "starter-pack",
+                    "description",
+                    "brand"
+                  ],
+                  "about": "where the content came from (source says how the text was entered)"
+                }
+              },
+              "about": "F8 G: followers on the biggest platform"
+            }
+          }
+        },
+        "teach": {
+          "type": "object",
+          "about": "what they teach (core 20-22, card F4)",
+          "properties": {
+            "myths": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "id",
+                  "status"
+                ],
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "pattern": "^[a-z0-9-]+$",
+                    "about": "stable: never changes when the list is reordered or the item edited"
+                  },
+                  "remove": {
+                    "type": "boolean",
+                    "about": "true: the person removed this item and confirmed it"
+                  },
+                  "value": {
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "confirmed",
+                      "skipped",
+                      "unconfirmed",
+                      "for_chat"
+                    ]
+                  },
+                  "source": {
+                    "type": "string",
+                    "enum": [
+                      "typed",
+                      "draft",
+                      "draft-edited"
+                    ]
+                  },
+                  "origin": {
+                    "type": "string",
+                    "enum": [
+                      "website",
+                      "document",
+                      "chat",
+                      "person",
+                      "starter-pack",
+                      "description",
+                      "brand"
+                    ],
+                    "about": "where the content came from (source says how the text was entered)"
+                  }
+                }
+              }
+            },
+            "mistakes": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "id",
+                  "status"
+                ],
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "pattern": "^[a-z0-9-]+$",
+                    "about": "stable: never changes when the list is reordered or the item edited"
+                  },
+                  "remove": {
+                    "type": "boolean",
+                    "about": "true: the person removed this item and confirmed it"
+                  },
+                  "value": {
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "confirmed",
+                      "skipped",
+                      "unconfirmed",
+                      "for_chat"
+                    ]
+                  },
+                  "source": {
+                    "type": "string",
+                    "enum": [
+                      "typed",
+                      "draft",
+                      "draft-edited"
+                    ]
+                  },
+                  "origin": {
+                    "type": "string",
+                    "enum": [
+                      "website",
+                      "document",
+                      "chat",
+                      "person",
+                      "starter-pack",
+                      "description",
+                      "brand"
+                    ],
+                    "about": "where the content came from (source says how the text was entered)"
+                  }
+                }
+              }
+            },
+            "steps": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "id",
+                  "status"
+                ],
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "pattern": "^[a-z0-9-]+$",
+                    "about": "stable: never changes when the list is reordered or the item edited"
+                  },
+                  "remove": {
+                    "type": "boolean",
+                    "about": "true: the person removed this item and confirmed it"
+                  },
+                  "value": {
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "confirmed",
+                      "skipped",
+                      "unconfirmed",
+                      "for_chat"
+                    ]
+                  },
+                  "source": {
+                    "type": "string",
+                    "enum": [
+                      "typed",
+                      "draft",
+                      "draft-edited"
+                    ]
+                  },
+                  "origin": {
+                    "type": "string",
+                    "enum": [
+                      "website",
+                      "document",
+                      "chat",
+                      "person",
+                      "starter-pack",
+                      "description",
+                      "brand"
+                    ],
+                    "about": "where the content came from (source says how the text was entered)"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "ladder": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "rung",
+              "status"
+            ],
+            "properties": {
+              "rung": {
+                "type": "string",
+                "enum": [
+                  "free",
+                  "entry",
+                  "main",
+                  "premium"
+                ]
+              },
+              "id": {
+                "type": "string",
+                "pattern": "^[a-z0-9-]+$",
+                "about": "the offer's own id, when the rung holds an offer the brand already has"
+              },
+              "none_yet": {
+                "type": "boolean"
+              },
+              "name": {
+                "type": "string"
+              },
+              "line": {
+                "type": "string",
+                "about": "one line about it"
+              },
+              "link": {
+                "type": "string"
+              },
+              "price": {
+                "type": "string"
+              },
+              "call_to_action": {
+                "type": "string"
+              },
+              "keyword": {
+                "type": "string",
+                "about": "one word, capitals, at most 10 letters"
+              },
+              "keyword_ready": {
+                "type": "boolean"
+              },
+              "status": {
+                "type": "string",
+                "enum": [
+                  "confirmed",
+                  "skipped",
+                  "unconfirmed",
+                  "for_chat"
+                ]
+              },
+              "source": {
+                "type": "string",
+                "enum": [
+                  "typed",
+                  "draft",
+                  "draft-edited"
+                ]
+              },
+              "origin": {
+                "type": "string",
+                "enum": [
+                  "website",
+                  "document",
+                  "chat",
+                  "person",
+                  "starter-pack",
+                  "description",
+                  "brand"
+                ],
+                "about": "where the content came from (source says how the text was entered)"
+              }
+            }
+          },
+          "about": "the offer ladder (core 23-26): one item per rung"
+        },
+        "goal": {
+          "type": "object",
+          "required": [
+            "status"
+          ],
+          "properties": {
+            "value": {
+              "type": "string",
+              "enum": [
+                "reach",
+                "leads",
+                "authority"
+              ]
+            },
+            "status": {
+              "type": "string",
+              "enum": [
+                "confirmed",
+                "skipped",
+                "unconfirmed",
+                "for_chat"
+              ]
+            },
+            "source": {
+              "type": "string",
+              "enum": [
+                "typed",
+                "draft",
+                "draft-edited"
+              ]
+            },
+            "origin": {
+              "type": "string",
+              "enum": [
+                "website",
+                "document",
+                "chat",
+                "person",
+                "starter-pack",
+                "description",
+                "brand"
+              ],
+              "about": "where the content came from (source says how the text was entered)"
+            }
+          },
+          "about": "what a win looks like (core 29); asked, never defaulted"
+        },
+        "platforms": {
+          "type": "object",
+          "required": [
+            "status"
+          ],
+          "properties": {
+            "by_speaker": {
+              "type": "object",
+              "about": "speaker id: list of platforms"
+            },
+            "other": {
+              "type": "string"
+            },
+            "status": {
+              "type": "string",
+              "enum": [
+                "confirmed",
+                "skipped",
+                "unconfirmed",
+                "for_chat"
+              ]
+            },
+            "source": {
+              "type": "string",
+              "enum": [
+                "typed",
+                "draft",
+                "draft-edited"
+              ]
+            },
+            "origin": {
+              "type": "string",
+              "enum": [
+                "website",
+                "document",
+                "chat",
+                "person",
+                "starter-pack",
+                "description",
+                "brand"
+              ],
+              "about": "where the content came from (source says how the text was entered)"
+            }
+          },
+          "about": "where each speaker posts or wants to (core 29)"
+        },
+        "capacity": {
+          "type": "object",
+          "required": [
+            "status"
+          ],
+          "properties": {
+            "hours_per_week": {
+              "type": "number",
+              "minimum": 0
+            },
+            "helpers": {
+              "type": "string"
+            },
+            "posts_per_week": {
+              "type": "number",
+              "minimum": 0
+            },
+            "status": {
+              "type": "string",
+              "enum": [
+                "confirmed",
+                "skipped",
+                "unconfirmed",
+                "for_chat"
+              ]
+            },
+            "source": {
+              "type": "string",
+              "enum": [
+                "typed",
+                "draft",
+                "draft-edited"
+              ]
+            },
+            "origin": {
+              "type": "string",
+              "enum": [
+                "website",
+                "document",
+                "chat",
+                "person",
+                "starter-pack",
+                "description",
+                "brand"
+              ],
+              "about": "where the content came from (source says how the text was entered)"
+            }
+          },
+          "about": "what they can keep up each week (core 30)"
+        },
+        "show": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "status"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[a-z0-9-]+$",
+                "about": "stable: never changes when the list is reordered or the item edited"
+              },
+              "remove": {
+                "type": "boolean",
+                "about": "true: the person removed this item and confirmed it"
+              },
+              "value": {
+                "type": "string"
+              },
+              "proof_id": {
+                "type": "string"
+              },
+              "status": {
+                "type": "string",
+                "enum": [
+                  "confirmed",
+                  "skipped",
+                  "unconfirmed",
+                  "for_chat"
+                ]
+              },
+              "source": {
+                "type": "string",
+                "enum": [
+                  "typed",
+                  "draft",
+                  "draft-edited"
+                ]
+              },
+              "origin": {
+                "type": "string",
+                "enum": [
+                  "website",
+                  "document",
+                  "chat",
+                  "person",
+                  "starter-pack",
+                  "description",
+                  "brand"
+                ],
+                "about": "where the content came from (source says how the text was entered)"
+              }
+            }
+          },
+          "about": "what they can show (core 31); never permission to claim anything"
+        },
+        "deep": {
+          "type": "object",
+          "about": "go deeper: all optional, now or later",
+          "properties": {
+            "alternatives": {
+              "type": "object",
+              "required": [
+                "status"
+              ],
+              "properties": {
+                "value": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "status": {
+                  "type": "string",
+                  "enum": [
+                    "confirmed",
+                    "skipped",
+                    "unconfirmed",
+                    "for_chat"
+                  ]
+                },
+                "source": {
+                  "type": "string",
+                  "enum": [
+                    "typed",
+                    "draft",
+                    "draft-edited"
+                  ]
+                },
+                "origin": {
+                  "type": "string",
+                  "enum": [
+                    "website",
+                    "document",
+                    "chat",
+                    "person",
+                    "starter-pack",
+                    "description",
+                    "brand"
+                  ],
+                  "about": "where the content came from (source says how the text was entered)"
+                }
+              },
+              "about": "what customers would do if they didn't exist"
+            },
+            "journey": {
+              "type": "object",
+              "required": [
+                "status"
+              ],
+              "properties": {
+                "want": {
+                  "type": "string"
+                },
+                "known_for": {
+                  "type": "string"
+                },
+                "do": {
+                  "type": "string"
+                },
+                "learn": {
+                  "type": "string"
+                },
+                "status": {
+                  "type": "string",
+                  "enum": [
+                    "confirmed",
+                    "skipped",
+                    "unconfirmed",
+                    "for_chat"
+                  ]
+                },
+                "source": {
+                  "type": "string",
+                  "enum": [
+                    "typed",
+                    "draft",
+                    "draft-edited"
+                  ]
+                },
+                "origin": {
+                  "type": "string",
+                  "enum": [
+                    "website",
+                    "document",
+                    "chat",
+                    "person",
+                    "starter-pack",
+                    "description",
+                    "brand"
+                  ],
+                  "about": "where the content came from (source says how the text was entered)"
+                }
+              }
+            },
+            "compliments": {
+              "type": "object",
+              "required": [
+                "status"
+              ],
+              "properties": {
+                "value": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "status": {
+                  "type": "string",
+                  "enum": [
+                    "confirmed",
+                    "skipped",
+                    "unconfirmed",
+                    "for_chat"
+                  ]
+                },
+                "source": {
+                  "type": "string",
+                  "enum": [
+                    "typed",
+                    "draft",
+                    "draft-edited"
+                  ]
+                },
+                "origin": {
+                  "type": "string",
+                  "enum": [
+                    "website",
+                    "document",
+                    "chat",
+                    "person",
+                    "starter-pack",
+                    "description",
+                    "brand"
+                  ],
+                  "about": "where the content came from (source says how the text was entered)"
+                }
+              }
+            },
+            "formats": {
+              "type": "object",
+              "required": [
+                "status"
+              ],
+              "properties": {
+                "repeatable": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "enjoyable": {
+                  "type": "string"
+                },
+                "status": {
+                  "type": "string",
+                  "enum": [
+                    "confirmed",
+                    "skipped",
+                    "unconfirmed",
+                    "for_chat"
+                  ]
+                },
+                "source": {
+                  "type": "string",
+                  "enum": [
+                    "typed",
+                    "draft",
+                    "draft-edited"
+                  ]
+                },
+                "origin": {
+                  "type": "string",
+                  "enum": [
+                    "website",
+                    "document",
+                    "chat",
+                    "person",
+                    "starter-pack",
+                    "description",
+                    "brand"
+                  ],
+                  "about": "where the content came from (source says how the text was entered)"
+                }
+              }
+            },
+            "adjacent_topics": {
+              "type": "object",
+              "required": [
+                "status"
+              ],
+              "properties": {
+                "value": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "status": {
+                  "type": "string",
+                  "enum": [
+                    "confirmed",
+                    "skipped",
+                    "unconfirmed",
+                    "for_chat"
+                  ]
+                },
+                "source": {
+                  "type": "string",
+                  "enum": [
+                    "typed",
+                    "draft",
+                    "draft-edited"
+                  ]
+                },
+                "origin": {
+                  "type": "string",
+                  "enum": [
+                    "website",
+                    "document",
+                    "chat",
+                    "person",
+                    "starter-pack",
+                    "description",
+                    "brand"
+                  ],
+                  "about": "where the content came from (source says how the text was entered)"
+                }
+              }
+            },
+            "world": {
+              "type": "object",
+              "required": [
+                "status"
+              ],
+              "properties": {
+                "people": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "places": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "interests": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "enemy": {
+                  "type": "string"
+                },
+                "status": {
+                  "type": "string",
+                  "enum": [
+                    "confirmed",
+                    "skipped",
+                    "unconfirmed",
+                    "for_chat"
+                  ]
+                },
+                "source": {
+                  "type": "string",
+                  "enum": [
+                    "typed",
+                    "draft",
+                    "draft-edited"
+                  ]
+                },
+                "origin": {
+                  "type": "string",
+                  "enum": [
+                    "website",
+                    "document",
+                    "chat",
+                    "person",
+                    "starter-pack",
+                    "description",
+                    "brand"
+                  ],
+                  "about": "where the content came from (source says how the text was entered)"
+                }
+              }
+            },
+            "person": {
+              "type": "object",
+              "required": [
+                "status"
+              ],
+              "properties": {
+                "values": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "timeline": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "beliefs": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "never_compromise": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "early_signs": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "ambitions": {
+                  "type": "string"
+                },
+                "status": {
+                  "type": "string",
+                  "enum": [
+                    "confirmed",
+                    "skipped",
+                    "unconfirmed",
+                    "for_chat"
+                  ]
+                },
+                "source": {
+                  "type": "string",
+                  "enum": [
+                    "typed",
+                    "draft",
+                    "draft-edited"
+                  ]
+                },
+                "origin": {
+                  "type": "string",
+                  "enum": [
+                    "website",
+                    "document",
+                    "chat",
+                    "person",
+                    "starter-pack",
+                    "description",
+                    "brand"
+                  ],
+                  "about": "where the content came from (source says how the text was entered)"
+                }
+              }
+            },
+            "stories": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "id",
+                  "status"
+                ],
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "pattern": "^[a-z0-9-]+$",
+                    "about": "stable: never changes when the list is reordered or the item edited"
+                  },
+                  "remove": {
+                    "type": "boolean",
+                    "about": "true: the person removed this item and confirmed it"
+                  },
+                  "kind": {
+                    "type": "string",
+                    "enum": [
+                      "origin",
+                      "failure",
+                      "success",
+                      "customer",
+                      "industry"
+                    ]
+                  },
+                  "text": {
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "confirmed",
+                      "skipped",
+                      "unconfirmed",
+                      "for_chat"
+                    ]
+                  },
+                  "source": {
+                    "type": "string",
+                    "enum": [
+                      "typed",
+                      "draft",
+                      "draft-edited"
+                    ]
+                  },
+                  "origin": {
+                    "type": "string",
+                    "enum": [
+                      "website",
+                      "document",
+                      "chat",
+                      "person",
+                      "starter-pack",
+                      "description",
+                      "brand"
+                    ],
+                    "about": "where the content came from (source says how the text was entered)"
+                  }
+                }
+              }
+            },
+            "audience": {
+              "type": "object",
+              "required": [
+                "status"
+              ],
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "commercial",
+                    "retail",
+                    "both"
+                  ]
+                },
+                "where": {
+                  "type": "string",
+                  "enum": [
+                    "shop",
+                    "online",
+                    "both"
+                  ]
+                },
+                "hangouts": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "trust_triggers": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "status": {
+                  "type": "string",
+                  "enum": [
+                    "confirmed",
+                    "skipped",
+                    "unconfirmed",
+                    "for_chat"
+                  ]
+                },
+                "source": {
+                  "type": "string",
+                  "enum": [
+                    "typed",
+                    "draft",
+                    "draft-edited"
+                  ]
+                },
+                "origin": {
+                  "type": "string",
+                  "enum": [
+                    "website",
+                    "document",
+                    "chat",
+                    "person",
+                    "starter-pack",
+                    "description",
+                    "brand"
+                  ],
+                  "about": "where the content came from (source says how the text was entered)"
+                }
+              }
+            },
+            "offers": {
+              "type": "object",
+              "required": [
+                "status"
+              ],
+              "properties": {
+                "customer_journey": {
+                  "type": "string"
+                },
+                "dream_result": {
+                  "type": "string"
+                },
+                "dm_tool": {
+                  "type": "string"
+                },
+                "status": {
+                  "type": "string",
+                  "enum": [
+                    "confirmed",
+                    "skipped",
+                    "unconfirmed",
+                    "for_chat"
+                  ]
+                },
+                "source": {
+                  "type": "string",
+                  "enum": [
+                    "typed",
+                    "draft",
+                    "draft-edited"
+                  ]
+                },
+                "origin": {
+                  "type": "string",
+                  "enum": [
+                    "website",
+                    "document",
+                    "chat",
+                    "person",
+                    "starter-pack",
+                    "description",
+                    "brand"
+                  ],
+                  "about": "where the content came from (source says how the text was entered)"
+                }
+              }
+            },
+            "voice": {
+              "type": "object",
+              "required": [
+                "status"
+              ],
+              "properties": {
+                "by_platform": {
+                  "type": "object"
+                },
+                "analogies": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "examples": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "status": {
+                  "type": "string",
+                  "enum": [
+                    "confirmed",
+                    "skipped",
+                    "unconfirmed",
+                    "for_chat"
+                  ]
+                },
+                "source": {
+                  "type": "string",
+                  "enum": [
+                    "typed",
+                    "draft",
+                    "draft-edited"
+                  ]
+                },
+                "origin": {
+                  "type": "string",
+                  "enum": [
+                    "website",
+                    "document",
+                    "chat",
+                    "person",
+                    "starter-pack",
+                    "description",
+                    "brand"
+                  ],
+                  "about": "where the content came from (source says how the text was entered)"
+                }
+              }
+            },
+            "vocabulary": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "id",
+                  "status"
+                ],
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "pattern": "^[a-z0-9-]+$",
+                    "about": "stable: never changes when the list is reordered or the item edited"
+                  },
+                  "remove": {
+                    "type": "boolean",
+                    "about": "true: the person removed this item and confirmed it"
+                  },
+                  "value": {
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "confirmed",
+                      "skipped",
+                      "unconfirmed",
+                      "for_chat"
+                    ]
+                  },
+                  "source": {
+                    "type": "string",
+                    "enum": [
+                      "typed",
+                      "draft",
+                      "draft-edited"
+                    ]
+                  },
+                  "origin": {
+                    "type": "string",
+                    "enum": [
+                      "website",
+                      "document",
+                      "chat",
+                      "person",
+                      "starter-pack",
+                      "description",
+                      "brand"
+                    ],
+                    "about": "where the content came from (source says how the text was entered)"
+                  }
+                }
+              }
+            },
+            "content_source": {
+              "type": "object",
+              "required": [
+                "status"
+              ],
+              "properties": {
+                "value": {
+                  "type": "string"
+                },
+                "status": {
+                  "type": "string",
+                  "enum": [
+                    "confirmed",
+                    "skipped",
+                    "unconfirmed",
+                    "for_chat"
+                  ]
+                },
+                "source": {
+                  "type": "string",
+                  "enum": [
+                    "typed",
+                    "draft",
+                    "draft-edited"
+                  ]
+                },
+                "origin": {
+                  "type": "string",
+                  "enum": [
+                    "website",
+                    "document",
+                    "chat",
+                    "person",
+                    "starter-pack",
+                    "description",
+                    "brand"
+                  ],
+                  "about": "where the content came from (source says how the text was entered)"
+                }
+              },
+              "about": "the pillar piece, or 'none yet'"
+            },
+            "baseline": {
+              "type": "object",
+              "required": [
+                "status"
+              ],
+              "properties": {
+                "platforms": {
+                  "type": "object",
+                  "about": "platform: {followers, typical_views, date}"
+                },
+                "status": {
+                  "type": "string",
+                  "enum": [
+                    "confirmed",
+                    "skipped",
+                    "unconfirmed",
+                    "for_chat"
+                  ]
+                },
+                "source": {
+                  "type": "string",
+                  "enum": [
+                    "typed",
+                    "draft",
+                    "draft-edited"
+                  ]
+                },
+                "origin": {
+                  "type": "string",
+                  "enum": [
+                    "website",
+                    "document",
+                    "chat",
+                    "person",
+                    "starter-pack",
+                    "description",
+                    "brand"
+                  ],
+                  "about": "where the content came from (source says how the text was entered)"
+                }
+              }
+            },
+            "look": {
+              "type": "object",
+              "required": [
+                "status"
+              ],
+              "properties": {
+                "fonts": {
+                  "type": "object",
+                  "properties": {
+                    "display": {
+                      "type": "string"
+                    },
+                    "body": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "extra_colors": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "pattern": "^#[0-9A-Fa-f]{6}$"
+                  }
+                },
+                "identity_line": {
+                  "type": "string"
+                },
+                "likes": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "dislikes": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "status": {
+                  "type": "string",
+                  "enum": [
+                    "confirmed",
+                    "skipped",
+                    "unconfirmed",
+                    "for_chat"
+                  ]
+                },
+                "source": {
+                  "type": "string",
+                  "enum": [
+                    "typed",
+                    "draft",
+                    "draft-edited"
+                  ]
+                },
+                "origin": {
+                  "type": "string",
+                  "enum": [
+                    "website",
+                    "document",
+                    "chat",
+                    "person",
+                    "starter-pack",
+                    "description",
+                    "brand"
+                  ],
+                  "about": "where the content came from (source says how the text was entered)"
+                }
+              }
+            },
+            "proof": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "id",
+                  "status"
+                ],
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "pattern": "^[a-z0-9-]+$",
+                    "about": "stable: never changes when the list is reordered or the item edited"
+                  },
+                  "remove": {
+                    "type": "boolean",
+                    "about": "true: the person removed this item and confirmed it"
+                  },
+                  "bank": {
+                    "type": "string",
+                    "enum": [
+                      "credibility",
+                      "interest"
+                    ]
+                  },
+                  "kind": {
+                    "type": "string",
+                    "enum": [
+                      "result",
+                      "testimonial",
+                      "screenshot",
+                      "photo",
+                      "fact"
+                    ]
+                  },
+                  "title": {
+                    "type": "string"
+                  },
+                  "context": {
+                    "type": "string"
+                  },
+                  "problem": {
+                    "type": "string"
+                  },
+                  "insight": {
+                    "type": "string"
+                  },
+                  "approach": {
+                    "type": "string"
+                  },
+                  "outcome": {
+                    "type": "string"
+                  },
+                  "lesson": {
+                    "type": "string"
+                  },
+                  "source_text": {
+                    "type": "string",
+                    "about": "a file, a link, a date, a person"
+                  },
+                  "known_from": {
+                    "type": "string",
+                    "enum": [
+                      "own_account",
+                      "document",
+                      "public_source_checked"
+                    ]
+                  },
+                  "may_publish": {
+                    "type": "string",
+                    "enum": [
+                      "no",
+                      "yes",
+                      "anonymised"
+                    ]
+                  },
+                  "names_third_party": {
+                    "type": "boolean"
+                  },
+                  "proof_id": {
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "confirmed",
+                      "skipped",
+                      "unconfirmed",
+                      "for_chat"
+                    ]
+                  },
+                  "source": {
+                    "type": "string",
+                    "enum": [
+                      "typed",
+                      "draft",
+                      "draft-edited"
+                    ]
+                  },
+                  "origin": {
+                    "type": "string",
+                    "enum": [
+                      "website",
+                      "document",
+                      "chat",
+                      "person",
+                      "starter-pack",
+                      "description",
+                      "brand"
+                    ],
+                    "about": "where the content came from (source says how the text was entered)"
+                  }
+                }
+              },
+              "about": "Credibility Bank and Interest Bank; goes to the proof library, never the settings"
+            }
+          }
+        },
+        "business_start": {
+          "type": "object",
+          "required": [
+            "status"
+          ],
+          "properties": {
+            "status": {
+              "type": "string",
+              "enum": [
+                "confirmed",
+                "skipped",
+                "unconfirmed",
+                "for_chat"
+              ]
+            },
+            "source": {
+              "type": "string",
+              "enum": [
+                "typed",
+                "draft",
+                "draft-edited"
+              ]
+            },
+            "origin": {
+              "type": "string",
+              "enum": [
+                "website",
+                "document",
+                "chat",
+                "person",
+                "starter-pack",
+                "description",
+                "brand"
+              ],
+              "about": "where the content came from (source says how the text was entered)"
+            },
+            "generator": {
+              "type": "string",
+              "about": "who suggested it: claude-from-website, claude-from-document, claude-from-description or pack:<id>@<version>"
+            },
+            "refs": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "about": "the pages, documents or idea ids it came from"
+            },
+            "what": {
+              "type": "string"
+            },
+            "where": {
+              "type": "string"
+            },
+            "website": {
+              "type": "string"
+            }
+          },
+          "about": "rev 12 N2: the first screen (what the business is, where, the website)"
+        },
+        "starter_pack": {
+          "type": "object",
+          "required": [
+            "status"
+          ],
+          "properties": {
+            "status": {
+              "type": "string",
+              "enum": [
+                "confirmed",
+                "skipped",
+                "unconfirmed",
+                "for_chat"
+              ]
+            },
+            "source": {
+              "type": "string",
+              "enum": [
+                "typed",
+                "draft",
+                "draft-edited"
+              ]
+            },
+            "origin": {
+              "type": "string",
+              "enum": [
+                "website",
+                "document",
+                "chat",
+                "person",
+                "starter-pack",
+                "description",
+                "brand"
+              ],
+              "about": "where the content came from (source says how the text was entered)"
+            },
+            "generator": {
+              "type": "string",
+              "about": "who suggested it: claude-from-website, claude-from-document, claude-from-description or pack:<id>@<version>"
+            },
+            "refs": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "about": "the pages, documents or idea ids it came from"
+            },
+            "id": {
+              "type": "string",
+              "pattern": "^[a-z0-9-]+$"
+            },
+            "version": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "suggestions": {
+              "type": "object",
+              "about": "only for 'Something else': Claude's suggestions from the description, allowlisted fields only"
+            }
+          },
+          "about": "rev 12 N3: the starter pack the suggestions came from (id 'custom' when Claude suggested from the description)"
+        },
+        "topic_ideas": {
+          "type": "array",
+          "about": "rev 12 N3: post ideas for the type of business, never brand answers",
+          "items": {
+            "type": "object",
+            "required": [
+              "status"
+            ],
+            "properties": {
+              "status": {
+                "type": "string",
+                "enum": [
+                  "confirmed",
+                  "skipped",
+                  "unconfirmed",
+                  "for_chat"
+                ]
+              },
+              "source": {
+                "type": "string",
+                "enum": [
+                  "typed",
+                  "draft",
+                  "draft-edited"
+                ]
+              },
+              "origin": {
+                "type": "string",
+                "enum": [
+                  "website",
+                  "document",
+                  "chat",
+                  "person",
+                  "starter-pack",
+                  "description",
+                  "brand"
+                ],
+                "about": "where the content came from (source says how the text was entered)"
+              },
+              "generator": {
+                "type": "string",
+                "about": "who suggested it: claude-from-website, claude-from-document, claude-from-description or pack:<id>@<version>"
+              },
+              "refs": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "about": "the pages, documents or idea ids it came from"
+              },
+              "id": {
+                "type": "string"
+              },
+              "field": {
+                "type": "string"
+              },
+              "text": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        },
+        "platform_candidates": {
+          "type": "array",
+          "about": "rev 12 N6: platforms a pack suggested, waiting until the owner assigns them to a speaker",
+          "items": {
+            "type": "object",
+            "required": [
+              "status"
+            ],
+            "properties": {
+              "status": {
+                "type": "string",
+                "enum": [
+                  "confirmed",
+                  "skipped",
+                  "unconfirmed",
+                  "for_chat"
+                ]
+              },
+              "source": {
+                "type": "string",
+                "enum": [
+                  "typed",
+                  "draft",
+                  "draft-edited"
+                ]
+              },
+              "origin": {
+                "type": "string",
+                "enum": [
+                  "website",
+                  "document",
+                  "chat",
+                  "person",
+                  "starter-pack",
+                  "description",
+                  "brand"
+                ],
+                "about": "where the content came from (source says how the text was entered)"
+              },
+              "generator": {
+                "type": "string",
+                "about": "who suggested it: claude-from-website, claude-from-document, claude-from-description or pack:<id>@<version>"
+              },
+              "refs": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "about": "the pages, documents or idea ids it came from"
+              },
+              "platform": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "acquisition": {
+          "type": "array",
+          "about": "rev 12 N6: how people find you today (part of question 29), the owner's own words",
+          "items": {
+            "type": "object",
+            "required": [
+              "status"
+            ],
+            "properties": {
+              "status": {
+                "type": "string",
+                "enum": [
+                  "confirmed",
+                  "skipped",
+                  "unconfirmed",
+                  "for_chat"
+                ]
+              },
+              "source": {
+                "type": "string",
+                "enum": [
+                  "typed",
+                  "draft",
+                  "draft-edited"
+                ]
+              },
+              "origin": {
+                "type": "string",
+                "enum": [
+                  "website",
+                  "document",
+                  "chat",
+                  "person",
+                  "starter-pack",
+                  "description",
+                  "brand"
+                ],
+                "about": "where the content came from (source says how the text was entered)"
+              },
+              "generator": {
+                "type": "string",
+                "about": "who suggested it: claude-from-website, claude-from-document, claude-from-description or pack:<id>@<version>"
+              },
+              "refs": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "about": "the pages, documents or idea ids it came from"
+              },
+              "id": {
+                "type": "string"
+              },
+              "value": {
+                "type": "string"
+              },
+              "remove": {
+                "type": "boolean"
+              }
+            }
+          }
+        },
+        "filming": {
+          "type": "object",
+          "required": [
+            "status"
+          ],
+          "properties": {
+            "status": {
+              "type": "string",
+              "enum": [
+                "confirmed",
+                "skipped",
+                "unconfirmed",
+                "for_chat"
+              ]
+            },
+            "source": {
+              "type": "string",
+              "enum": [
+                "typed",
+                "draft",
+                "draft-edited"
+              ]
+            },
+            "origin": {
+              "type": "string",
+              "enum": [
+                "website",
+                "document",
+                "chat",
+                "person",
+                "starter-pack",
+                "description",
+                "brand"
+              ],
+              "about": "where the content came from (source says how the text was entered)"
+            },
+            "generator": {
+              "type": "string",
+              "about": "who suggested it: claude-from-website, claude-from-document, claude-from-description or pack:<id>@<version>"
+            },
+            "refs": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "about": "the pages, documents or idea ids it came from"
+            },
+            "speakers": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "status"
+                ],
+                "properties": {
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "confirmed",
+                      "skipped",
+                      "unconfirmed",
+                      "for_chat"
+                    ]
+                  },
+                  "source": {
+                    "type": "string",
+                    "enum": [
+                      "typed",
+                      "draft",
+                      "draft-edited"
+                    ]
+                  },
+                  "origin": {
+                    "type": "string",
+                    "enum": [
+                      "website",
+                      "document",
+                      "chat",
+                      "person",
+                      "starter-pack",
+                      "description",
+                      "brand"
+                    ],
+                    "about": "where the content came from (source says how the text was entered)"
+                  },
+                  "generator": {
+                    "type": "string",
+                    "about": "who suggested it: claude-from-website, claude-from-document, claude-from-description or pack:<id>@<version>"
+                  },
+                  "refs": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "about": "the pages, documents or idea ids it came from"
+                  },
+                  "id": {
+                    "type": "string"
+                  },
+                  "mode": {
+                    "type": "string",
+                    "enum": [
+                      "on_camera",
+                      "voice_over",
+                      "not_in_videos"
+                    ]
+                  }
+                }
+              }
+            },
+            "where": {
+              "type": "string"
+            }
+          },
+          "about": "rev 12 N6: who speaks in the videos, on camera or as a voice-over, and where they film (optional, not counted)"
+        },
+        "influences": {
+          "type": "object",
+          "required": [
+            "status"
+          ],
+          "properties": {
+            "status": {
+              "type": "string",
+              "enum": [
+                "confirmed",
+                "skipped",
+                "unconfirmed",
+                "for_chat"
+              ],
+              "about": "the question's own answer: confirmed with no rows clears the brand's list; skipped leaves it"
+            },
+            "restored": {
+              "type": "boolean"
+            },
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "id",
+                  "status"
+                ],
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "pattern": "^[a-z0-9-]+$",
+                    "about": "stable: never changes when the list is reordered or the item edited"
+                  },
+                  "remove": {
+                    "type": "boolean",
+                    "about": "true: the person removed this item and confirmed it"
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "confirmed",
+                      "skipped",
+                      "unconfirmed",
+                      "for_chat"
+                    ]
+                  },
+                  "source": {
+                    "type": "string",
+                    "enum": [
+                      "typed",
+                      "draft",
+                      "draft-edited"
+                    ]
+                  },
+                  "origin": {
+                    "type": "string",
+                    "enum": [
+                      "website",
+                      "document",
+                      "chat",
+                      "person",
+                      "starter-pack",
+                      "description",
+                      "brand"
+                    ],
+                    "about": "where the content came from (source says how the text was entered)"
+                  },
+                  "quoted": {
+                    "type": "boolean",
+                    "about": "rev 13 M6: the owner's own writing, quoted, never reworded"
+                  },
+                  "said_by": {
+                    "type": "string",
+                    "enum": [
+                      "owner",
+                      "brand"
+                    ],
+                    "about": "who wrote or said it"
+                  },
+                  "excerpt": {
+                    "type": "string",
+                    "about": "the exact supporting words"
+                  },
+                  "refs": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "about": "source id, revision and page"
+                  },
+                  "generator": {
+                    "type": "string"
+                  },
+                  "derived_from": {
+                    "type": "object",
+                    "about": "an edited quote: the owner's own words now, but where they came from is kept"
+                  },
+                  "accepted": {
+                    "type": "boolean",
+                    "about": "the owner's own yes for this quote"
+                  },
+                  "quoted_parts": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "enum": [
+                        "name",
+                        "why"
+                      ]
+                    },
+                    "about": "the parts that are quoted (the rest the owner typed)"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "why": {
+                    "type": "string"
+                  },
+                  "restored": {
+                    "type": "boolean",
+                    "about": "read back from the brand to check again"
+                  }
+                }
+              }
+            }
+          },
+          "about": "who inspires them (optional, uncounted): only the owner's own answers, or quotes of their own writing"
+        },
+        "fonts": {
+          "type": "object",
+          "required": [
+            "status"
+          ],
+          "properties": {
+            "status": {
+              "type": "string",
+              "enum": [
+                "confirmed",
+                "skipped",
+                "unconfirmed",
+                "for_chat"
+              ]
+            },
+            "source": {
+              "type": "string",
+              "enum": [
+                "typed",
+                "draft",
+                "draft-edited"
+              ]
+            },
+            "origin": {
+              "type": "string",
+              "enum": [
+                "website",
+                "document",
+                "chat",
+                "person",
+                "starter-pack",
+                "description",
+                "brand"
+              ],
+              "about": "where the content came from (source says how the text was entered)"
+            },
+            "generator": {
+              "type": "string",
+              "about": "who suggested it: claude-from-website, claude-from-document, claude-from-description or pack:<id>@<version>"
+            },
+            "refs": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "about": "the pages, documents or idea ids it came from"
+            },
+            "heading": {
+              "type": "string"
+            },
+            "body": {
+              "type": "string"
+            }
+          },
+          "about": "rev 12 N5: the fonts the owner likes for headings and text (optional, not counted)"
+        },
+        "provenance": {
+          "type": "object",
+          "about": "rev 12 N3: where each question's words came from, by question id",
+          "properties": {}
+        },
+        "inventory": {
+          "type": "object",
+          "about": "rev 13 M3: what Claude read from the owner's material, and what it gave each question",
+          "properties": {
+            "sources": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "id",
+                  "name",
+                  "status"
+                ],
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "pattern": "^[a-z0-9-]+$",
+                    "about": "stable across rereads, e.g. src-1"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "kind": {
+                    "type": "string",
+                    "enum": [
+                      "pdf",
+                      "document",
+                      "text",
+                      "spreadsheet",
+                      "web",
+                      "image",
+                      "audio",
+                      "video",
+                      "other"
+                    ]
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "read",
+                      "partly read",
+                      "couldn't read",
+                      "not read yet"
+                    ]
+                  },
+                  "covered": {
+                    "type": "string",
+                    "about": "exactly what was read, e.g. pages 1-48 of 52"
+                  },
+                  "dont_use": {
+                    "type": "boolean",
+                    "about": "marked by the owner before reading: never read, never used"
+                  },
+                  "revision": {
+                    "type": "string",
+                    "about": "fingerprint of the version that was read"
+                  },
+                  "note": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "fields": {
+              "type": "object",
+              "about": "by question id: {coverage, refs}"
+            },
+            "made": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "skipped": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "reflection": {
+      "type": "object"
+    },
+    "followups": {
+      "type": "object",
+      "about": "one prepared follow-up question per drafted answer that reads generic, by the page's field id (fields.json), e.g. {\"what_you_do\": \"Give one example from your own work.\"}. Written by Claude with the website draft; shown under that answer, never as a pop-up, and never suggesting an answer"
+    }
+  }
+}

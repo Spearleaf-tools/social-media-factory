@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "what": "Verified facts this brand may state in public. Each has a source. A number that is not here (or in a research file, or on a proof item) is treated as unverified.",
+    "example": "This is the made-up example brand. Every fact below is invented."
+  },
+  "facts": [
+    {
+      "id": "ferment-18h",
+      "claim": "Our sourdough ferments for at least 18 hours",
+      "values": [
+        "18"
+      ],
+      "source": "Our own production sheet"
+    },
+    {
+      "id": "class-size",
+      "claim": "A class takes 8 people and lasts 4 hours",
+      "values": [
+        "8",
+        "4"
+      ],
+      "source": "Our class booking page"
+    },
+    {
+      "id": "opened-2019",
+      "claim": "We opened in 2019",
+      "values": [
+        "2019"
+      ],
+      "source": "Our shop lease"
+    },
+    {
+      "id": "starter-100",
+      "claim": "Our starter is 100 percent hydration: equal flour and water by weight",
+      "values": [
+        "100"
+      ],
+      "source": "Our own method sheet"
+    },
+    {
+      "id": "rye-12",
+      "claim": "We bake 12 rye loaves on a Friday",
+      "values": [
+        "12"
+      ],
+      "source": "Our own production sheet"
+    }
+  ]
+}

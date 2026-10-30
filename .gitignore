@@ -1,0 +1,59 @@
+# --- never commit keys
+keys.env
+.env
+.env.*
+!keys.env.example
+
+# --- the Social Media Factory's own install and scratch space
+.factory/
+# Troubleshooting reports (HELP.md) stay on this computer until the person chooses to send one.
+Feedback/
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+
+# --- YOUR brands stay on your computer. Only the fictional example brand is part of the repo.
+# (If you fork this repo publicly, this is what keeps your brand, your drafts and your
+# posting history out of it.)
+Client/*
+!Client/README.md
+!Client/maple-and-main/
+# ...and even for the example brand, only its settings and source material are tracked, by name.
+# Anything a tool writes there (plans, scripts, batches, schedules, derived settings) stays local.
+Client/maple-and-main/*
+!Client/maple-and-main/README.md
+!Client/maple-and-main/brand-master.json
+!Client/maple-and-main/Brand/
+Client/maple-and-main/Brand/*
+!Client/maple-and-main/Brand/*.md
+!Client/maple-and-main/Studio/
+Client/maple-and-main/Studio/*
+!Client/maple-and-main/Studio/facts.json
+!Client/maple-and-main/Inputs/
+Client/maple-and-main/Inputs/*
+!Client/maple-and-main/Inputs/Questions/
+
+
+# --- An owner's thinking journal stays on their computer, even in the shared brands above:
+# it can hold private entries. (Its half-saved copy too.)
+Client/*/Brand/journal.md
+Client/*/Brand/journal.md.saving
+
+# --- media and working files
+*.mp4
+*.mov
+*.m4v
+*.mp3
+*.wav
+*.m4a
+*.log
+*.db
+*.sqlite
+*.sqlite3
+
+# --- OS and editor junk
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

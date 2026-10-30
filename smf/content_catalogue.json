@@ -1,0 +1,1566 @@
+{
+ "version": 1,
+ "about": "What the Social Media Factory can make, from the Full Content Reference (Oct 17), using the full name \"Social Media Factory\" throughout. Each option lists the features it relies on (smf/features.json) in `implements`; an empty list carries a `limit`. `also` lists optional extras an option can use (they don't change whether it's ready). The menu page groups options by `kinds` (what you want to make) and filters them by `platforms`; an option with an empty `platforms` list is for every platform. `stages` keeps the order of the work.",
+ "internal": [
+  "setup",
+  "status"
+ ],
+ "flow": [
+  "Your first request",
+  "Setup",
+  "Enough material?",
+  "Pick a topic",
+  "Make it: a post, an image, a script to film, or clips from a recording",
+  "Review and approve",
+  "Post it yourself or schedule it",
+  "Check the results",
+  "Your next idea"
+ ],
+ "stages": [
+  [
+   "Set up your brand",
+   [
+    "P11"
+   ],
+   "Do this once, then update it when your business changes."
+  ],
+  [
+   "Plan what to make",
+   [
+    "P01",
+    "P03",
+    "P04",
+    "P05",
+    "P06",
+    "P07",
+    "P08",
+    "P09",
+    "P10"
+   ],
+   "Choose a topic first. Research is optional when your own material already supports the idea."
+  ],
+  [
+   "Write social posts",
+   [
+    "W01",
+    "W02",
+    "W03",
+    "W04",
+    "W05"
+   ],
+   "Use these when the result you need is written post copy."
+  ],
+  [
+   "Prepare to record",
+   [
+    "P02",
+    "S01",
+    "S02",
+    "S03",
+    "S04",
+    "W07"
+   ],
+   "Use these before a new recording. Scripts and slides are ingredients, not finished movies."
+  ],
+  [
+   "Make images & slides",
+   [
+    "I01",
+    "I02",
+    "I03",
+    "I04",
+    "I05",
+    "I06",
+    "I07",
+    "I08",
+    "I09",
+    "I10",
+    "I11",
+    "I12",
+    "I13",
+    "I14",
+    "I15"
+   ],
+   "Choose the image format that helps explain your idea. You do not need every format."
+  ],
+  [
+   "Edit finished videos",
+   [
+    "V01",
+    "V02",
+    "V03",
+    "V04",
+    "V05",
+    "V06",
+    "V07",
+    "V08",
+    "V09",
+    "V10",
+    "W06"
+   ],
+   "Start with your recordings or footage, then prepare the descriptions that accompany the videos."
+  ],
+  [
+   "Review the content",
+   [
+    "O01"
+   ],
+   "The assistant brings the drafts and media together. You read, watch and decide."
+  ],
+  [
+   "Publish or hand off",
+   [
+    "O02",
+    "O03",
+    "O04",
+    "O05"
+   ],
+   "Choose manual posting or connected scheduling. Testing variants is an optional advanced route."
+  ],
+  [
+   "Learn from results",
+   [
+    "O06"
+   ],
+   "Use actual results to choose the next useful piece of content."
+  ],
+  [
+   "Optional: follow up by DM",
+   [
+    "O07"
+   ],
+   "Add this only when you have a real resource to deliver and a reason to automate replies."
+  ]
+ ],
+ "platforms": [
+  [
+   "instagram",
+   "Instagram"
+  ],
+  [
+   "facebook",
+   "Facebook"
+  ],
+  [
+   "linkedin",
+   "LinkedIn"
+  ],
+  [
+   "twitter",
+   "X"
+  ],
+  [
+   "shorts",
+   "TikTok and YouTube Shorts"
+  ],
+  [
+   "youtube",
+   "YouTube"
+  ]
+ ],
+ "kinds": [
+  [
+   "Just words",
+   [
+    "W01",
+    "W02",
+    "W03",
+    "W04",
+    "W05"
+   ],
+   "A written post, ready to paste. No pictures needed."
+  ],
+  [
+   "A post with an image",
+   [
+    "I03",
+    "I04",
+    "I05",
+    "I06",
+    "I07",
+    "I08",
+    "I09",
+    "I10",
+    "I11",
+    "I12",
+    "I15"
+   ],
+   "One picture to go with a post: a stat, a quote, a headline, a comparison, or a real photo of yours."
+  ],
+  [
+   "A carousel",
+   [
+    "I01",
+    "I02"
+   ],
+   "Several slides people swipe through, or a PDF for LinkedIn."
+  ],
+  [
+   "A short video",
+   [
+    "S01",
+    "S02",
+    "S04",
+    "V01",
+    "V02",
+    "V03",
+    "V05",
+    "W06"
+   ],
+   "Vertical videos under about a minute: a script you film yourself, or clips cut from a recording you already have."
+  ],
+  [
+   "A long video",
+   [
+    "S03",
+    "P03",
+    "W07",
+    "I13",
+    "I14",
+    "V04"
+   ],
+   "Everything for one YouTube video: the idea, titles, thumbnail, script, slides and description."
+  ],
+  [
+   "A film or ad",
+   [
+    "V06",
+    "V07",
+    "V08",
+    "V09",
+    "V10"
+   ],
+   "Your own footage cut to a voiceover: a brand film, an ad, a demo or a recap."
+  ],
+  [
+   "Along the way",
+   [
+    "P11",
+    "P01",
+    "P02",
+    "P04",
+    "P05",
+    "P06",
+    "P07",
+    "P08",
+    "P09",
+    "P10",
+    "O01",
+    "O02",
+    "O03",
+    "O04",
+    "O05",
+    "O06",
+    "O07"
+   ],
+   "Planning, research, approving, posting and checking results. The Social Media Factory walks you through these; you don't need to start here."
+  ]
+ ],
+ "items": [
+  {
+   "id": "V01",
+   "group": "Video",
+   "name": "Recording highlights",
+   "when": "Pull one useful idea out of a podcast, interview, talk, webinar or filmed Q&A.",
+   "needs": "A recording, named speakers and your choice of moments.",
+   "gives": "Edited short video files, with the original spoken words.",
+   "kind": "Finished media",
+   "route": "Clips",
+   "note": "A hook must be something the on-camera person actually said. Transcription may cost extra; an existing subtitle file can be used with less precision.",
+   "prompt": "For [brand], find self-contained clips in this recording. Show me the real opening lines and let me choose the moments before cutting.",
+   "label": "Cut highlights from a recording",
+   "input": "A podcast, interview, webinar or talk recording; tell us who is speaking.",
+   "work": "Finds useful moments, shows the real opening lines, and cuts the moments you choose.",
+   "format": "MP4 videos",
+   "output": "Short edited MP4 files saved locally, using the words actually spoken. Transcription may have a cost, shown before it runs.",
+   "implements": [
+    "make-clips"
+   ],
+   "platforms": [
+    "instagram",
+    "facebook",
+    "shorts"
+   ]
+  },
+  {
+   "id": "V02",
+   "group": "Video",
+   "name": "Captioned vertical clips",
+   "when": "Make an existing clip readable with the sound off.",
+   "needs": "A checked clip and its transcript.",
+   "gives": "Vertical MP4s with word-by-word captions, opening text and speaker credit.",
+   "kind": "Finished media",
+   "route": "Clips",
+   "note": "Includes full-frame and inset-square treatments inside a vertical canvas. Required disclaimers remain visible.",
+   "prompt": "For [brand], turn these checked clips into vertical videos with readable captions. Show me the framing and text before delivery.",
+   "label": "Add captions to vertical clips",
+   "input": "A recording or clips you want to use. The assistant prepares or checks the transcript.",
+   "work": "Frames the speaker for a tall screen and adds checked on-screen captions and opening text.",
+   "format": "Captioned MP4 videos",
+   "output": "Vertical MP4 files with captions visible inside the video. These captions differ from the description below a social post.",
+   "implements": [
+    "make-clips",
+    "clip-versions"
+   ],
+   "platforms": [
+    "instagram",
+    "facebook",
+    "shorts"
+   ]
+  },
+  {
+   "id": "V03",
+   "group": "Video",
+   "name": "Alternate clip versions",
+   "when": "Try different treatments of the same spoken idea.",
+   "needs": "Finished clips and the brand’s video settings.",
+   "gives": "Versions with different framing, caption treatment, pace, colour or approved music.",
+   "kind": "Finished media",
+   "route": "Clips",
+   "note": "These are variations of one clip, not new stories. Mirror treatment has additional checks; posting repeated versions is a separate choice.",
+   "prompt": "For [brand], make alternate treatments of these clips while keeping their meaning. Show me the differences.",
+   "label": "Make alternate clip edits",
+   "input": "A clip already made here and the changes you want to compare.",
+   "work": "Creates versions with different framing, captions, pace, colour or approved music.",
+   "format": "MP4 variations",
+   "output": "Separate MP4 files of the same spoken idea. Choosing a version does not automatically publish the others.",
+   "implements": [
+    "make-clips",
+    "clip-versions"
+   ],
+   "platforms": [
+    "instagram",
+    "facebook",
+    "shorts"
+   ]
+  },
+  {
+   "id": "V04",
+   "group": "Video",
+   "name": "Two-camera conversation",
+   "when": "Show the speaker during a full interview or podcast.",
+   "needs": "Two camera recordings, usable audio and a confirmed speaker-to-camera map.",
+   "gives": "A long edited video that switches between cameras.",
+   "kind": "Finished media",
+   "route": "Two cameras",
+   "note": "Camera synchronisation and speaker mapping come before rendering. This is an actual long-form edit, distinct from a YouTube filming package.",
+   "prompt": "For [brand], synchronise these two camera files and make a full conversation edit that follows the speaker.",
+   "label": "Edit a two-camera conversation",
+   "input": "The two camera recordings, usable audio and which camera shows each speaker.",
+   "work": "Synchronises the recordings, confirms the speaker mapping and switches cameras during the conversation.",
+   "format": "Long MP4 video",
+   "output": "A full conversation edit as an MP4 file. This is an actual edited video, unlike the YouTube filming package.",
+   "implements": [
+    "two-camera"
+   ],
+   "platforms": [
+    "youtube"
+   ]
+  },
+  {
+   "id": "V05",
+   "group": "Video",
+   "name": "Two-camera highlights",
+   "when": "Pull short moments from a two-camera conversation.",
+   "needs": "Synced cameras, transcript and an approved cut list.",
+   "gives": "Short clips with camera changes, then optional captions and versions.",
+   "kind": "Finished media",
+   "route": "Two cameras",
+   "note": "The single-camera filler-removal step does not apply to this route.",
+   "prompt": "For [brand], make short highlights from this two-camera conversation. Keep the camera on the person speaking.",
+   "label": "Cut two-camera highlights",
+   "input": "The two camera recordings, or a two-camera project already prepared here.",
+   "work": "Synchronises and maps speakers if needed, then cuts approved moments with camera switches.",
+   "format": "Short MP4 videos",
+   "output": "Short MP4 highlights; captions and alternate treatments can be added next.",
+   "implements": [
+    "two-camera"
+   ],
+   "platforms": [
+    "instagram",
+    "facebook",
+    "shorts"
+   ]
+  },
+  {
+   "id": "V06",
+   "group": "Video",
+   "name": "Narrated brand film",
+   "when": "Explain who the brand is through its own story and footage.",
+   "needs": "Real brand material, cleared footage and an approved narration.",
+   "gives": "A rendered film, shot contact sheet and source credits.",
+   "kind": "Finished media",
+   "route": "Film",
+   "note": "Uses your recorded read or a synthetic voice. Synthetic narration costs extra; it does not generate moving footage.",
+   "prompt": "For [brand], propose a narrated brand film using our own story and this cleared footage. Show me the narration and matching shots first.",
+   "label": "Make a narrated brand film",
+   "input": "Your real brand story, several usable footage files and either your recorded narration or words to develop together.",
+   "work": "Plans the narration and matching shots for approval, then assembles the film with your voice or an approved synthetic voice.",
+   "format": "MP4 + supporting files",
+   "output": "A finished MP4, a JPG overview of the shots, credits.txt and a render report. Synthetic narration may cost extra.",
+   "implements": [
+    "narrated-film"
+   ],
+   "also": [
+    "motion-titles"
+   ],
+   "platforms": [
+    "instagram",
+    "facebook",
+    "linkedin",
+    "youtube"
+   ]
+  },
+  {
+   "id": "V07",
+   "group": "Video",
+   "name": "Video ad or offer promo",
+   "when": "Introduce a real offer with one clear next step.",
+   "needs": "An existing offer, supporting facts, footage and a real destination.",
+   "gives": "A short narrated promotional video assembled from source footage.",
+   "kind": "Finished media",
+   "route": "Film",
+   "note": "An application of the film workflow. Making an ad does not launch a paid advertising campaign.",
+   "prompt": "For [brand], draft a short narrated promo for [real offer] from this footage. Use only claims we can back and ask me to approve the script.",
+   "label": "Make a video ad or offer promo",
+   "input": "A real offer, evidence for its claims, a real destination and footage to show.",
+   "work": "Uses the narrated-film process to assemble a short promotional story.",
+   "format": "MP4 video",
+   "output": "A finished promotional MP4 plus the film’s supporting files. Creating the video does not launch a paid advertising campaign.",
+   "implements": [
+    "narrated-film"
+   ],
+   "also": [
+    "motion-titles"
+   ],
+   "platforms": [
+    "instagram",
+    "facebook",
+    "linkedin",
+    "youtube"
+   ]
+  },
+  {
+   "id": "V08",
+   "group": "Video",
+   "name": "Product demo film",
+   "when": "Show what a product actually does.",
+   "needs": "Original screen captures or product footage and verified features.",
+   "gives": "A narrated demo with shots matched to each line.",
+   "kind": "Finished media",
+   "route": "Film",
+   "note": "The Social Media Factory edits supplied footage; it does not operate the product or record the demo for you.",
+   "prompt": "For [brand], turn these screen recordings into a narrated product demonstration. Show only features visible in the supplied material.",
+   "label": "Make a product demo film",
+   "input": "Your screen recordings or product footage and the real features to explain.",
+   "work": "Matches a checked narration to the supplied demonstration footage.",
+   "format": "MP4 video",
+   "output": "A narrated demo MP4. You supply the screen capture or filmed demonstration; the Social Media Factory does not operate and record the product for you.",
+   "implements": [
+    "narrated-film"
+   ],
+   "also": [
+    "motion-titles"
+   ],
+   "platforms": [
+    "instagram",
+    "facebook",
+    "linkedin",
+    "youtube"
+   ]
+  },
+  {
+   "id": "V09",
+   "group": "Video",
+   "name": "Event or project recap",
+   "when": "Tell the story of a real event or completed project.",
+   "needs": "Cleared event/project footage, factual notes and your narration or approved script.",
+   "gives": "A recap film with narration and optional licensed music.",
+   "kind": "Finished media",
+   "route": "Film",
+   "note": "A suggested use of the existing film workflow, not a separate one-click recap tool.",
+   "prompt": "For [brand], propose a recap from this event footage and these notes. Match every statement to something that happened.",
+   "label": "Make an event / project recap",
+   "input": "Footage you may use, accurate notes about what happened and any recorded narration.",
+   "work": "Uses the narrated-film process to shape a recap from your real material.",
+   "format": "MP4 video",
+   "output": "A recap MP4 with narration and optional approved music. This is a use of the film tools, not a separate automatic recap generator.",
+   "implements": [
+    "narrated-film"
+   ],
+   "also": [
+    "motion-titles"
+   ],
+   "platforms": [
+    "instagram",
+    "facebook",
+    "linkedin",
+    "youtube"
+   ]
+  },
+  {
+   "id": "V10",
+   "group": "Video",
+   "name": "Vertical film or ad cut",
+   "when": "Adapt a wide narrated film for a tall screen.",
+   "needs": "The film’s plan, original sources and a new crop decision for each shot.",
+   "gives": "A separately composed vertical film.",
+   "kind": "Finished media",
+   "route": "Film",
+   "note": "A new version with its own framing; an automatic centre crop is not assumed to work.",
+   "prompt": "For [brand], adapt this approved film into a vertical cut. Recheck every shot so the subject, product and words stay visible.",
+   "label": "Make a vertical film version",
+   "input": "A film made here and its original footage. The assistant retrieves the existing plan.",
+   "work": "Replans the crop and composition shot by shot for a tall screen.",
+   "format": "Vertical MP4 video",
+   "output": "A separately framed vertical MP4. Important subjects and text are checked again for the new shape.",
+   "implements": [
+    "narrated-film"
+   ],
+   "also": [
+    "motion-titles"
+   ],
+   "platforms": [
+    "instagram",
+    "facebook",
+    "shorts"
+   ]
+  },
+  {
+   "id": "S01",
+   "group": "Scripts",
+   "name": "Short video script",
+   "when": "Know exactly what to say and show in a Reel, TikTok or Short.",
+   "needs": "An approved topic, brand voice samples and supporting facts.",
+   "gives": "A pitch, spoken script, on-screen hook, visual directions and filming checklist.",
+   "kind": "Filming package",
+   "route": "Scripts",
+   "note": "Pitch approval comes first. You still record the video; this output is not an MP4.",
+   "prompt": "For [brand], pitch short videos answering our real customer questions. Show the topic, opening and purpose before writing the scripts.",
+   "label": "Write a short video script",
+   "input": "A topic you choose, your explanation in your own words, and any facts behind it.",
+   "work": "Proposes the opening and purpose first, then prepares speaking lines, on-screen text and filming notes.",
+   "format": "Script + teleprompter",
+   "output": "A Markdown script, a plain .txt teleprompter file and filming notes. You still record the video.",
+   "implements": [
+    "write-scripts"
+   ],
+   "platforms": [
+    "instagram",
+    "facebook",
+    "shorts"
+   ]
+  },
+  {
+   "id": "S02",
+   "group": "Scripts",
+   "name": "New scripts from a recording",
+   "when": "Re-record a useful idea more deliberately.",
+   "needs": "A recording already organised into a transcript and cut list.",
+   "gives": "New filmable scripts based on the recording’s ideas, plus teleprompter files.",
+   "kind": "Filming package",
+   "route": "Scripts",
+   "note": "This is a new shoot using existing material. V01 instead cuts the original recording.",
+   "prompt": "For [brand], use this recording to pitch new short scripts I can film. Keep every fact faithful to the source.",
+   "label": "Write new scripts from a recording",
+   "input": "Your recording and the names of the speakers. You do not need to prepare a transcript.",
+   "work": "Organises the transcript and useful moments, then pitches scripts you can record again.",
+   "format": "Script + teleprompter",
+   "output": "New Markdown scripts and plain .txt teleprompter files based on your ideas. This creates a plan for a new shoot, not clips from the old recording.",
+   "implements": [
+    "write-scripts"
+   ],
+   "platforms": [
+    "instagram",
+    "facebook",
+    "shorts"
+   ]
+  },
+  {
+   "id": "S03",
+   "group": "Scripts",
+   "name": "YouTube filming package",
+   "when": "Prepare a longer answer, case walkthrough, demonstration or list.",
+   "needs": "A sourced topic and the presenter’s actual spoken or written explanation.",
+   "gives": "Titles, thumbnail choices, opening, structure, script, teleprompter and description; optional slides.",
+   "kind": "Filming package",
+   "route": "YouTube",
+   "note": "Four structures: straight answer, worked example, live test and countdown. Recording and final editing are still needed.",
+   "prompt": "For [brand], package a YouTube video answering [real question]. Start with the topic, title and thumbnail, then use my own explanation for the script.",
+   "label": "Prepare a YouTube video",
+   "input": "A question to answer and your spoken or written explanation, with evidence for any claims.",
+   "work": "Works through topic, titles, thumbnail, opening, structure, script and description with you.",
+   "format": "Folder of filming materials",
+   "output": "A video folder with brief.md, script.md, teleprompter.txt and thumbnail PNGs; optional slide PNGs and PDF. Titles and description are part of the written package. You still film and finish the video.",
+   "implements": [
+    "youtube-video"
+   ],
+   "platforms": [
+    "youtube"
+   ]
+  },
+  {
+   "id": "S04",
+   "group": "Scripts",
+   "name": "Teleprompter & shoot pack",
+   "when": "Film several approved scripts in one sitting.",
+   "needs": "Scripts that passed their checks.",
+   "gives": "Clean speaking-only text files and, for short scripts, a batch index and what to have ready.",
+   "kind": "Filming package",
+   "route": "Scripts / YouTube",
+   "note": "A component of the script workflows, not a separate video generator. Editing the script requires rebuilding its teleprompter file.",
+   "prompt": "For [brand], prepare the approved scripts for filming, with current teleprompter files and a list of what I need for each shoot.",
+   "label": "Prepare scripts for filming",
+   "input": "Scripts you have approved. The assistant locates their latest versions.",
+   "work": "Builds clean speaking-only text and, for short scripts, an index of what is ready to film.",
+   "format": "TXT files + shoot index",
+   "output": "A .txt teleprompter file per script; short-script batches also have INDEX.md, a text overview of the shoot. These are reading files, not video files.",
+   "implements": [
+    "write-scripts",
+    "youtube-video"
+   ],
+   "platforms": [
+    "instagram",
+    "facebook",
+    "shorts",
+    "youtube"
+   ]
+  },
+  {
+   "id": "I01",
+   "group": "Images",
+   "name": "Teaching carousel",
+   "when": "Explain a process, a checklist, a comparison or a set of lessons.",
+   "needs": "One supported idea, approved copy and brand colours.",
+   "gives": "Ordered PNG slides: a cover, teaching slides and a close.",
+   "kind": "Finished media",
+   "route": "Visuals",
+   "note": "Slide types include point, steps, checklist, comparison and stat. No photos are needed.",
+   "prompt": "For [brand], turn this approved explanation into a carousel with one clear idea per slide.",
+   "label": "Make a teaching carousel",
+   "input": "One useful explanation, checklist or process. Brand colours can come from setup.",
+   "work": "Drafts the slide sequence for approval, then draws a cover, teaching slides and closing slide.",
+   "format": "PNG images",
+   "output": "One numbered PNG image per slide, saved in your brand’s Output folder. Upload them in order as one carousel.",
+   "implements": [
+    "make-visuals"
+   ],
+   "platforms": [
+    "instagram",
+    "linkedin"
+   ]
+  },
+  {
+   "id": "I02",
+   "group": "Images",
+   "name": "PDF carousel",
+   "when": "Share a swipeable document, especially as a LinkedIn document post.",
+   "needs": "An approved carousel or slide sequence.",
+   "gives": "One PDF document alongside the images.",
+   "kind": "Finished media",
+   "route": "Visuals",
+   "note": "PDF is an export of the visuals, not a separate ebook-writing workflow.",
+   "prompt": "For [brand], make a PDF carousel from this approved post, with a useful recap and a simple close.",
+   "label": "Make a PDF carousel",
+   "input": "An explanation to turn into slides, or a carousel already made here.",
+   "work": "Prepares the slide sequence, draws the images and combines them into one document.",
+   "format": "PDF + PNG images",
+   "output": "One PDF document plus the individual PNG slides in Output. The PDF can be uploaded as a document post where supported.",
+   "implements": [
+    "make-visuals"
+   ],
+   "platforms": [
+    "linkedin"
+   ]
+  },
+  {
+   "id": "I03",
+   "group": "Images",
+   "name": "Stat card",
+   "when": "Let one verified number carry the point.",
+   "needs": "The exact number, what it measures and its source.",
+   "gives": "A branded image with the number, context and source.",
+   "kind": "Finished media",
+   "route": "Visuals",
+   "note": "A number without a confirmed source is flagged; it must not be presented as verified.",
+   "prompt": "For [brand], make a stat card using this exact sourced figure and explain what it measures.",
+   "label": "Make a statistic card",
+   "input": "The exact figure, what it measures and a checkable source.",
+   "work": "Designs one image with the number, context and source.",
+   "format": "PNG image",
+   "output": "A branded PNG image in Output, ready to attach to a post after review.",
+   "implements": [
+    "make-visuals"
+   ],
+   "platforms": [
+    "instagram",
+    "facebook",
+    "linkedin",
+    "twitter"
+   ]
+  },
+  {
+   "id": "I04",
+   "group": "Images",
+   "name": "Before / after card",
+   "when": "Show a real change or an honest side-by-side comparison.",
+   "needs": "Both sides of the comparison and evidence for any result.",
+   "gives": "A split image using words and numbers.",
+   "kind": "Finished media",
+   "route": "Visuals",
+   "note": "The fixed layout is typographic. A photographic comparison needs supplied photos and a custom design.",
+   "prompt": "For [brand], make a before-and-after card from these documented details. Keep both sides specific and supportable.",
+   "label": "Make a comparison card",
+   "input": "Both sides of a real comparison; evidence for any claimed improvement.",
+   "work": "Lays out a before/after or side-by-side comparison using words and figures.",
+   "format": "PNG image",
+   "output": "One split-layout PNG in Output. A photo comparison uses your supplied photos and the custom-design route.",
+   "implements": [
+    "make-visuals"
+   ],
+   "platforms": [
+    "instagram",
+    "facebook",
+    "linkedin",
+    "twitter"
+   ]
+  },
+  {
+   "id": "I05",
+   "group": "Images",
+   "name": "Alert card",
+   "when": "Flag a real deadline, warning, change or mistake to avoid.",
+   "needs": "Confirmed announcement details or an evidenced warning.",
+   "gives": "A branded image with a short headline and alert treatment.",
+   "kind": "Finished media",
+   "route": "Visuals",
+   "note": "Urgency must come from the real situation.",
+   "prompt": "For [brand], make an alert card about this confirmed update. Keep the key action clear.",
+   "label": "Make an alert card",
+   "input": "A confirmed deadline, change or evidenced warning.",
+   "work": "Designs a short headline and a clear action using the alert layout.",
+   "format": "PNG image",
+   "output": "One branded PNG in Output, ready to pair with explanatory post text.",
+   "implements": [
+    "make-visuals"
+   ],
+   "platforms": [
+    "instagram",
+    "facebook",
+    "linkedin",
+    "twitter"
+   ]
+  },
+  {
+   "id": "I06",
+   "group": "Images",
+   "name": "Headline card",
+   "when": "Make one clear statement, position or announcement.",
+   "needs": "An approved line the brand can stand behind.",
+   "gives": "A bold headline image in the brand’s colours.",
+   "kind": "Finished media",
+   "route": "Visuals",
+   "note": "The caption supplies the explanation; the card holds one idea.",
+   "prompt": "For [brand], turn this approved statement into a headline card.",
+   "label": "Make a headline card",
+   "input": "A statement, announcement or point you can stand behind.",
+   "work": "Designs one short headline in your brand’s visual style.",
+   "format": "PNG image",
+   "output": "One branded PNG in Output. The accompanying post can explain the details.",
+   "implements": [
+    "make-visuals"
+   ],
+   "platforms": [
+    "instagram",
+    "facebook",
+    "linkedin",
+    "twitter"
+   ]
+  },
+  {
+   "id": "I07",
+   "group": "Images",
+   "name": "Note-style card",
+   "when": "Share a short lesson, reminder or useful list.",
+   "needs": "The brand’s own wording and a concise set of points.",
+   "gives": "A note-like image with a title and short lines.",
+   "kind": "Finished media",
+   "route": "Visuals",
+   "note": "Light and dark treatments are available. This is designed text, not proof of a real private note.",
+   "prompt": "For [brand], make a note-style card from these lessons in my own words.",
+   "label": "Make a note-style card",
+   "input": "A short useful note, list or reminder in your own words.",
+   "work": "Uses the note-style layout to make the text easy to scan.",
+   "format": "PNG image",
+   "output": "One note-style PNG in Output, ready for review and posting.",
+   "implements": [
+    "make-visuals"
+   ],
+   "platforms": [
+    "instagram",
+    "facebook",
+    "linkedin",
+    "twitter"
+   ]
+  },
+  {
+   "id": "I08",
+   "group": "Images",
+   "name": "Post-style quote card",
+   "when": "Give a line from your own writing a visual form.",
+   "needs": "Your own words and the correct brand identity.",
+   "gives": "A post-like card with name and initials or a supplied avatar.",
+   "kind": "Finished media",
+   "route": "Visuals",
+   "note": "Not a forged customer screenshot or a recreated endorsement.",
+   "prompt": "For [brand], turn this line from my own writing into a post-style image with my identity.",
+   "label": "Make a quote / post-style card",
+   "input": "Your own approved words, or an accurately attributed quote you may use.",
+   "work": "Arranges the words in a post-like visual layout without inventing an endorsement.",
+   "format": "PNG image",
+   "output": "One PNG in Output styled like a text post. It is a designed graphic, not evidence that someone posted it.",
+   "implements": [
+    "make-visuals"
+   ],
+   "platforms": [
+    "instagram",
+    "facebook",
+    "linkedin",
+    "twitter"
+   ]
+  },
+  {
+   "id": "I09",
+   "group": "Images",
+   "name": "Bold text / offer card",
+   "when": "Give a short offer or statement visual emphasis.",
+   "needs": "An approved message and, for an offer, its real details.",
+   "gives": "A large-type image with an ad or statement layout.",
+   "kind": "Finished media",
+   "route": "Visuals",
+   "note": "Creating the image does not buy ad placement.",
+   "prompt": "For [brand], make a bold text card for this real offer using the approved wording.",
+   "label": "Make a bold text / offer card",
+   "input": "A real offer or a short supported statement and its next step.",
+   "work": "Uses large type to make the message easy to read.",
+   "format": "PNG image",
+   "output": "One bold-text PNG in Output, with a separate caption if requested.",
+   "implements": [
+    "make-visuals"
+   ],
+   "platforms": [
+    "instagram",
+    "facebook",
+    "linkedin",
+    "twitter"
+   ]
+  },
+  {
+   "id": "I10",
+   "group": "Images",
+   "name": "Custom graphic / photo with text",
+   "when": "Make a visual that the fixed layouts do not fit.",
+   "needs": "Approved words, brand styling and any photos cleared for use.",
+   "gives": "Custom-designed PNGs; the design can be saved as a reusable look.",
+   "kind": "Finished media",
+   "route": "Visuals",
+   "note": "Can combine text, simple shapes and supplied or generated assets. The renderer checks readability and clipping.",
+   "prompt": "For [brand], propose a custom visual direction for this post using these approved photos. Keep the text easy to read on a phone.",
+   "label": "Make a custom graphic",
+   "input": "A clear message, any photos you want included and your design preferences.",
+   "work": "Designs a custom composition and renders it as an image.",
+   "format": "PNG image",
+   "output": "A finished PNG in Output. HTML/CSS may be used internally to draw it; the social content you receive is an image.",
+   "implements": [
+    "make-visuals"
+   ],
+   "platforms": [
+    "instagram",
+    "facebook",
+    "linkedin",
+    "twitter"
+   ]
+  },
+  {
+   "id": "I11",
+   "group": "Images",
+   "name": "Real photo / proof screenshot",
+   "when": "Show the person, place, product or something that actually happened.",
+   "needs": "An existing approved photo or genuine screenshot with private details handled.",
+   "gives": "The supplied image attached to a post, or used in a custom design.",
+   "kind": "Supplied asset",
+   "route": "Visuals / Posts",
+   "note": "The evidence is supplied by you. The Social Media Factory must not invent or recreate a customer message as proof.",
+   "prompt": "For [brand], use this real approved image with a post explaining what it shows. Check whether any private details need removing first.",
+   "label": "Use a real photo or screenshot",
+   "input": "Your own photo or a screenshot you have permission to publish, with its context.",
+   "work": "Checks that the attachment supports the post and pairs it with accurate copy.",
+   "format": "Supplied media + post text",
+   "output": "Your existing image attached to a reviewable post. This uses an asset you provide; it does not create new photographic evidence.",
+   "implements": [
+    "make-visuals",
+    "write-posts"
+   ],
+   "platforms": [
+    "instagram",
+    "facebook",
+    "linkedin",
+    "twitter"
+   ]
+  },
+  {
+   "id": "I12",
+   "group": "Images",
+   "name": "Generated image asset",
+   "when": "Create an illustration or concept image for a design.",
+   "needs": "A clear image brief and approval of the exact generation cost.",
+   "gives": "A generated image that can be used in a custom graphic or thumbnail.",
+   "kind": "Finished media",
+   "route": "Visuals + OpenAI",
+   "note": "Paid, optional route using the brand’s OpenAI setup. A generated person or product image is not real customer or product evidence.",
+   "prompt": "For [brand], propose a generated image for [visual idea]. Show me the prompt and cost before generating anything.",
+   "label": "Generate an image asset",
+   "input": "A description of the illustration or supporting image you need.",
+   "work": "Checks the brief and cost with you, then uses the optional image-generation service.",
+   "format": "Generated image file",
+   "output": "A generated image saved locally for use in a design or post. It cannot stand in for a real customer, event or proven result.",
+   "implements": [
+    "ai-pictures"
+   ],
+   "platforms": [
+    "instagram",
+    "facebook",
+    "linkedin",
+    "twitter"
+   ]
+  },
+  {
+   "id": "I13",
+   "group": "Images",
+   "name": "YouTube thumbnail",
+   "when": "Make the video’s subject understandable at a glance.",
+   "needs": "A chosen title, supported concept and optional approved photos.",
+   "gives": "Full-size thumbnails plus small preview copies.",
+   "kind": "Finished media",
+   "route": "YouTube visuals",
+   "note": "Six layouts: words, photo right, photo left, full photo, versus and number. You choose the final concept.",
+   "prompt": "For [brand], make distinct thumbnail concepts for this chosen title. Show them small so I can judge readability.",
+   "label": "Make a YouTube thumbnail",
+   "input": "The video’s real promise, title direction and a photo if you want one.",
+   "work": "Creates thumbnail options and checks whether they read at a small size.",
+   "format": "PNG + small preview",
+   "output": "A 1280 × 720 PNG thumbnail and a 320-pixel-wide preview. Six layouts cover words, photo-left, photo-right, full-photo, versus and number.",
+   "implements": [
+    "youtube-video",
+    "make-visuals"
+   ],
+   "platforms": [
+    "youtube"
+   ]
+  },
+  {
+   "id": "I14",
+   "group": "Images",
+   "name": "Video support slide deck",
+   "when": "Help viewers see the point while the presenter speaks.",
+   "needs": "The video’s structure, evidence and optional real pictures.",
+   "gives": "Slide PNGs, a PDF and a contact sheet.",
+   "kind": "Finished media",
+   "route": "YouTube visuals",
+   "note": "Thirteen types: title, statement, number, share, comparison, steps, list, ranking, progress, picture, quote, ask and next video. These are static slides, not a rendered slideshow film.",
+   "prompt": "For [brand], build supporting slides for this video. Use diagrams, comparisons or real pictures where they explain the point better than repeating my script.",
+   "label": "Make supporting video slides",
+   "input": "An approved video outline or script and the facts or visuals to show.",
+   "work": "Designs still slides to support the speaker, using the appropriate slide layouts.",
+   "format": "PNG slides + PDF",
+   "output": "Individual slide PNGs, a PDF and an overview image. These are still graphics; adding them to a finished video is a separate editing step.",
+   "implements": [
+    "youtube-video",
+    "make-visuals"
+   ],
+   "platforms": [
+    "youtube"
+   ]
+  },
+  {
+   "id": "I15",
+   "group": "Images",
+   "name": "Story-size / square graphics",
+   "when": "Fit an existing visual into a different canvas.",
+   "needs": "Approved content and an appropriate layout.",
+   "gives": "Portrait, square or story-size images.",
+   "kind": "Finished media",
+   "route": "Visuals",
+   "note": "Size presets reuse the visual workflow. A story-size image does not imply a dedicated Stories publishing workflow.",
+   "prompt": "For [brand], make this approved graphic in a story-size layout and check that all the words fit.",
+   "label": "Make square or tall graphics",
+   "input": "An existing design or message and where you want to use it.",
+   "work": "Adapts the layout to the chosen image shape and checks the crop and text.",
+   "format": "PNG images",
+   "output": "Square 1080 × 1080, portrait 1080 × 1350 or story-size 1080 × 1920 PNGs. A story-size file does not itself publish an Instagram Story.",
+   "implements": [
+    "make-visuals"
+   ],
+   "platforms": [
+    "instagram",
+    "facebook",
+    "linkedin"
+   ]
+  },
+  {
+   "id": "W01",
+   "group": "Writing",
+   "name": "LinkedIn post",
+   "when": "Share an explanation, experience, point of view or real proof.",
+   "needs": "An approved topic and material in the brand’s own voice.",
+   "gives": "A platform-specific draft, checked and saved for review.",
+   "kind": "Written content",
+   "route": "Posts",
+   "note": "A different angle is written for each platform; a single draft is not simply copied everywhere.",
+   "prompt": "For [brand], write a LinkedIn post from this approved topic and our source material.",
+   "label": "Write a LinkedIn post",
+   "input": "One real idea, experience, customer question or announcement; any facts it relies on.",
+   "work": "Drafts in your voice for the intended LinkedIn audience and prepares it for review.",
+   "format": "Post text",
+   "output": "Words shown in the conversation and local review page. After approval, a manual export gives you post.txt to copy into LinkedIn.",
+   "implements": [
+    "write-posts"
+   ],
+   "platforms": [
+    "linkedin"
+   ]
+  },
+  {
+   "id": "W02",
+   "group": "Writing",
+   "name": "Facebook post",
+   "when": "Start a relevant conversation or share a real update.",
+   "needs": "An approved topic, audience context and source material.",
+   "gives": "A Facebook-specific post, with an optional image.",
+   "kind": "Written content",
+   "route": "Posts",
+   "note": "The chosen shape and ending depend on the post’s job.",
+   "prompt": "For [brand], write a Facebook post about this approved topic in our usual voice.",
+   "label": "Write a Facebook post",
+   "input": "A real update, useful explanation or offer and who should see it.",
+   "work": "Adapts your material for your Facebook audience and prepares it for review.",
+   "format": "Post text",
+   "output": "Words in the conversation and local review page; post.txt when you export approved content for manual posting.",
+   "implements": [
+    "write-posts"
+   ],
+   "platforms": [
+    "facebook"
+   ]
+  },
+  {
+   "id": "W03",
+   "group": "Writing",
+   "name": "Instagram caption",
+   "when": "Give an image or video context and a useful next step.",
+   "needs": "An approved topic and visual or video to accompany it.",
+   "gives": "An Instagram caption ready to review with its media.",
+   "kind": "Written content",
+   "route": "Posts",
+   "note": "An image or video is required before an Instagram post can be approved.",
+   "prompt": "For [brand], write an Instagram caption for this approved visual, using our own words and facts.",
+   "label": "Write an Instagram caption",
+   "input": "The photo, carousel or video you intend to share, plus the point it should make.",
+   "work": "Writes the accompanying words and any relevant next step.",
+   "format": "Caption text",
+   "output": "Words shown with the media in the local review page; post.txt in a manual export. The caption is separate from text inside the image.",
+   "implements": [
+    "write-posts"
+   ],
+   "platforms": [
+    "instagram"
+   ]
+  },
+  {
+   "id": "W04",
+   "group": "Writing",
+   "name": "X post",
+   "when": "State one observation, useful point or supported contrast.",
+   "needs": "A concise, approved idea and its sources.",
+   "gives": "A platform-specific short post.",
+   "kind": "Written content",
+   "route": "Posts",
+   "note": "Use a thread when the full explanation needs more space.",
+   "prompt": "For [brand], turn this approved idea into a concise X post.",
+   "label": "Write an X post",
+   "input": "One clear idea and the facts or source material behind it.",
+   "work": "Drafts a concise post in your voice and checks it for the target account.",
+   "format": "Post text",
+   "output": "A draft in the conversation and local review page; approved words in post.txt when exported.",
+   "implements": [
+    "write-posts"
+   ],
+   "platforms": [
+    "twitter"
+   ]
+  },
+  {
+   "id": "W05",
+   "group": "Writing",
+   "name": "X thread",
+   "when": "Explain one idea across a sequence of connected posts.",
+   "needs": "An approved topic with enough material for several useful steps.",
+   "gives": "A lead post and ordered follow-up posts.",
+   "kind": "Written content",
+   "route": "Posts",
+   "note": "A built-in thread structure; every part is checked against the brand’s rules.",
+   "prompt": "For [brand], write an X thread from this explanation. Make each part useful and keep the order clear.",
+   "label": "Write an X thread",
+   "input": "An explanation that needs several connected posts, with supporting facts.",
+   "work": "Breaks the explanation into ordered posts with a clear beginning and end.",
+   "format": "Ordered post text",
+   "output": "The thread in the local review page; one post.txt file with numbered sections in a manual export, ready to copy in order.",
+   "implements": [
+    "write-posts"
+   ],
+   "platforms": [
+    "twitter"
+   ]
+  },
+  {
+   "id": "W06",
+   "group": "Writing",
+   "name": "Clip captions & descriptions",
+   "when": "Write the words that sit below a finished video.",
+   "needs": "The clip’s real transcript, facts and destination platforms.",
+   "gives": "Descriptions tailored to the clip versions and platforms.",
+   "kind": "Written content",
+   "route": "Clips",
+   "note": "Distinct from captions burned into the video. These are the accompanying post words.",
+   "prompt": "For [brand], write descriptions for these clips using only their transcripts and our verified facts.",
+   "label": "Write descriptions for clips",
+   "input": "The finished clips and where you want to publish them.",
+   "work": "Writes titles, post descriptions and relevant next steps that match each clip.",
+   "format": "Post text for each video",
+   "output": "Text paired with each MP4 in the local review page; post.txt beside the video in a manual export. This text appears outside the video.",
+   "implements": [
+    "clip-versions"
+   ],
+   "platforms": [
+    "instagram",
+    "facebook",
+    "shorts"
+   ]
+  },
+  {
+   "id": "W07",
+   "group": "Writing",
+   "name": "YouTube titles & description",
+   "when": "Package an idea so the viewer knows what the video answers.",
+   "needs": "The topic, chosen structure, script and final chapter times after editing.",
+   "gives": "Title choices, description, chapters and tags.",
+   "kind": "Written content",
+   "route": "YouTube",
+   "note": "Part of the YouTube package. Planned chapter times must be replaced with actual edit times.",
+   "prompt": "For [brand], prepare titles and a description for this video. Keep the real search phrase intact and use final chapter times when the edit is ready.",
+   "label": "Write YouTube titles & description",
+   "input": "The planned or recorded video and its actual content.",
+   "work": "Develops title options and description copy; adds chapters when timings are available.",
+   "format": "Written video package",
+   "output": "Title options and description/chapters stored with the video’s written package and explained in the conversation. A scheduled upload uses approved post text.",
+   "implements": [
+    "youtube-video"
+   ],
+   "platforms": [
+    "youtube"
+   ]
+  },
+  {
+   "id": "P01",
+   "group": "Planning",
+   "name": "Topic bank & weekly plan",
+   "when": "Choose what to talk about before deciding how it looks.",
+   "needs": "Real audience questions, pillars, offers, facts and proof.",
+   "gives": "Sourced topics for approval, then a platform-by-platform plan.",
+   "kind": "Planning output",
+   "route": "Planning",
+   "note": "Each post has a job: reach, trust or leads. Topics are approved before writing starts.",
+   "prompt": "For [brand], use our own material to propose topics. Tell me what each comes from, then plan the topics I approve.",
+   "label": "Choose topics & plan posts",
+   "input": "A business goal, customer questions, or something useful you already know. You do not need a finished plan.",
+   "work": "Suggests topics from your material; you choose which ones to make and when.",
+   "format": "Topic list + plan",
+   "output": "Topics and proposed posting slots explained in the conversation; the Social Media Factory saves the working plan locally. No posts are published.",
+   "implements": [
+    "plan-content"
+   ],
+   "platforms": []
+  },
+  {
+   "id": "P02",
+   "group": "Planning",
+   "name": "Podcast / talk run-sheet",
+   "when": "Prepare to speak naturally on a topic.",
+   "needs": "Your subject, audience and actual point of view.",
+   "gives": "Speakable talking points, linked sources and spare questions.",
+   "kind": "Planning output",
+   "route": "Talking points",
+   "note": "An assisted research workflow, not a standalone Social Media Factory command. Unsupported numbers stay out of the on-air points.",
+   "prompt": "For [brand], prepare a sourced run-sheet for my conversation about [subject], using our audience’s questions and my own point of view.",
+   "label": "Prepare talking points",
+   "input": "Your subject, audience, questions you expect and your own point of view.",
+   "work": "Organises a useful speaking order, evidence, prompts and transitions.",
+   "format": "Markdown text document",
+   "output": "A .md document in the brand’s talking-points folder: an outline to speak from, not a recording or finished video.",
+   "implements": [
+    "talking-points"
+   ],
+   "platforms": []
+  },
+  {
+   "id": "P03",
+   "group": "Planning",
+   "name": "YouTube question slate",
+   "when": "Turn a keyword export into decisions about what to film.",
+   "needs": "Keyword CSV exports and your review decisions.",
+   "gives": "Question groups marked film, batch, text or parked; approved groups become briefs.",
+   "kind": "Planning output",
+   "route": "YouTube",
+   "note": "Preserves the search wording and groups phrases that ask the same thing.",
+   "prompt": "For [brand], organise this keyword export into questions worth filming, batching, answering in text or parking.",
+   "label": "Choose YouTube questions",
+   "input": "A keyword spreadsheet exported as CSV. The assistant helps interpret it.",
+   "work": "Groups similar questions and lets you choose: film, combine, answer in writing or save for later.",
+   "format": "HTML review + text",
+   "output": "A standalone review.html page to open in your browser, plus slate.md, a text document. Your selections become video briefs. This differs from the post-review server.",
+   "implements": [
+    "youtube-video"
+   ],
+   "platforms": [
+    "youtube"
+   ]
+  },
+  {
+   "id": "P04",
+   "group": "Planning",
+   "name": "Creator study",
+   "when": "Understand how a creator structures short videos.",
+   "needs": "A public creator account and an approved research estimate.",
+   "gives": "A sourced study of patterns and a worksheet to interpret them.",
+   "kind": "Planning output",
+   "route": "Research",
+   "note": "Paid research route. Learn structures and demand; do not copy the creator’s words.",
+   "prompt": "For [brand], study the structure of this creator’s videos. Show the research cost first, then separate observations from ideas we could test.",
+   "label": "Study a creator’s videos",
+   "input": "A public creator account and the questions you want to investigate.",
+   "work": "Quotes the research cost, then studies openings, structure and patterns after your approval.",
+   "format": "Research files + summary",
+   "output": "A written summary explained in the conversation, with saved research files and source links in your brand’s Research folder.",
+   "implements": [
+    "research"
+   ],
+   "platforms": []
+  },
+  {
+   "id": "P05",
+   "group": "Planning",
+   "name": "YouTube demand / outlier study",
+   "when": "Check a topic’s recent demand or a channel’s unusually strong videos.",
+   "needs": "A keyword or channel and an approved research estimate.",
+   "gives": "Demand evidence or channel-relative outliers and a summary.",
+   "kind": "Planning output",
+   "route": "Research",
+   "note": "A guide to choosing a topic, not a prediction of your future views.",
+   "prompt": "For [brand], check demand for [topic] on YouTube. Show me the research estimate before running it.",
+   "label": "Research YouTube demand",
+   "input": "A topic, search phrase or channel you want to understand.",
+   "work": "Checks demand or unusually strong videos relative to that channel, after cost approval.",
+   "format": "Research files + summary",
+   "output": "Saved research evidence and a plain-language summary in the conversation. Results help choose topics; they do not predict your views.",
+   "implements": [
+    "research"
+   ],
+   "platforms": [
+    "youtube"
+   ]
+  },
+  {
+   "id": "P06",
+   "group": "Planning",
+   "name": "Audience listening",
+   "when": "Find the words people use for their questions and problems.",
+   "needs": "Relevant terms or communities and an approved research estimate.",
+   "gives": "Collected Reddit or X discussions with source links.",
+   "kind": "Planning output",
+   "route": "Research",
+   "note": "What people say online suggests questions; it does not prove factual claims.",
+   "prompt": "For [brand], listen for real questions about [subject]. Show me the research cost before collecting anything.",
+   "label": "Find audience questions",
+   "input": "A subject, search terms or relevant online communities.",
+   "work": "After cost approval, collects relevant Reddit or X discussions and identifies people’s actual questions.",
+   "format": "Source links + notes",
+   "output": "Saved research files containing discussion evidence and links; the assistant explains the useful questions in the conversation.",
+   "implements": [
+    "research"
+   ],
+   "platforms": []
+  },
+  {
+   "id": "P07",
+   "group": "Planning",
+   "name": "Audience demand report",
+   "when": "Turn existing listening into a usable list of topics.",
+   "needs": "Research already collected for this brand.",
+   "gives": "Grouped themes, evidence and topic candidates.",
+   "kind": "Planning output",
+   "route": "Research",
+   "note": "The report step itself needs no paid research key; collecting new source material may cost extra.",
+   "prompt": "For [brand], turn our existing listening research into a demand report and a short list of topics to review.",
+   "label": "Summarise audience demand",
+   "input": "Research the Social Media Factory has already collected for your brand. The assistant finds it.",
+   "work": "Groups recurring problems and questions, then proposes topics for you to choose.",
+   "format": "Markdown report",
+   "output": "A summary.md text document and supporting data in the Research folder, with recommendations explained in the conversation.",
+   "implements": [
+    "research"
+   ],
+   "platforms": []
+  },
+  {
+   "id": "P08",
+   "group": "Planning",
+   "name": "Search results report",
+   "when": "See what answers and follow-up questions appear for a search.",
+   "needs": "Exact questions and an approved research estimate.",
+   "gives": "Search result evidence to inform a topic or video brief.",
+   "kind": "Planning output",
+   "route": "Research",
+   "note": "Optional enrichment for the question slate.",
+   "prompt": "For [brand], check search results for these questions and show the cost before running the research.",
+   "label": "Research search results",
+   "input": "The exact question or questions you are considering answering.",
+   "work": "Shows the cost, then gathers search results and related questions to help shape your answer.",
+   "format": "Research files + summary",
+   "output": "Saved search evidence and source links, with a summary in the conversation. These can support a video brief.",
+   "implements": [
+    "research"
+   ],
+   "platforms": []
+  },
+  {
+   "id": "P09",
+   "group": "Planning",
+   "name": "Video research notes",
+   "when": "Extract checkable material from one source video.",
+   "needs": "A permitted source video or link, and its context.",
+   "gives": "Transcript, selected stills and a worksheet for facts and lessons.",
+   "kind": "Planning output",
+   "route": "Research",
+   "note": "On-screen figures are read and checked; spoken-only figures need audio confirmation. This is research, not permission to reuse the footage.",
+   "prompt": "For [brand], extract research notes from this video. Keep exact figures tied to timestamps and label anything the source does not substantiate.",
+   "label": "Take notes from a source video",
+   "input": "A video file or permitted source link, and what you want to learn from it.",
+   "work": "Extracts a transcript and still frames, then checks claims against the source.",
+   "format": "Text notes + still images",
+   "output": "A transcript, selected image files, an index.md text document and a FACTS.md worksheet in the Research folder.",
+   "implements": [
+    "research"
+   ],
+   "platforms": []
+  },
+  {
+   "id": "P10",
+   "group": "Planning",
+   "name": "Published-studies research",
+   "when": "Find source material to investigate a question.",
+   "needs": "A focused research question.",
+   "gives": "Study search results and available source links.",
+   "kind": "Planning output",
+   "route": "Research",
+   "note": "A research aid; findings still need reading and verification before becoming brand claims.",
+   "prompt": "For [brand], find published studies about [question] and help me distinguish original findings from summaries.",
+   "label": "Find published studies",
+   "input": "One focused question you want evidence for.",
+   "work": "Searches for published studies and helps check original findings before using a claim.",
+   "format": "Search results + links",
+   "output": "Research results and source links, explained in the conversation. A search result is not yet a verified claim for a post.",
+   "implements": [
+    "research"
+   ],
+   "platforms": []
+  },
+  {
+   "id": "P11",
+   "group": "Planning",
+   "name": "Brand brief & proof library",
+   "when": "Give every future piece a reliable starting point.",
+   "needs": "Your own writing, audience knowledge, offers, brand choices and publishable evidence.",
+   "gives": "A brand profile, voice samples, kit, rules, verified facts and proof records.",
+   "kind": "Planning output",
+   "route": "Onboarding",
+   "note": "The foundation for all content. Brand setup can use an interview or the local onboarding page.",
+   "prompt": "Set up [brand] using our own material. Help me capture our audience’s real questions, our voice and the proof we can publish.",
+   "label": "Set up your brand",
+   "input": "Your business name, who you help, your own writing or recordings, offers and any facts you can support.",
+   "work": "Asks one question at a time and saves your voice, facts and design choices for future work.",
+   "format": "Saved brand profile",
+   "output": "A summary in the conversation; settings and reference documents saved in your brand’s folder. This is setup, not a social post.",
+   "implements": [
+    "onboard-brand"
+   ],
+   "platforms": []
+  },
+  {
+   "id": "O01",
+   "group": "Workflow",
+   "name": "Review page",
+   "when": "Read the exact words and see the media before approval.",
+   "needs": "A prepared batch of posts and attached media.",
+   "gives": "A local page to approve, edit, request a remake or turn down posts.",
+   "kind": "Workflow output",
+   "route": "Review",
+   "note": "An edit invalidates approval. Unverified content requires explicit acknowledgement; failed checks must be fixed.",
+   "prompt": "For [brand], show me the posts and media we just made for review and explain anything that needs a decision.",
+   "label": "Review your posts",
+   "input": "The Social Media Factory has already made your drafts and images or videos. You only need to read, watch and decide.",
+   "work": "Opens a local review page showing each post’s exact words, media and proposed publishing details.",
+   "format": "Local browser page",
+   "output": "A page running on your computer while the review server is open. Approve, edit, request a remake or reject each post. It is not a saved standalone HTML file or a Claude artifact.",
+   "implements": [
+    "review"
+   ],
+   "platforms": []
+  },
+  {
+   "id": "O02",
+   "group": "Workflow",
+   "name": "Ready-to-post folder",
+   "when": "Post by hand or hand the batch to a team member.",
+   "needs": "Approved content and cleared media.",
+   "gives": "Ordered files, post text, media, schedule sheet and upload instructions.",
+   "kind": "Workflow output",
+   "route": "Publishing",
+   "note": "No scheduling service is needed. Exporting does not publish anything.",
+   "prompt": "For [brand], save the approved content in a ready-to-post folder I can upload by hand.",
+   "label": "Save files to post yourself",
+   "input": "Posts and media you have approved. The assistant collects the correct files.",
+   "work": "Makes a dated folder with one subfolder per post and instructions for uploading it yourself.",
+   "format": "Folder on your computer",
+   "output": "Inside the brand’s Output → ready-to-post: post.txt plus numbered images, video or PDF per post; schedule.csv and README.txt at the top. Optional alt text, first comment and link files are included when present.",
+   "implements": [
+    "export-folder"
+   ],
+   "platforms": []
+  },
+  {
+   "id": "O03",
+   "group": "Workflow",
+   "name": "Scheduled content calendar",
+   "when": "Send an approved batch to linked accounts.",
+   "needs": "Approved content, confirmed account mapping and Metricool access.",
+   "gives": "A preview of accounts and times, then scheduled posts after your explicit yes.",
+   "kind": "Workflow output",
+   "route": "Publishing",
+   "note": "The app’s documented scheduling integration is Metricool. Current plan access and price must be checked before sign-up.",
+   "prompt": "For [brand], preview the approved posts, accounts and times. Wait for my yes before scheduling anything.",
+   "label": "Schedule approved posts",
+   "input": "Your approved posts, chosen accounts and times, and a connected Metricool account.",
+   "work": "Shows an exact preview without sending; after your explicit yes, sends the posts to Metricool.",
+   "format": "Metricool schedule",
+   "output": "Posts scheduled in the external Metricool service plus local sending records. This is not a new HTML calendar or a Claude artifact. Plan access and cost must be checked before sign-up.",
+   "implements": [
+    "schedule-posts"
+   ],
+   "platforms": []
+  },
+  {
+   "id": "O04",
+   "group": "Workflow",
+   "name": "One-short-a-day plan",
+   "when": "Distribute a folder of finished videos steadily.",
+   "needs": "Finished videos with descriptions and linked accounts.",
+   "gives": "A daily plan that continues after existing bookings, then a reviewable batch.",
+   "kind": "Workflow output",
+   "route": "Publishing",
+   "note": "This schedules videos you already have; it does not create a fresh short each day.",
+   "prompt": "For [brand], plan one finished short a day from this folder. Show me the calendar before anything is sent.",
+   "label": "Schedule one short per day",
+   "input": "Finished video files and the accounts you want to use. The assistant helps prepare descriptions.",
+   "work": "Builds a daily plan around existing bookings, then shows the posts for review and scheduling approval.",
+   "format": "Daily plan → schedule",
+   "output": "A proposed plan in the conversation/review process; Metricool bookings only after your yes. It distributes finished videos, not newly generated daily videos.",
+   "implements": [
+    "daily-shorts"
+   ],
+   "platforms": [
+    "instagram",
+    "facebook",
+    "shorts"
+   ]
+  },
+  {
+   "id": "O05",
+   "group": "Workflow",
+   "name": "TikTok test & promote",
+   "when": "Compare alternate edits before choosing one for other accounts.",
+   "needs": "Finished variants, distinct descriptions, linked accounts and the feature enabled.",
+   "gives": "A test plan, measured comparison and a winner distribution plan.",
+   "kind": "Workflow output",
+   "route": "Publishing",
+   "note": "Advanced and off by default. It deliberately posts multiple versions of a clip; each sending stage needs approval.",
+   "prompt": "For [brand], explain a test-and-promote plan for these versions before enabling or posting anything.",
+   "label": "Test clip versions on TikTok",
+   "input": "Finished alternate edits and connected accounts; choose to enable this advanced feature.",
+   "work": "Plans the test, requests sending approval, compares available results and proposes where to share a winner.",
+   "format": "Test plan + results",
+   "output": "Plans and comparisons explained in the conversation, with local records and approved external posts. Each sending stage needs approval. Off by default.",
+   "implements": [
+    "tiktok-test-promote"
+   ],
+   "platforms": [
+    "shorts"
+   ]
+  },
+  {
+   "id": "O06",
+   "group": "Workflow",
+   "name": "Results report & script audit",
+   "when": "Use actual performance to choose the next test.",
+   "needs": "Published content and available network results or supplied script performance data.",
+   "gives": "Publication status, saved metrics, strong and weak posts; a script audit can suggest one next test.",
+   "kind": "Workflow output",
+   "route": "Results",
+   "note": "Missing metrics remain missing. Scheduler acceptance is not proof of publication.",
+   "prompt": "For [brand], check what actually published, show the available results and suggest one supported thing to test next.",
+   "label": "Check results & improve",
+   "input": "Posts sent through the connected service, or script performance data you supply.",
+   "work": "Checks what actually published, explains available metrics and suggests a supported next test.",
+   "format": "Conversation + saved reports",
+   "output": "Publication status and metrics explained in the conversation, with data saved locally. A script audit produces a Markdown text report. There is no automatic visual analytics dashboard promised here.",
+   "implements": [
+    "check-results"
+   ],
+   "platforms": [],
+   "also": [
+    "results-by-hand"
+   ]
+  },
+  {
+   "id": "O07",
+   "group": "Workflow",
+   "name": "Comment-to-DM message flow",
+   "when": "Deliver a real resource and route interested people to real offers.",
+   "needs": "An Instagram account, an existing giveaway, real links and ManyChat or GoHighLevel.",
+   "gives": "Approved message copy and a guided build/test in the outside service.",
+   "kind": "External workflow",
+   "route": "DM funnel",
+   "note": "A documented guided workflow, not a native Social Media Factory DM engine. Activation and live changes need separate approval; outside service costs apply.",
+   "prompt": "For [brand], draft a comment-to-DM flow for our real giveaway and offers. Show every message before building or activating anything.",
+   "label": "Plan an Instagram comment-to-DM flow",
+   "input": "An Instagram account, a real giveaway, actual links and ManyChat or GoHighLevel access.",
+   "work": "Drafts the messages for approval and guides setup and testing in the outside service.",
+   "format": "Message copy + external setup",
+   "output": "Approved message text and setup notes; the live automation lives in ManyChat or GoHighLevel. Separate approval is needed before activation. Outside service costs apply.",
+   "implements": [],
+   "limit": "Not available yet: the comment-to-DM flow is planned, not built.",
+   "platforms": [
+    "instagram"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,161 @@
+{
+  "_meta": {
+    "last_researched": "2026-06-11",
+    "as_of": "June 2026",
+    "universal_rules": [
+      "One post, one idea. If it needs two ideas, it is two posts.",
+      "Say who the post is for in the opening, so the right people stop and everyone else scrolls on. A smaller, right audience beats a large, wrong one on every platform.",
+      "Every fact, number, quote and customer story comes from the brand's own files through the contract. If it is not there, it is not in the post.",
+      "Never trade for engagement: no 'comment YES', no 'tag a friend', no 'share if you agree'. All four platforms detect it and cut the post's reach.",
+      "Put the words people search for into the sentences. All four platforms now sort posts by reading the text, and hashtags carry little or no reach.",
+      "Keep the reader on the platform. A link in the post body costs reach everywhere, so the substance goes in the post itself.",
+      "Answer real comments quickly, within the first hour where you can. Early conversation is a ranking signal on all four.",
+      "These mechanics describe June 2026 and go stale within months. Refresh them before relying on any number."
+    ],
+    "note": "Brand-neutral platform mechanics only. Audience, voice, subjects, offers and proof come from the brand's own folder and are never assumed here. Hard limits are enforced by the platforms. Orderings of signals and formats are supported by several large independent studies. Exact percentages are third-party estimates: rely on which way they point, never on the exact figure. max_len matches the Factory's checker. target_len is in characters. The key 'twitter' means X."
+  },
+  "linkedin": {
+    "max_len": 3000,
+    "target_len": {"min": 900, "max": 2500},
+    "opening_line_pattern": "About 140 characters show on a phone before 'see more' (about 210 on a desktop), and a line break ends the visible part early. Write the opening as one tight paragraph that works alone. It needs three things: something specific (a number, a time span or a named outcome), a gap the next line will close, and a signal of who it is for. Reliable patterns: the result first, the common belief corrected, 'I looked at N of these', what changed this month, the list worth keeping, the honest admission.",
+    "structure_template": [
+      "OPENING: one paragraph of 140 characters or fewer that works alone: a specific result, finding or claim, and who it is for",
+      "CONTEXT: set the scene in a line or two",
+      "THE SUBSTANCE: three to six brief lines, a single thought in each, walking through the example, the steps or the evidence",
+      "THE TAKEAWAY: two or three lines that give the reader something to do. The save is earned here",
+      "CLOSE: one real question that can only be answered from experience, or one line worth remembering. Nothing after it"
+    ],
+    "cta_policy": "One ask per post, at most. Two kinds are safe: a question that takes first-hand experience to answer, and a prompt to keep the post that names the moment it will be needed ('Save this for the week before you hire'). Never 'comment YES', 'tag someone' or 'agree?': these patterns are detected and the post is held back. Keep links out of the body (studies put the reach cost between a fifth and a half). Moving the link into the first comment is no longer free either: posts built to push readers to a comment link now take a smaller cut, roughly a tenth. Unless the link is the whole point, leave it out of any post meant to travel. Sales asks belong in their own occasional post, about one in ten.",
+    "hashtag_policy": "Zero to three specific hashtags, or none. Hashtag following was removed, and in recent datasets posts without hashtags did slightly better. Write the subject into the sentences instead. Many brands switch hashtags off on LinkedIn altogether, and the brand's own style setting always wins.",
+    "preferred_formats": [
+      "swipeable PDF document: 6 to 10 slides, large type, a recap slide second from last. The most saved format",
+      "single image with text: a real photo, chart or screenshot that the post walks through",
+      "native vertical video under 60 seconds with captions burned in, because most plays are silent",
+      "text only, if the writing is strong enough to stand without a picture",
+      "poll, rarely, and only with a question worth answering"
+    ],
+    "do": [
+      "Post from a person's profile where the brand has one. Company pages reach a very small share of their followers",
+      "Judge a post by saves, comments from the right people, profile visits and messages. Ignore impressions",
+      "Write for reading time: brief lines, a single thought in each, space between beats, plain words",
+      "Give every carousel a recap slide just before the end, built to be screenshotted",
+      "Reply to comments within about 15 minutes during the first 60 to 90 minutes",
+      "Stay on the brand's own subjects so the platform learns who to show the posts to. Three to five posts a week"
+    ],
+    "dont": [
+      "Add a link to the body, or build the post around a link in the comments",
+      "Ask for comments, tags or reactions as a trade, or join engagement groups",
+      "Open with scene-setting that could start any post by anyone",
+      "Chase a broad, off-subject topic for reach. It teaches the platform the wrong audience",
+      "Post more than once a day",
+      "Close every post on an identical sales line",
+      "Make a claim with nothing the reader can see or check"
+    ]
+  },
+  "facebook": {
+    "max_len": 63206,
+    "target_len": {"min": 200, "max": 600},
+    "opening_line_pattern": "Facebook cuts a post with 'See more' after two or three lines on a phone, so the opening 125 characters have to stand by themselves. The platform's own creator guidance describes three kinds of opening: a benefit promised, a plain statement of what you are about to show, and a question or invitation. Whichever you use, include a concrete noun (a place, a product, a kind of person) and a real number if the brand has one. With a photo or a Reel, the interesting thing must be visible in the first image or the first frame.",
+    "structure_template": [
+      "LINE 1: 125 characters or fewer, with a concrete noun and, where the brand has one, a real number",
+      "LINE 2: what the photo or video shows, or why this matters to the reader",
+      "BODY: three to six brief lines, a single thought in each: the situation, the one thing that changed or the one thing to do, and why it works. Give the full explanation in the post",
+      "CLOSE: a question that takes a full sentence to answer, or a request to pass the post to one kind of person",
+      "LINK: none in the caption. If a link is truly needed it goes in the first comment, and sparingly"
+    ],
+    "cta_policy": "Keep links out of the caption: by the platform's own reporting, almost all post views go to posts without one, and link posts have the lowest engagement of any format. Dropping the link into the first comment is a habit of the trade, not official advice, and a late 2025 test limits how many link posts a professional profile or Page can publish. First choice of ask: a comment prompt that needs a real sentence in reply. Second: 'send this to' a specific person. Sales asks are rare, soft, and in the first comment. On Facebook the conversation in comments and messages is the path to a sale, not the click.",
+    "hashtag_policy": "Zero to two, or none. Never a block of hashtags: since April 2025 a long caption packed with hashtags is treated as spam and loses reach. The brand's own style setting always wins.",
+    "preferred_formats": [
+      "Reel: every uploaded video is a Reel now, it was the one format whose engagement rose in early 2026, and it is the main way to reach people who do not follow you. 15 to 30 seconds by default",
+      "single photo or a short album: real photos do clearly better than text alone",
+      "text status from a person's profile: reach is falling, but it sounds like someone speaking and builds the relationship",
+      "link post: avoid"
+    ],
+    "do": [
+      "Where the brand has a person, publish on that profile (switched to Professional Mode) and share to the Page afterwards",
+      "Rewrite the post for one or two relevant groups instead of pasting it. Lead with the help and remove the promotion",
+      "Use your own photos, footage and analysis. Since March 2026 original work is rewarded and copies are demoted",
+      "Name the place and the kind of person in the opening",
+      "Answer genuine comments within the hour. Facebook documents on-topic comments as something it ranks on",
+      "Measure a post by who replied, not by its view count"
+    ],
+    "dont": [
+      "Place a link inside the caption",
+      "Ask for a one-word comment, or open with a promise of a shock that hides the subject",
+      "Stuff hashtags, or write a caption that does not match the photo or video",
+      "Paste the same post word for word into the profile, the Page and groups",
+      "Hold the useful part back behind 'comment a word and I will message you'",
+      "Post to the Page only and stop there. A Page post reaches around one follower in a hundred"
+    ]
+  },
+  "twitter": {
+    "max_len": 280,
+    "target_len": {"min": 100, "max": 280},
+    "opening_line_pattern": "The opening line has to sell the post by itself: people decide in a few words. Strongest patterns: a specific result with an exact, unrounded number; a line that frames the attached image; a common belief corrected, with the evidence straight after; a plain statement of how something works; the reader's own frustration said back to them. Lead with the result or the reader rather than with yourself. Two openings to drop: a thread label and a link.",
+    "structure_template": [
+      "SINGLE POST (the default): the point in one line, a blank line, one to three lines of reason or detail, and an optional one-line takeaway. 280 characters in total. Attach a native image when there is something to see",
+      "THREAD (only when the idea is a true sequence): post 1 stands alone with the result and the promise; posts 2 to 6 carry one step each, with one image each where possible; the last post recaps and holds the only ask. Four to seven posts",
+      "LINK: never in the first post. It goes in a reply"
+    ],
+    "cta_policy": "No 'repost if you agree', no 'comment YES', no fake polls: engagement farming is penalised and it raises the mute and report predictions that push a post down. Allowed: a real question people in the field can answer, a bookmark prompt after a dense, useful post, and 'follow for' a specific promise only in the last post of a thread. A link belongs in a reply, or is added once the post has traction.",
+    "hashtag_policy": "None by default. The ranking model reads the meaning of the text, so the subject belongs in the sentence. One at most, for a real event or community tag. (The 2025 hashtag ban applies to paid ads only.)",
+    "preferred_formats": [
+      "text with one native image: a photo, chart or screenshot that the line frames",
+      "plain text: in the largest recent study it drew more engagement per view than anything else",
+      "short native video, such as a screen recording or a quick demonstration",
+      "thread, for step by step walkthroughs and case stories only",
+      "link post: last resort, with the link in a reply"
+    ],
+    "do": [
+      "Use a paid account if X matters to the brand. In the largest recent study free accounts had a median engagement of zero, and paid accounts reached about ten times as many people per post",
+      "Aim for bookmarks rather than likes. A bookmark means 'I will need this'",
+      "Answer the replies under your own posts within the hour",
+      "Add useful, specific replies under bigger accounts that cover the brand's subjects",
+      "Stay on the brand's subjects, so the platform's picture of the account stays sharp",
+      "Two or three strong posts a day at most. The feed limits how often one account appears"
+    ],
+    "dont": [
+      "Lead with a link",
+      "Turn one good idea into a thread. Each post in a thread is scored alone, so the reading time is split",
+      "Use engagement bait",
+      "Mock a business or a person by name. Blocks, mutes and reports all count against the post, and the people watching are potential customers",
+      "Make a claim with nothing attached to back it",
+      "Chase an off-subject post for reach. It pulls the account toward the wrong audience"
+    ]
+  },
+  "instagram": {
+    "max_len": 2200,
+    "target_len": {"min": 300, "max": 800},
+    "opening_line_pattern": "On Instagram the opening is visual: the carousel cover or the first frame of the Reel. Give it a 5 to 10 word headline in the largest type on the slide, legible at a glance, holding one open question. The caption is cut at about 125 characters, so its first line must work alone. It should extend the cover rather than repeat it, and contain the phrase people would type into search. Reliable cover patterns: a specific result, a small mistake with a real cost, a picture that is visibly unfinished until you swipe, a common belief reversed, a demonstration already under way, the reader named directly.",
+    "structure_template": [
+      "CAPTION LINE 1: 125 characters or fewer, extends the cover or first frame, and contains the phrase people would search",
+      "CAPTION BODY: 300 to 800 characters for a teaching post: the short story or the steps, in short lines. One or two lines for a Reel",
+      "CAPTION CLOSE: one ask only: save it, send it to a specific kind of person, or answer a question",
+      "LABELS: three to five specific hashtags at the very end, never more than five",
+      "CAROUSEL SLIDES (when the visual is a carousel, 7 to 10 slides at 1080 by 1350): a cover with a 5 to 10 word headline; a slide 2 strong enough to be someone's first sight of the post; one idea per slide; one slide written to be forwarded; a recap slide written to be saved; one soft closing slide"
+    ],
+    "cta_policy": "One ask per post, aimed at a save or a send ('Save this for Sunday's bake', 'Send this to the friend who keeps saying they will start running'). Those two actions feed the strongest ranking ratios. An ask to buy, book or message belongs on roughly one post in four or five. Ending the caption on a question lifts comments. Do not send people to the link in the bio on every post.",
+    "hashtag_policy": "A hard limit of five per post or Reel, enforced by the platform since December 2025. Use three to five specific labels. They tell the platform what the post is about and do not add reach. Discovery comes from the words in the caption, the text on screen, the alt text and the words spoken aloud.",
+    "preferred_formats": [
+      "carousel, 40 to 50 percent of posts: the highest engagement and save rate, and the only format the feed will show a second time, starting on slide 2",
+      "Reel, 35 to 45 percent: the reach format, with more than half of views coming from people who do not follow the account",
+      "single image and Stories, 10 to 15 percent: for people who already know the brand"
+    ],
+    "do": [
+      "Make slide 2 strong enough to be the first thing someone sees",
+      "Design one slide per post to be forwarded: a plain comparison, a recap or a checklist",
+      "Use Trial Reels (accounts with 1,000 followers or more) to test a new opening on people who do not follow you",
+      "Track saves, sends, follows and profile visits as a share of reach, not as raw counts",
+      "Name the reader in the opening, even though it lowers raw reach",
+      "Write the phrases people search for into the caption and the on-screen text"
+    ],
+    "dont": [
+      "Chase trending audio or generic tips that attract people who will never be customers",
+      "Post advice with nothing shown: no photo, no example, no result",
+      "Put a hard sales slide on every carousel. People do not pass on sales posts",
+      "Open a Reel with a logo or a slow introduction. The decision is made in the first one to three seconds",
+      "Judge a post by reach alone",
+      "Use more than five hashtags, or treat them as a way to be found"
+    ]
+  }
+}

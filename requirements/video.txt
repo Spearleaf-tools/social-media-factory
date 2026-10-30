@@ -1,0 +1,155 @@
+anyio==4.15.1
+    # via httpx
+av==18.1.0
+    # via faster-whisper
+certifi==2026.7.22
+    # via
+    #   -c core.txt
+    #   httpcore
+    #   httpx
+    #   requests
+cffi==2.1.1 ; platform_machine != 'ppc64le' and platform_machine != 's390x' and platform_python_implementation != 'PyPy' and sys_platform == 'linux'
+    # via cryptography
+charset-normalizer==3.5.1
+    # via
+    #   -c core.txt
+    #   requests
+click==8.5.0
+    # via
+    #   -c core.txt
+    #   huggingface-hub
+colorama==0.4.6 ; sys_platform == 'win32'
+    # via tqdm
+cryptography==50.0.1 ; platform_machine != 'ppc64le' and platform_machine != 's390x' and sys_platform == 'linux'
+    # via secretstorage
+ctranslate2==4.8.2
+    # via faster-whisper
+docutils==0.23
+    # via readme-renderer
+faster-whisper==1.2.1
+    # via -r video.in
+filelock==4.2.4
+    # via
+    #   -r video.in
+    #   huggingface-hub
+    #   static-ffmpeg
+flatbuffers==25.12.19
+    # via onnxruntime
+fsspec==2026.9.0
+    # via huggingface-hub
+h11==0.16.0
+    # via httpcore
+hf-xet==1.6.0 ; platform_machine == 'AMD64' or platform_machine == 'aarch64' or platform_machine == 'amd64' or platform_machine == 'arm64' or platform_machine == 'x86_64'
+    # via huggingface-hub
+httpcore==1.0.9
+    # via httpx
+httpx==0.28.1
+    # via huggingface-hub
+huggingface-hub==1.32.0
+    # via
+    #   faster-whisper
+    #   tokenizers
+id==1.6.1
+    # via twine
+idna==3.20
+    # via
+    #   -c core.txt
+    #   anyio
+    #   httpx
+    #   requests
+jaraco-classes==3.4.0 ; platform_machine != 'ppc64le' and platform_machine != 's390x'
+    # via keyring
+jaraco-context==6.1.2 ; platform_machine != 'ppc64le' and platform_machine != 's390x'
+    # via keyring
+jaraco-functools==4.6.0 ; platform_machine != 'ppc64le' and platform_machine != 's390x'
+    # via keyring
+jeepney==0.9.0 ; platform_machine != 'ppc64le' and platform_machine != 's390x' and sys_platform == 'linux'
+    # via
+    #   keyring
+    #   secretstorage
+keyring==25.7.0 ; platform_machine != 'ppc64le' and platform_machine != 's390x'
+    # via twine
+markdown-it-py==4.2.0
+    # via rich
+mdurl==0.1.2
+    # via markdown-it-py
+more-itertools==11.1.0 ; platform_machine != 'ppc64le' and platform_machine != 's390x'
+    # via
+    #   jaraco-classes
+    #   jaraco-functools
+nh3==0.3.7
+    # via readme-renderer
+numpy==2.5.3
+    # via
+    #   -c core.txt
+    #   ctranslate2
+    #   onnxruntime
+    #   opencv-python-headless
+    #   scipy
+onnxruntime==1.30.0
+    # via faster-whisper
+opencv-python-headless==5.0.0.93
+    # via -r video.in
+packaging==26.3
+    # via
+    #   huggingface-hub
+    #   onnxruntime
+    #   twine
+progress==1.6.1
+    # via static-ffmpeg
+protobuf==7.36.2
+    # via onnxruntime
+pycparser==3.0 ; implementation_name != 'PyPy' and platform_machine != 'ppc64le' and platform_machine != 's390x' and platform_python_implementation != 'PyPy' and sys_platform == 'linux'
+    # via cffi
+pygments==2.21.0
+    # via
+    #   readme-renderer
+    #   rich
+pywin32-ctypes==0.2.3 ; platform_machine != 'ppc64le' and platform_machine != 's390x' and sys_platform == 'win32'
+    # via keyring
+pyyaml==6.0.3
+    # via
+    #   ctranslate2
+    #   huggingface-hub
+readme-renderer==46.0
+    # via twine
+requests==2.34.2
+    # via
+    #   -c core.txt
+    #   -r video.in
+    #   requests-toolbelt
+    #   static-ffmpeg
+    #   twine
+requests-toolbelt==1.0.0
+    # via twine
+rfc3986==2.0.0
+    # via twine
+rich==15.0.0
+    # via twine
+scipy==1.18.1
+    # via -r video.in
+secretstorage==3.5.0 ; platform_machine != 'ppc64le' and platform_machine != 's390x' and sys_platform == 'linux'
+    # via keyring
+static-ffmpeg==3.0
+    # via -r video.in
+tokenizers==0.23.2
+    # via faster-whisper
+tqdm==4.70.1
+    # via
+    #   faster-whisper
+    #   huggingface-hub
+twine==7.0.0
+    # via static-ffmpeg
+typing-extensions==4.16.0
+    # via
+    #   -c core.txt
+    #   anyio
+    #   huggingface-hub
+urllib3==2.8.0
+    # via
+    #   -c core.txt
+    #   id
+    #   requests
+    #   twine
+yt-dlp==2026.8.19
+    # via -r video.in

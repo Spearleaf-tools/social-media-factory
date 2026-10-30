@@ -1,0 +1,1084 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>Social Media Factory review</title>
+<!-- The icon is drawn right here, so the page asks nobody for a file. The only web address in
+     this whole page is the SVG format's own name inside that drawing; nothing is fetched from it. -->
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23111111'/%3E%3Cpath d='M9 16.5l5 5 9-11' fill='none' stroke='%23ffffff' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<style>
+/* One stylesheet, written by hand, light theme only. Colour is used for one thing: the state a
+   post is in. Every state also has words, so nothing depends on seeing the colour. */
+:root {
+  color-scheme: light;
+  --ground: #ffffff;
+  --panel: #f6f6f7;
+  --ink: #111111;
+  --soft: #4a4a4f;
+  --line: #d9d9de;
+  --focus: #1d4ed8;
+  --ready: #1d4ed8;
+  --ok: #15692f;
+  --ok-bg: #e9f6ee;
+  --stop: #b3261e;
+  --stop-bg: #fdecea;
+  --wait: #8a5300;
+  --wait-bg: #fdf3e1;
+  --quiet: #6b6b72;
+  --radius: 10px;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: var(--ground); color: var(--ink);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: 15px; line-height: 1.5;
+}
+button, input, select, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; }
+button:disabled { cursor: default; opacity: .45; }
+:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.skip { position: absolute; left: -999px; top: 0; background: var(--ink); color: var(--ground); padding: 8px 12px; z-index: 100; }
+.skip:focus { left: 8px; top: 8px; }
+
+/* the lost-connection bar */
+#down { display: none; background: var(--stop); color: #fff; padding: 10px 16px; text-align: center; font-weight: 600; }
+#down button { margin-left: 10px; background: #fff; color: var(--stop); border: 0; border-radius: 6px; padding: 4px 12px; font-weight: 600; }
+body.is-down #down { display: block; position: sticky; top: 0; z-index: 60; }
+body.is-down .needs-server { opacity: .45; pointer-events: none; }
+
+/* top bar */
+#top { position: sticky; top: 0; z-index: 50; background: var(--ground); border-bottom: 1px solid var(--line); padding: 10px 18px; }
+body.is-down #top { position: static; }
+.top-row { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 14px; }
+#top h1 { font-size: 16px; margin: 0; font-weight: 700; }
+#top h1 span { font-weight: 400; color: var(--soft); }
+#counts { color: var(--soft); font-variant-numeric: tabular-nums; }
+#counts b { color: var(--ink); }
+.spacer { flex: 1; }
+#filter-box summary { display: none; cursor: pointer; color: var(--soft); font-size: 14px; padding: 8px 0 2px; }
+#filters { display: flex; flex-wrap: wrap; gap: 6px 8px; align-items: center; margin-top: 8px; }
+#filters label { display: inline-flex; align-items: center; gap: 5px; color: var(--soft); font-size: 13px; }
+#filters select { border: 1px solid var(--line); border-radius: 7px; padding: 5px 6px; background: var(--ground); max-width: 170px; }
+.btn { border: 1px solid var(--line); background: var(--ground); border-radius: 8px; padding: 6px 13px; min-height: 36px; }
+.btn:hover:not(:disabled) { background: var(--panel); }
+.btn.primary { background: var(--ok); border-color: var(--ok); color: #fff; font-weight: 700; }
+.btn.primary:hover:not(:disabled) { background: #0f5324; }
+.btn.danger { color: var(--stop); border-color: #e3aca8; }
+.btn.plain { border: 0; background: none; text-decoration: underline; color: var(--soft); padding: 4px 6px; min-height: 0; }
+
+/* shell */
+#shell { display: grid; grid-template-columns: 230px minmax(0, 1fr); }
+#rail { position: sticky; top: var(--top-h, 100px); align-self: start; max-height: calc(100vh - var(--top-h, 100px)); overflow-y: auto; padding: 14px 10px 30px; border-right: 1px solid var(--line); }
+#rail h2 { font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--quiet); margin: 16px 8px 6px; }
+#rail h2:first-child { margin-top: 0; }
+.rail-item { display: flex; width: 100%; gap: 6px; align-items: baseline; text-align: left; border: 0; background: none; border-radius: 7px; padding: 6px 8px; }
+.rail-item:hover { background: var(--panel); }
+.rail-item[aria-pressed="true"] { background: #e8eefc; font-weight: 600; }
+.rail-item .n { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.rail-item .m { font-size: 12px; color: var(--soft); white-space: nowrap; }
+.rail-item .m.fix { color: var(--stop); font-weight: 600; }
+#feed { max-width: 700px; width: 100%; margin: 0 auto; padding: 16px 16px 60vh; }
+.day { font-size: 13px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--soft); margin: 26px 4px 10px; }
+.day:first-child { margin-top: 4px; }
+.empty { text-align: center; color: var(--soft); padding: 60px 16px; }
+#foot { color: var(--soft); font-size: 13px; text-align: center; padding: 0 16px 40px; max-width: 700px; margin: 0 auto; }
+
+/* a post */
+.card { position: relative; border: 1px solid var(--line); border-left: 6px solid var(--quiet); border-radius: var(--radius); margin: 0 0 16px; background: var(--ground); overflow: hidden; }
+.card.is-ready { border-left-color: var(--ready); }
+.card.is-approved, .card.is-done { border-left-color: var(--ok); }
+.card.is-fix, .card.is-reapprove { border-left-color: var(--stop); }
+.card.is-remake { border-left-color: var(--wait); }
+.card.is-turned-down { border-left-color: var(--quiet); }
+.card.is-turned-down .words { text-decoration: line-through; color: var(--soft); }
+.card.is-current { box-shadow: 0 0 0 3px rgba(29, 78, 216, .35); }
+.card:focus { outline: none; }
+.card:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+.card-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; padding: 11px 16px 9px; background: var(--panel); border-bottom: 1px solid var(--line); }
+.card-head h3 { margin: 0; font-size: 16px; }
+.card-head h3 .who { font-weight: 400; color: var(--soft); font-size: 14px; margin-left: 4px; }
+.card-head .when { margin: 0; color: var(--soft); font-size: 13px; }
+.chip { margin-left: auto; font-size: 12.5px; font-weight: 700; border-radius: 20px; padding: 2px 10px; border: 1px solid var(--line); background: var(--ground); white-space: nowrap; }
+.is-ready .chip { color: var(--ready); border-color: #b9c8f4; }
+.is-approved .chip, .is-done .chip { color: var(--ok); border-color: #a9d6b8; background: var(--ok-bg); }
+.is-fix .chip, .is-reapprove .chip { color: var(--stop); border-color: #e3aca8; background: var(--stop-bg); }
+.is-remake .chip { color: var(--wait); border-color: #e6cc9a; background: var(--wait-bg); }
+.notes { padding: 0 16px; }
+.note { margin: 10px 0 0; padding: 7px 10px; border-radius: 8px; font-size: 13.5px; border: 1px solid var(--line); background: var(--panel); }
+.note.unverified, .note.wait { color: var(--wait); background: var(--wait-bg); border-color: #e6cc9a; }
+.note.stop { color: var(--stop); background: var(--stop-bg); border-color: #e3aca8; }
+.note b { font-weight: 700; }
+.body { padding: 12px 16px 4px; }
+.words { white-space: pre-wrap; overflow-wrap: anywhere; margin: 0; }
+.p-twitter .words, .p-facebook .words { font-size: 16px; line-height: 1.4; }
+.words mark.over { background: var(--stop-bg); color: var(--stop); }
+.foldmark { display: inline-block; width: 0; height: 1.1em; border-left: 2px dashed var(--wait); margin: 0 2px; vertical-align: text-bottom; }
+.more { border: 0; background: none; padding: 0 2px; color: var(--ready); text-decoration: underline; }
+.foldhint { margin: 6px 0 0; font-size: 12.5px; color: var(--quiet); }
+.thread { margin: 12px 0 0; padding: 0 0 0 12px; border-left: 2px solid var(--line); list-style: none; }
+.thread li { padding: 8px 0; border-top: 1px solid var(--line); }
+.thread li:first-child { border-top: 0; }
+.thread .num { display: block; font-size: 12px; color: var(--quiet); font-variant-numeric: tabular-nums; }
+.media { display: flex; gap: 8px; overflow-x: auto; margin: 12px 0 4px; padding-bottom: 4px; scroll-snap-type: x proximity; }
+.media figure { margin: 0; position: relative; flex: 0 0 auto; scroll-snap-align: start; }
+.media.single figure { flex: 1 1 auto; }
+.media img, .media video { display: block; max-height: 300px; max-width: 100%; border-radius: 8px; border: 1px solid var(--line); background: var(--panel); }
+.media.many img, .media.many video { height: 220px; width: auto; max-width: none; }
+.card.is-open .media img, .card.is-open .media video { max-height: none; height: auto; max-width: 100%; }
+.card.is-open .media { flex-wrap: wrap; }
+.media figcaption { position: absolute; top: 6px; right: 6px; background: rgba(17,17,17,.78); color: #fff; font-size: 11.5px; border-radius: 10px; padding: 1px 7px; }
+.media .origin { position: absolute; left: 6px; bottom: 6px; background: rgba(17,17,17,.82); color: #fff; font-size: 12px; font-weight: 600; border-radius: 10px; padding: 2px 8px; }
+.media .gone, .media .doc { display: flex; align-items: center; justify-content: center; min-height: 110px; min-width: 200px; padding: 12px; border-radius: 8px; text-align: center; font-size: 13px; overflow-wrap: anywhere; }
+.media .gone { border: 1px dashed var(--stop); color: var(--stop); background: var(--stop-bg); font-weight: 600; }
+.media .doc { border: 1px solid var(--line); background: var(--panel); }
+.extras { margin: 10px 0 0; font-size: 13.5px; color: var(--soft); }
+.extras dt { font-weight: 700; color: var(--ink); margin-top: 6px; }
+.extras dd { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; }
+.foot { padding: 4px 16px 14px; }
+.findings { list-style: none; margin: 8px 0 0; padding: 0; font-size: 13.5px; }
+.findings li { padding: 3px 0; overflow-wrap: anywhere; }
+.findings .must { color: var(--stop); }
+.findings .look { color: var(--wait); }
+.findings .tag { font-weight: 700; }
+.meta { display: flex; flex-wrap: wrap; gap: 4px 12px; margin-top: 10px; font-size: 12.5px; color: var(--soft); font-variant-numeric: tabular-nums; }
+.meta .over { color: var(--stop); font-weight: 700; }
+.meta .good { color: var(--ok); }
+.meta .bad { color: var(--stop); font-weight: 600; }
+.meta .id { margin-left: auto; color: var(--quiet); }
+.ack { display: flex; gap: 8px; align-items: flex-start; margin-top: 12px; padding: 8px 10px; border: 1px solid #e6cc9a; background: var(--wait-bg); border-radius: 8px; font-size: 14px; }
+.ack input { margin-top: 4px; width: 18px; height: 18px; flex: 0 0 auto; }
+.actions { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+.row { margin-top: 12px; padding-top: 10px; border-top: 1px dashed var(--line); }
+.row label { display: block; font-size: 13px; color: var(--soft); margin-bottom: 4px; }
+.row input[type="text"], .row select, .editor textarea { width: 100%; border: 1px solid var(--line); border-radius: 8px; padding: 7px 9px; background: var(--ground); }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+.chips button { border: 1px solid var(--line); background: var(--ground); border-radius: 16px; padding: 3px 11px; font-size: 13px; }
+.chips button[aria-pressed="true"] { background: var(--wait-bg); border-color: var(--wait); color: var(--wait); font-weight: 600; }
+.row .line { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; align-items: center; }
+.hint { font-size: 12.5px; color: var(--quiet); margin: 6px 0 0; }
+.editor { margin: 0; }
+.editor label { display: block; font-size: 13px; color: var(--soft); margin: 10px 0 4px; }
+.editor label:first-child { margin-top: 0; }
+.editor textarea { resize: vertical; min-height: 70px; line-height: 1.45; white-space: pre-wrap; }
+.live { font-size: 12.5px; color: var(--soft); margin: 4px 0 0; font-variant-numeric: tabular-nums; }
+.live .over { color: var(--stop); font-weight: 700; }
+.order { list-style: none; margin: 6px 0 0; padding: 0; }
+.order li { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; padding: 5px 0; border-top: 1px solid var(--line); font-size: 13.5px; }
+.order li span { flex: 1; min-width: 120px; overflow-wrap: anywhere; }
+.order .btn { min-height: 30px; padding: 2px 9px; font-size: 13px; }
+.order li.dropped span { text-decoration: line-through; color: var(--quiet); }
+.stale { position: absolute; inset: 0; z-index: 5; background: rgba(255,255,255,.93); display: flex; flex-direction: column; gap: 10px; align-items: center; justify-content: center; text-align: center; padding: 18px; font-weight: 600; }
+
+/* dialogs and messages */
+dialog { border: 1px solid var(--line); border-radius: 12px; padding: 20px 22px; max-width: 480px; width: calc(100% - 32px); color: var(--ink); background: var(--ground); }
+dialog::backdrop { background: rgba(17,17,17,.45); }
+dialog h2 { margin: 0 0 10px; font-size: 17px; }
+dialog .end { display: flex; justify-content: flex-end; gap: 8px; margin-top: 16px; }
+dialog ul { margin: 8px 0 0; padding-left: 20px; color: var(--soft); }
+#keys table { border-collapse: collapse; width: 100%; font-size: 14px; margin-top: 12px; }
+#keys label { display: flex; gap: 8px; align-items: center; }
+#keys td { padding: 4px 6px; border-bottom: 1px solid var(--line); vertical-align: top; }
+#keys td:first-child { white-space: nowrap; width: 110px; }
+kbd { font: inherit; font-size: 12.5px; font-weight: 700; border: 1px solid var(--line); border-bottom-width: 2px; border-radius: 5px; padding: 0 5px; background: var(--panel); }
+#toasts { position: fixed; left: 50%; bottom: 18px; transform: translateX(-50%); z-index: 80; display: flex; flex-direction: column; gap: 8px; width: min(92vw, 520px); pointer-events: none; }
+.toast { background: var(--ink); color: #fff; border-radius: 9px; padding: 10px 14px; font-size: 14px; box-shadow: 0 4px 16px rgba(0,0,0,.25); }
+.toast.bad { background: var(--stop); }
+
+@media (max-width: 900px) {
+  #shell { grid-template-columns: minmax(0, 1fr); }
+  #rail { display: none; }
+  #top { padding: 9px 12px; }
+  #feed { padding: 12px 12px 50vh; }
+}
+@media (max-width: 560px) {
+  body { font-size: 16px; }
+  #top { position: static; }
+  #filters select { max-width: 46vw; }
+  #filter-box summary { display: list-item; }
+  .btn { min-height: 44px; padding: 8px 14px; }
+  .card-head, .body, .foot, .notes { padding-left: 12px; padding-right: 12px; }
+  .chip { margin-left: 0; }
+  .media.many img, .media.many video { height: 180px; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .toast { animation: rise .15s ease-out; }
+  @keyframes rise { from { opacity: 0; transform: translateY(8px); } }
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#feed">Skip to the posts</a>
+<div id="down" role="alert">This page has lost touch with the Factory on this computer. Nothing you do now is being saved.
+  <button type="button" id="retry">Try again</button></div>
+
+<header id="top">
+  <div class="top-row">
+    <h1>Social Media Factory review <span id="brandname"></span></h1>
+    <span id="counts" aria-live="off"></span>
+    <span class="spacer"></span>
+    <button type="button" class="btn" id="keys-open" aria-haspopup="dialog">Keyboard shortcuts</button>
+    <button type="button" class="btn primary needs-server" id="all-open" aria-haspopup="dialog" disabled>Approve all I have seen (0)</button>
+  </div>
+  <details id="filter-box" open>
+    <summary>Show only some posts</summary>
+    <form id="filters" aria-label="Show only some posts"></form>
+  </details>
+</header>
+
+<div id="shell">
+  <nav id="rail" aria-label="Days and networks"></nav>
+  <div>
+    <main id="feed" tabindex="-1" aria-label="Posts to review"><p class="empty">Opening your posts…</p></main>
+    <p id="foot"></p>
+  </div>
+</div>
+
+<dialog id="all" aria-labelledby="all-title">
+  <h2 id="all-title">Approve all the posts you have seen</h2>
+  <div id="all-body"></div>
+  <div class="end">
+    <button type="button" class="btn" data-close>Cancel</button>
+    <button type="button" class="btn primary" id="all-go">Approve</button>
+  </div>
+</dialog>
+
+<dialog id="keys" aria-labelledby="keys-title">
+  <h2 id="keys-title">Keyboard shortcuts</h2>
+  <label><input type="checkbox" id="keys-on"> Use single-key shortcuts on this page</label>
+  <table>
+    <tbody>
+      <tr><td><kbd>J</kbd> <kbd>K</kbd> or <kbd>↓</kbd> <kbd>↑</kbd></td><td>next post, previous post</td></tr>
+      <tr><td><kbd>A</kbd></td><td>approve this post and move to the next one waiting for you</td></tr>
+      <tr><td><kbd>E</kbd></td><td>edit the words (<kbd>Ctrl</kbd>+<kbd>Enter</kbd> saves, <kbd>Esc</kbd> cancels)</td></tr>
+      <tr><td><kbd>R</kbd></td><td>ask for a remake, with a note</td></tr>
+      <tr><td><kbd>X</kbd></td><td>turn this post down, with a note if you like</td></tr>
+      <tr><td><kbd>U</kbd></td><td>undo the last thing done to this post</td></tr>
+      <tr><td><kbd>Shift</kbd>+<kbd>U</kbd></td><td>undo the last thing you did on this page</td></tr>
+      <tr><td><kbd>Space</kbd></td><td>show the whole caption and full-size images</td></tr>
+      <tr><td><kbd>1</kbd>–<kbd>9</kbd></td><td>show only that day (press again to show every day)</td></tr>
+      <tr><td><kbd>F</kbd></td><td>step through the networks</td></tr>
+      <tr><td><kbd>?</kbd></td><td>this list</td></tr>
+    </tbody>
+  </table>
+  <div class="end"><button type="button" class="btn" data-close>Close</button></div>
+</dialog>
+
+<div id="toasts"></div>
+<div id="say" class="sr-only" role="status" aria-live="polite"></div>
+
+<script>
+"use strict";
+(function () {
+  // Everything on this page is built from DOM nodes and textContent. No post text is ever turned
+  // into HTML, so nothing written in a post can run as code here.
+
+  var NETWORKS = { twitter: "X", linkedin: "LinkedIn", facebook: "Facebook", instagram: "Instagram",
+    threads: "Threads", bluesky: "Bluesky", tiktok: "TikTok", youtube: "YouTube", pinterest: "Pinterest",
+    gmb: "Google Business Profile" };
+  var STATE_WORDS = { ready: "Ready to review", fix: "Needs a fix", approved: "Approved",
+    reapprove: "Approval no longer valid", remake: "Remake asked for", "turned-down": "Turned down" };
+  var DONE_WORDS = { scheduled: "Scheduled", posted: "Posted", exported: "In the ready-to-post folder" };
+  var REMAKE_NOTES = ["sounds too formal", "make it shorter", "open with the detail", "does not sound like us",
+    "the first line is weak"];
+  var SEEN_SHARE = 0.8;      // this much of the card (or of the screen, for a tall card) ...
+  var SEEN_AFTER_MS = 700;   // ... for this long counts as "looked at". Scrolling past does not.
+
+  var S = { info: null, posts: new Map(), shown: [], current: null,
+    filters: { platform: "", identity: "", state: "", pillar: "", day: "", changed: false },
+    editing: null, remaking: null, refusing: null, picked: new Set(), open: new Set(), stale: new Set(),
+    ticked: new Set(), mine: [], down: false, retry: null, watcher: null, timers: new Map(), keys: true };
+
+  try { S.keys = localStorage.getItem("smf-review-keys") !== "off"; } catch (e) { /* private window */ }
+  if (window.matchMedia("(max-width: 560px)").matches) document.getElementById("filter-box").open = false;   // a phone starts with the posts
+
+  // ---------- small helpers ----------
+  function $(id) { return document.getElementById(id); }
+  function h(tag, props) {
+    var el = document.createElement(tag), i, kids = Array.prototype.slice.call(arguments, 2);
+    if (props) Object.keys(props).forEach(function (k) {
+      var v = props[k];
+      if (v == null || v === false) return;
+      if (k === "class") el.className = v;
+      else if (k === "text") el.textContent = v;
+      else if (k === "data") Object.keys(v).forEach(function (d) { el.dataset[d] = v[d]; });
+      else if (v === true) el.setAttribute(k, "");
+      else el.setAttribute(k, v);
+    });
+    (function add(list) {
+      for (i = 0; i < list.length; i++) {
+        var kid = list[i];
+        if (kid == null || kid === false) continue;
+        if (Array.isArray(kid)) add(kid); else el.append(kid.nodeType ? kid : document.createTextNode(String(kid)));
+      }
+    })(kids);
+    return el;
+  }
+  function chars(text) { return Array.from(text || ""); }         // count the way the checker does
+  function plural(n, one, many) { return n + " " + (n === 1 ? one : many); }
+  function network(p) { return NETWORKS[p.platform] || p.platform; }
+  function dayOf(p) { return (p.scheduled_time_local || "").slice(0, 10); }
+  function limitFor(platform) { return (S.info && S.info.limits[platform]) || {}; }
+
+  function when(local) {
+    var m = /^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2})$/.exec(local || "");
+    if (!m) return "No time set yet";
+    var d = new Date(+m[1], +m[2] - 1, +m[3], +m[4], +m[5]);
+    return d.toLocaleDateString(undefined, { weekday: "short", day: "numeric", month: "short" }) + " · " +
+      d.toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" });
+  }
+  function dayWords(day, brief) {
+    var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(day || "");
+    if (!m) return "No day set yet";
+    return new Date(+m[1], +m[2] - 1, +m[3]).toLocaleDateString(undefined,
+      brief ? { weekday: "short", day: "numeric", month: "short" } : { weekday: "long", day: "numeric", month: "long" });
+  }
+
+  // The one word that says where a post stands. Worked out from what the Factory sent.
+  function stateOf(p) {
+    if (p.locked) return "done";
+    if (p.status === "rejected") return "turned-down";
+    if (p.status === "regen_queued") return "remake";
+    if (p.status === "approved" && p.approval === "voided") return "reapprove";
+    if ((p.lint_errors || []).length || p.status === "blocked" || p.sourcing === "blocked") return "fix";
+    if (p.status === "approved") return "approved";
+    return "ready";
+  }
+  function stateWords(p) { var s = stateOf(p); return s === "done" ? (DONE_WORDS[p.status] || p.status) : STATE_WORDS[s]; }
+  function waiting(p) { var s = stateOf(p); return s === "ready" || s === "reapprove"; }
+  function canApprove(p) { return !p.approve_block; }
+  function needsTick(p) { return canApprove(p) && p.needs_acknowledgement; }
+
+  // ---------- talking to the Factory on this computer ----------
+  function Fail(message, status, data) { this.message = message; this.status = status; this.data = data || {}; }
+
+  function call(path, payload) {
+    var opts = payload === undefined ? {} :
+      { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) };
+    return fetch(path, opts).then(function (res) {
+      setDown(false);
+      return res.json().catch(function () { return null; }).then(function (data) {
+        if (!res.ok) throw new Fail((data && data.error) || "The review page could not do that.", res.status, data);
+        return data;
+      });
+    }, function () {
+      setDown(true);
+      throw new Fail("This page has lost touch with the Factory on this computer.", 0);
+    });
+  }
+
+  function setDown(down) {
+    if (down === S.down) return;
+    S.down = down;
+    document.body.classList.toggle("is-down", down);
+    if (down && !S.retry) S.retry = setInterval(function () { load(true, true); }, 5000);
+    if (!down && S.retry) { clearInterval(S.retry); S.retry = null; }
+  }
+
+  function say(message, bad) {
+    var t = h("div", { class: "toast" + (bad ? " bad" : ""), text: message }), box = $("toasts");
+    while (box.children.length >= 2) box.firstChild.remove();       // working fast must not bury the posts in messages
+    box.append(t);
+    $("say").textContent = "";
+    setTimeout(function () { $("say").textContent = message; }, 30);
+    setTimeout(function () { t.remove(); }, bad ? 7000 : 3500);
+  }
+
+  function load(quiet, keepTyping) {
+    return call("/api/batch").then(function (info) {
+      S.info = info;
+      S.posts = new Map(info.posts.map(function (p) { return [p.id, p]; }));
+      if (keepTyping && S.editing) { drawTop(); drawRail(); return; }    // reconnecting must not wipe an open editor
+      S.stale.clear();
+      drawAll();
+      if (!S.current && S.shown.length) setCurrent(S.shown[0], false);
+    }, function (e) {
+      if (!quiet) say(e.message, true);
+    });
+  }
+
+  function refresh(id) {
+    return call("/api/post/" + encodeURIComponent(id)).then(function (data) { take(data.post); });
+  }
+
+  function take(post) {                 // a fresh copy of one post arrived
+    var old = S.posts.get(post.id);
+    if (!old || old.content_sha !== post.content_sha || old.status !== post.status) S.ticked.delete(post.id);
+    S.posts.set(post.id, post);
+    S.stale.delete(post.id);
+    redraw(post.id);
+    drawTop(); drawRail();
+  }
+
+  // ---------- which posts are on screen ----------
+  function passes(p) {
+    var f = S.filters;
+    if (f.platform && p.platform !== f.platform) return false;
+    if (f.identity && p.identity !== f.identity) return false;
+    if (f.pillar && p.pillar !== f.pillar) return false;
+    if (f.day && dayOf(p) !== f.day) return false;
+    if (f.changed && !p.changed_since_seen) return false;
+    if (f.state === "unverified") return p.sourcing !== "passed";
+    if (f.state && stateOf(p) !== f.state) return false;
+    return true;
+  }
+  function inOrder(a, b) {
+    return (a.scheduled_time_iso || "~").localeCompare(b.scheduled_time_iso || "~") || a.id.localeCompare(b.id);
+  }
+  function days() {
+    var seen = {};
+    S.posts.forEach(function (p) { seen[dayOf(p)] = true; });
+    return Object.keys(seen).sort(function (a, b) { return (a || "~").localeCompare(b || "~"); });
+  }
+  function bulkSplit() {
+    var out = { go: [], unseen: 0, fix: 0, remake: 0, facts: 0 };
+    S.shown.forEach(function (id) {
+      var p = S.posts.get(id), s = stateOf(p);
+      if (s === "remake") out.remake++;
+      else if (s === "fix") out.fix++;
+      else if (!waiting(p) || !canApprove(p)) return;
+      else if (p.needs_acknowledgement) out.facts++;
+      else if (!p.seen) out.unseen++;
+      else out.go.push(p);
+    });
+    return out;
+  }
+
+  // ---------- drawing: top bar, side rail ----------
+  function drawTop() {
+    var all = Array.from(S.posts.values());
+    $("brandname").textContent = S.info ? "· " + S.info.brand.name : "";
+    document.title = (S.info ? S.info.brand.name + " · " : "") + "Social Media Factory review";
+    var n = function (test) { return all.filter(test).length; };
+    var counts = $("counts");
+    counts.textContent = "";
+    counts.append(h("b", { text: n(function (p) { return p.seen; }) + " of " + all.length }), " looked at · ",
+      h("b", { text: n(function (p) { return stateOf(p) === "approved" || stateOf(p) === "done"; }) }), " approved · ",
+      h("b", { text: n(function (p) { return stateOf(p) === "fix" || stateOf(p) === "reapprove"; }) }), " to fix · ",
+      h("b", { text: n(function (p) { return stateOf(p) === "remake"; }) }), " being remade");
+
+    var f = S.filters, form = $("filters");
+    var focused = document.activeElement && document.activeElement.name;
+    form.textContent = "";
+    function pick(name, label, options) {
+      var sel = h("select", { name: name, id: "f-" + name }, h("option", { value: "", text: "All" }));
+      options.forEach(function (o) { sel.append(h("option", { value: o[0], text: o[1], selected: o[0] === f[name] })); });
+      sel.value = f[name];
+      form.append(h("label", { "for": "f-" + name }, label, sel));
+    }
+    var uniq = function (key) { var s = {}; all.forEach(function (p) { if (p[key]) s[p[key]] = true; }); return Object.keys(s).sort(); };
+    pick("platform", "Network", uniq("platform").map(function (k) { return [k, NETWORKS[k] || k]; }));
+    pick("identity", "Voice", uniq("identity").map(function (k) { return [k, (S.info && S.info.brand.identities[k]) || k]; }));
+    pick("state", "Where it stands", [["ready", "Ready to review"], ["fix", "Needs a fix"], ["reapprove", "Approval no longer valid"],
+      ["unverified", "Facts not checked"], ["remake", "Remake asked for"], ["approved", "Approved"],
+      ["turned-down", "Turned down"], ["done", "Already sent or exported"]]);
+    if (uniq("pillar").length) pick("pillar", "Subject", uniq("pillar").map(function (k) { return [k, k]; }));
+    pick("day", "Day", days().map(function (d) { return [d, dayWords(d)]; }).filter(function (o) { return o[0]; }));
+    var box = h("input", { type: "checkbox", name: "changed", id: "f-changed" });
+    box.checked = f.changed;
+    form.append(h("label", { "for": "f-changed" }, box, "Changed since I saw it"));
+    if (f.platform || f.identity || f.state || f.pillar || f.day || f.changed)
+      form.append(h("button", { type: "button", class: "btn plain", data: { act: "clear" }, text: "Show everything" }));
+    if (focused && form.elements[focused]) form.elements[focused].focus();
+
+    var go = bulkSplit().go.length, btn = $("all-open");
+    btn.textContent = "Approve all I have seen (" + go + ")";
+    btn.disabled = !go;
+    measure();
+  }
+  function measure() { document.documentElement.style.setProperty("--top-h", $("top").offsetHeight + "px"); }
+  window.addEventListener("resize", measure);
+
+  function drawRail() {
+    var rail = $("rail"), all = Array.from(S.posts.values());
+    rail.textContent = "";
+    function item(kind, value, name, list) {
+      var fix = list.filter(function (p) { var s = stateOf(p); return s === "fix" || s === "reapprove"; }).length;
+      var left = list.filter(waiting).length;
+      var mark = fix ? h("span", { class: "m fix", text: fix + " to fix" }) :
+        left ? h("span", { class: "m", text: left + " to review" }) :
+        h("span", { class: "m", text: list.length ? "all done" : "" });
+      return h("button", { type: "button", class: "rail-item", "aria-pressed": String(S.filters[kind] === value),
+        data: { rail: kind, value: value } }, h("span", { class: "n", text: name }), mark,
+        h("span", { class: "m", text: "· " + list.length }));
+    }
+    rail.append(h("h2", { text: "Days" }));
+    days().forEach(function (d) {
+      if (d) rail.append(item("day", d, dayWords(d, true), all.filter(function (p) { return dayOf(p) === d; })));
+    });
+    rail.append(h("h2", { text: "Networks" }));
+    var nets = {};
+    all.forEach(function (p) { nets[p.platform] = true; });
+    Object.keys(nets).sort().forEach(function (k) {
+      rail.append(item("platform", k, NETWORKS[k] || k, all.filter(function (p) { return p.platform === k; })));
+    });
+    var changed = all.filter(function (p) { return p.changed_since_seen; }).length;
+    rail.append(h("h2", { text: "Look again" }),
+      h("button", { type: "button", class: "rail-item", "aria-pressed": String(S.filters.changed), data: { rail: "changed", value: "1" } },
+        h("span", { class: "n", text: "Changed since I saw it" }), h("span", { class: "m", text: String(changed) })));
+  }
+
+  // ---------- drawing: one post ----------
+  function wordsBlock(p, text, max, fold) {
+    var cps = chars(text), box = h("p", { class: "words" });
+    var open = S.open.has(p.id);
+    if (fold && cps.length > fold && !open) {
+      box.append(cps.slice(0, fold).join(""),
+        h("button", { type: "button", class: "more", data: { act: "open" }, "aria-expanded": "false", text: "… see more" }));
+      return box;
+    }
+    var cut = max && cps.length > max ? max : cps.length;
+    if (fold && cps.length > fold) {
+      box.append(cps.slice(0, fold).join(""),
+        h("span", { class: "foldmark" }, h("span", { class: "sr-only", text: " (most readers see only up to here) " })),
+        cps.slice(fold, cut).join(""));
+    } else box.append(cps.slice(0, cut).join(""));
+    if (cut < cps.length) box.append(h("mark", { class: "over" }, h("span", { class: "sr-only", text: " (over the limit from here) " }), cps.slice(cut).join("")));
+    if (fold && cps.length > fold)
+      box.append(" ", h("button", { type: "button", class: "more", data: { act: "open" }, "aria-expanded": "true", text: "see less" }));
+    return box;
+  }
+
+  function mediaBlock(p) {
+    if (!p.media.length) return null;
+    var many = p.media.length > 1;
+    var strip = h("div", { class: "media " + (many ? "many" : "single"), role: "group",
+      "aria-label": many ? plural(p.media.length, "image", "images or clips") + ", in posting order" : "The image or clip for this post" });
+    p.media.forEach(function (m) {
+      var src = "/media/" + encodeURIComponent(p.id) + "/" + m.index, inner;
+      if (m.problem) {
+        inner = h("div", { class: "gone", role: "img", "aria-label": "This file cannot be shown: " + m.name },
+          m.problem === "outside" ? "Not shown: " + m.name + " is outside this brand's folder" :
+          m.problem === "type" ? "Not shown: " + m.name + " is not an image, a video or a PDF" : "Missing file: " + m.name);
+      } else if (m.kind === "video") {
+        inner = h("video", { src: src, controls: true, preload: "metadata", "aria-label": "Clip " + (m.index + 1) + " of " + p.media.length });
+      } else if (m.kind === "document") {
+        inner = h("div", { class: "doc" }, h("a", { href: src, target: "_blank", rel: "noopener", text: "Open " + m.name }));
+      } else {
+        inner = h("img", { src: src, loading: "lazy", data: { act: "open", name: m.name },
+          alt: p.alt_text && !many ? p.alt_text : "Image " + (m.index + 1) + " of " + p.media.length + " for this post" });
+      }
+      var origin = (m.origins && m.origins.length) ? h("span", { class: "origin", text: "Has a " + m.origins.join(" and a ") }) : null;
+      strip.append(h("figure", null, inner, many ? h("figcaption", { text: (m.index + 1) + "/" + p.media.length }) : null, origin));
+    });
+    return strip;
+  }
+
+  function findingItem(text, must) {
+    var m = /^\[(?:ERROR|WARN)\]\s*([^:]+):\s*([\s\S]*)$/.exec(text);
+    return h("li", { class: must ? "must" : "look" }, h("span", { class: "tag", text: must ? "Must fix: " : "Worth a look: " }),
+      m ? m[2] : text, m ? h("span", { class: "sr-only", text: " (rule: " + m[1] + ")" }) : null);
+  }
+
+  function editor(p) {
+    var box = h("div", { class: "editor" }), id = "ed-" + p.id;
+    function area(name, label, value, platformCounted) {
+      var ta = h("textarea", { id: id + "-" + name, name: name, rows: "4", spellcheck: "true" });
+      ta.value = value || "";
+      box.append(h("label", { "for": id + "-" + name, text: label }), ta);
+      if (platformCounted) box.append(h("p", { class: "live", data: { liveFor: name }, "aria-live": "polite" }));
+      return ta;
+    }
+    area("text", p.thread && p.thread.length ? "Tweet 1" : "The words", p.text, true);
+    (p.thread || []).forEach(function (t, i) { area("thread-" + i, "Tweet " + (i + 2) + " (empty it to remove it)", t, true); });
+    if (p.platform === "twitter")
+      box.append(h("div", { class: "line" }, h("button", { type: "button", class: "btn", data: { act: "add-tweet" }, text: "Add a tweet" })));
+    area("first_comment", "First comment (optional)", p.first_comment, false);
+    if (p.media.length) area("alt_text", "Alt text: what the image shows, for people who cannot see it", p.alt_text, false);
+    if (p.media.length > 1 || (p.media.length === 1 && p.platform !== "instagram")) {
+      var list = h("ol", { class: "order", "aria-label": "The order of the images" });
+      p.media.forEach(function (m) {
+        list.append(h("li", { data: { index: String(m.index) } }, h("span", { text: m.name }),
+          h("button", { type: "button", class: "btn", data: { act: "earlier" }, text: "Earlier" }),
+          h("button", { type: "button", class: "btn", data: { act: "later" }, text: "Later" }),
+          h("button", { type: "button", class: "btn danger", data: { act: "drop" }, text: "Remove" })));
+      });
+      box.append(h("label", { text: "Images, in posting order" }), list);
+    }
+    box.append(h("div", { class: "line", style: "margin-top:12px" },
+      h("button", { type: "button", class: "btn primary needs-server", data: { act: "save" }, text: "Save" }),
+      h("button", { type: "button", class: "btn", data: { act: "cancel" }, text: "Cancel" }),
+      h("span", { class: "hint", text: "Ctrl+Enter saves · Esc cancels. Saving checks the words again, and an approved post will need approving again." })));
+    return box;
+  }
+
+  function liveCheck(card, p) {
+    var style = (S.info && S.info.style) || {}, max = limitFor(p.platform).max;
+    card.querySelectorAll(".live").forEach(function (line) {
+      var ta = card.querySelector('textarea[name="' + line.dataset.liveFor + '"]');
+      if (!ta) return;
+      ta.style.height = "auto"; ta.style.height = (ta.scrollHeight + 4) + "px";
+      var text = ta.value, n = chars(text).length, bits = [];
+      var count = h("span", { class: max && n > max ? "over" : "", text: n + (max ? " / " + max : "") + " characters" });
+      if (max && n > max) bits.push((n - max) + " over the limit");
+      if (style.no_em_dashes) { var d = (text.match(/—|–|--/g) || []).length; if (d) bits.push(plural(d, "long dash", "long dashes")); }
+      var long = text.split(/[.!?]+\s+|\n+/).filter(function (s) { return (s.match(/\S+/g) || []).length > (style.max_sentence_words || 22); }).length;
+      if (long) bits.push(plural(long, "long sentence", "long sentences"));
+      line.textContent = "";
+      line.append(count, bits.length ? " · " + bits.join(" · ") : "");
+    });
+  }
+
+  function card(p) {
+    var st = stateOf(p), lim = limitFor(p.platform), tid = "t-" + p.id;
+    var el = h("article", { class: "card is-" + st + " p-" + p.platform + (S.open.has(p.id) ? " is-open" : "") + (S.current === p.id ? " is-current" : ""),
+      id: "card-" + p.id, data: { id: p.id }, tabindex: S.current === p.id ? "0" : "-1", "aria-labelledby": tid });
+
+    el.append(h("header", { class: "card-head" },
+      h("h3", { id: tid }, network(p), h("span", { class: "who", text: p.identity_name || p.identity })),
+      h("p", { class: "when", text: when(p.scheduled_time_local) }),
+      h("span", { class: "chip", text: stateWords(p) })));
+
+    var notes = h("div", { class: "notes" });
+    if (p.sourcing_note) notes.append(h("p", { class: "note " + (p.sourcing === "blocked" ? "stop" : "unverified"), text: p.sourcing_note }));
+    if (st === "reapprove") notes.append(h("p", { class: "note stop", text: p.approval_note || "This post was changed after it was approved, so the approval no longer counts. Read it again and approve it if it is right." }));
+    if (p.changed_since_seen) notes.append(h("p", { class: "note wait", text: "Changed since you last looked at it." }));
+    if (p.timing_note && !p.locked) notes.append(h("p", { class: "note", text: p.timing_note }));
+    if (notes.childNodes.length) el.append(notes);
+
+    var body = h("div", { class: "body" });
+    if (S.editing === p.id) body.append(editor(p));
+    else {
+      var words = [wordsBlock(p, p.text, lim.max, lim.fold)];
+      if (lim.fold && chars(p.text).length > lim.fold)
+        words.push(h("p", { class: "foldhint", text: network(p) + " shows about the first " + lim.fold + " characters before “see more” (as of " + S.info.folds_as_of + "). The dashed mark is roughly where that falls." }));
+      if (p.thread && p.thread.length) {
+        var total = p.thread.length + 1, ol = h("ol", { class: "thread", "aria-label": "The rest of the thread" });
+        p.thread.forEach(function (t, i) {
+          var n = chars(t).length;
+          ol.append(h("li", null, h("span", { class: "num", text: "Tweet " + (i + 2) + " of " + total + " · " + n + (lim.max ? " / " + lim.max : "") }),
+            wordsBlock(p, t, lim.max, 0)));
+        });
+        words.push(ol);
+      }
+      var pics = mediaBlock(p);
+      (p.platform === "instagram" ? [pics].concat(words) : words.concat([pics]))
+        .forEach(function (part) { if (part) body.append(part); });
+      var extras = h("dl", { class: "extras" });
+      if (p.first_comment) extras.append(h("dt", { text: "First comment" }), h("dd", { text: p.first_comment }));
+      if (p.alt_text) extras.append(h("dt", { text: "Alt text" }), h("dd", { text: p.alt_text }));
+      if (p.link) extras.append(h("dt", { text: "Link" }), h("dd", { text: p.link }));
+      if (extras.childNodes.length) body.append(extras);
+    }
+    el.append(body);
+
+    var foot = h("div", { class: "foot" });
+    if (S.editing !== p.id) {
+      var errs = p.lint_errors || [], warns = p.lint_warnings || [];
+      if (errs.length || warns.length) {
+        var ul = h("ul", { class: "findings" });
+        errs.forEach(function (t) { ul.append(findingItem(t, true)); });
+        warns.forEach(function (t) { ul.append(findingItem(t, false)); });
+        foot.append(ul);
+      }
+      if (p.feedback) foot.append(h("p", { class: "note" + (st === "remake" ? " wait" : "") },
+        h("b", { text: st === "remake" ? "Your remake note: " : st === "turned-down" ? "Why it was turned down: " : "Note: " }), p.feedback));
+
+      var n = chars(p.text).length;
+      foot.append(h("div", { class: "meta" },
+        p.pillar ? h("span", { text: p.pillar }) : null,
+        h("span", { class: lim.max && n > lim.max ? "over" : "", text: n + (lim.max ? " / " + lim.max : "") + " characters" }),
+        errs.length ? h("span", { class: "bad", text: plural(errs.length, "problem", "problems") + " to fix" }) :
+          warns.length ? h("span", { text: plural(warns.length, "thing", "things") + " worth a look" }) : h("span", { class: "good", text: "Passed every check" }),
+        p.seen ? h("span", { text: "You have looked at this" }) : null,
+        S.info && S.info.files.length > 1 ? h("span", { text: p.batch }) : null,
+        h("span", { class: "id", text: p.id })));
+
+      if (needsTick(p)) {
+        var tick = h("input", { type: "checkbox", id: "ack-" + p.id, data: { act: "tick" } });
+        tick.checked = S.ticked.has(p.id);
+        foot.append(h("div", { class: "ack" }, tick, h("label", { "for": "ack-" + p.id,
+          text: "I have checked the facts in this post myself. (Nobody has checked them against your own material, so approving is your word that they are right. This is written on the post.)" })));
+      }
+      if (S.remaking === p.id) foot.append(remakeRow(p));
+      if (S.refusing === p.id) foot.append(refuseRow(p));
+
+      var blocked = !canApprove(p) || (needsTick(p) && !S.ticked.has(p.id));
+      var approve = h("button", { type: "button", class: "btn primary needs-server", data: { act: "approve" }, disabled: blocked,
+        "aria-keyshortcuts": "A", text: st === "reapprove" ? "Approve again" : "Approve" });
+      if (p.approve_block) approve.title = p.approve_block;
+      foot.append(h("div", { class: "actions" }, approve,
+        h("button", { type: "button", class: "btn needs-server", data: { act: "edit" }, disabled: p.locked, "aria-keyshortcuts": "E", text: "Edit" }),
+        h("button", { type: "button", class: "btn needs-server", data: { act: "remake" }, disabled: p.locked, "aria-keyshortcuts": "R",
+          "aria-expanded": String(S.remaking === p.id), text: "Ask for a remake" }),
+        h("button", { type: "button", class: "btn danger needs-server", data: { act: "refuse" }, disabled: p.locked || st === "turned-down",
+          "aria-keyshortcuts": "X", "aria-expanded": String(S.refusing === p.id), text: "Turn down" }),
+        h("button", { type: "button", class: "btn needs-server", data: { act: "undo" }, disabled: p.locked, "aria-keyshortcuts": "U", text: "Undo" }),
+        h("button", { type: "button", class: "btn", data: { act: "copy" }, text: "Copy the words" })));
+      if (p.approve_block && st !== "approved" && st !== "done")
+        foot.append(h("p", { class: "hint", text: p.approve_block }));
+    }
+    el.append(foot);
+
+    if (S.stale.has(p.id)) el.append(h("div", { class: "stale", role: "alert" },
+      "This post was changed by something else after you opened it. Nothing you did was saved.",
+      h("button", { type: "button", class: "btn primary", data: { act: "latest" }, text: "Show the latest version" })));
+    return el;
+  }
+
+  function remakeRow(p) {
+    var row = h("div", { class: "row" }), chips = h("div", { class: "chips", role: "group", "aria-label": "Common notes" });
+    REMAKE_NOTES.forEach(function (t) {
+      chips.append(h("button", { type: "button", "aria-pressed": String(S.picked.has(t)), data: { act: "chip", chip: t }, text: t }));
+    });
+    var kind = h("select", { id: "rk-" + p.id, name: "kind" }, h("option", { value: "words", text: "the words" }), h("option", { value: "image", text: "the image" }));
+    row.append(chips, h("label", { "for": "rn-" + p.id, text: "What should be different? (optional if you picked a note above)" }),
+      h("input", { type: "text", id: "rn-" + p.id, name: "remake-note", autocomplete: "off" }),
+      h("div", { class: "line" }, h("label", { "for": "rk-" + p.id, style: "margin:0", text: "Remake" }), kind,
+        h("button", { type: "button", class: "btn needs-server", data: { act: "remake-go" }, text: "Ask for the remake" }),
+        h("button", { type: "button", class: "btn", data: { act: "close-rows" }, text: "Cancel" })),
+      h("p", { class: "hint", text: "The post waits here until Claude remakes it. Tell Claude: “remake the posts I asked about.” Ctrl+Enter sends · Esc cancels." }));
+    return row;
+  }
+
+  function refuseRow(p) {
+    return h("div", { class: "row" }, h("label", { "for": "xn-" + p.id, text: "Why? (optional, but it helps the next batch)" }),
+      h("input", { type: "text", id: "xn-" + p.id, name: "refuse-note", autocomplete: "off" }),
+      h("div", { class: "line" }, h("button", { type: "button", class: "btn danger needs-server", data: { act: "refuse-go" }, text: "Turn it down" }),
+        h("button", { type: "button", class: "btn", data: { act: "close-rows" }, text: "Cancel" })),
+      h("p", { class: "hint", text: "Enter turns it down · Esc cancels. You can undo this." }));
+  }
+
+  function redraw(id) {
+    var p = S.posts.get(id), old = $("card-" + id);
+    if (!p || !old) return;
+    var hadFocus = old.contains(document.activeElement);
+    var fresh = card(p);
+    old.replaceWith(fresh);
+    if (S.watcher) S.watcher.observe(fresh);
+    if (S.editing === id) liveCheck(fresh, p);
+    if (hadFocus) fresh.focus({ preventScroll: true });
+  }
+
+  function drawFeed() {
+    var feed = $("feed"), list = Array.from(S.posts.values()).filter(passes);
+    // posts that need a fix come first, so nothing broken hides at the bottom of a long week
+    var fix = list.filter(function (p) { var s = stateOf(p); return s === "fix" || s === "reapprove"; }).sort(inOrder);
+    var rest = list.filter(function (p) { return fix.indexOf(p) < 0; }).sort(inOrder);
+    S.shown = fix.concat(rest).map(function (p) { return p.id; });
+    if (S.current && S.shown.indexOf(S.current) < 0) S.current = null;
+    if (S.watcher) S.watcher.disconnect();
+    S.timers.forEach(clearTimeout); S.timers.clear();
+    feed.textContent = "";
+    if (!S.posts.size) { feed.append(h("p", { class: "empty", text: "There are no posts in this batch yet." })); return; }
+    if (!list.length) {
+      var good = S.filters.state === "fix" || S.filters.state === "reapprove" || S.filters.changed;
+      feed.append(h("p", { class: "empty" }, "No posts match what you chose to show" + (good ? ", which is good news. " : ". "),
+        h("button", { type: "button", class: "btn plain", data: { act: "clear" }, text: "Show everything" })));
+      return;
+    }
+    if (fix.length) { feed.append(h("h2", { class: "day", text: "Fix these first" })); fix.forEach(function (p) { feed.append(card(p)); }); }
+    var last = null;
+    rest.forEach(function (p) {
+      var d = dayOf(p);
+      if (d !== last) { feed.append(h("h2", { class: "day", text: dayWords(d) })); last = d; }
+      feed.append(card(p));
+    });
+    watch();
+  }
+
+  function drawAll() {
+    drawTop(); drawRail(); drawFeed();
+    if (S.info) $("foot").textContent = "Nothing on this page posts anything. It only records your decisions in the batch on this computer. " +
+      "When you are done, ask Claude to make your ready-to-post folder. Times are shown in " + S.info.brand.timezone + " time.";
+  }
+
+  // ---------- which post you are on ----------
+  function setCurrent(id, scroll) {
+    var was = S.current && $("card-" + S.current);
+    if (was) { was.classList.remove("is-current"); was.tabIndex = -1; }
+    S.current = id;
+    var el = id && $("card-" + id);
+    if (!el) return;
+    el.classList.add("is-current"); el.tabIndex = 0;
+    if (scroll) {
+      var calm = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      el.scrollIntoView({ block: "center", behavior: calm ? "auto" : "smooth" });
+      el.focus({ preventScroll: true });
+    }
+  }
+  function step(by) {
+    if (!S.shown.length) return;
+    var i = S.shown.indexOf(S.current);
+    setCurrent(S.shown[i < 0 ? 0 : Math.max(0, Math.min(S.shown.length - 1, i + by))], true);
+  }
+  function nextWaiting(from) {
+    var i = S.shown.indexOf(from), j;
+    for (j = i + 1; j < S.shown.length; j++) if (waiting(S.posts.get(S.shown[j]))) return setCurrent(S.shown[j], true);
+    if (i + 1 < S.shown.length) setCurrent(S.shown[i + 1], true);
+  }
+
+  // ---------- "looked at" ----------
+  function watch() {
+    if (!("IntersectionObserver" in window)) return;
+    var steps = []; for (var i = 0; i <= 20; i++) steps.push(i / 20);
+    S.watcher = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        var id = en.target.dataset.id, p = S.posts.get(id);
+        if (!p) return;
+        // A card taller than the screen can never be 80% visible, so measure against the smaller of the two.
+        var room = Math.min(en.boundingClientRect.height, (en.rootBounds && en.rootBounds.height) || window.innerHeight);
+        var share = room > 0 ? en.intersectionRect.height / room : 0;
+        if (en.isIntersecting && share >= SEEN_SHARE) {
+          if (p.seen || S.timers.has(id)) return;
+          S.timers.set(id, setTimeout(function () { S.timers.delete(id); looked(id); }, SEEN_AFTER_MS));
+        } else if (S.timers.has(id)) { clearTimeout(S.timers.get(id)); S.timers.delete(id); }
+      });
+    }, { threshold: steps });
+    document.querySelectorAll("#feed .card").forEach(function (el) { S.watcher.observe(el); });
+  }
+  function looked(id) {
+    var p = S.posts.get(id);
+    if (!p || p.seen || S.down || S.editing === id) return;
+    call("/api/post/" + encodeURIComponent(id) + "/seen", { content_sha: p.content_sha }).then(function (data) {
+      var el = $("card-" + id);
+      var busy = S.editing === id || S.remaking === id || S.refusing === id || (el && el.contains(document.activeElement));
+      if (busy) { S.posts.set(id, data.post); drawTop(); drawRail(); } else take(data.post);   // never redraw over typing
+    }, function (e) { if (e.status === 409 && e.data.post && S.editing !== id) take(e.data.post); });
+  }
+
+  // ---------- doing things ----------
+  function act(p, action, payload, done) {
+    if (S.down) { say("This page has lost touch with the Factory. Nothing is being saved.", true); return Promise.resolve(false); }
+    payload = payload || {};
+    payload.rev = p.rev;
+    return call("/api/post/" + encodeURIComponent(p.id) + "/" + action, payload).then(function (data) {
+      take(data.post);
+      if (done) { say(done); S.mine.push(p.id); }
+      return true;
+    }, function (e) {
+      if (e.status === 409) { S.stale.add(p.id); if (e.data.post) S.posts.set(p.id, e.data.post); redraw(p.id); }
+      else if (e.status) say(e.message, true);
+      return false;
+    });
+  }
+  function approve(p, thenNext) {
+    if (!canApprove(p)) return say(p.approve_block, true);
+    if (needsTick(p) && !S.ticked.has(p.id)) {
+      say("Tick “I have checked the facts in this post myself” first. Nobody has checked them against your own material.", true);
+      var box = $("ack-" + p.id); if (box) box.focus();
+      return;
+    }
+    act(p, "approve", { content_sha: p.content_sha, acknowledge_unverified: needsTick(p) }, "Approved. Press U to undo.")
+      .then(function (ok) { if (ok && thenNext) nextWaiting(p.id); });
+  }
+  function closeRows() {
+    var ids = [S.remaking, S.refusing];
+    S.remaking = S.refusing = null; S.picked.clear();
+    ids.forEach(function (id) { if (id) redraw(id); });
+  }
+  function openEditor(p) {
+    if (p.locked) return say("This post has already gone out or been exported, so it cannot be changed here.", true);
+    closeRows();
+    var other = S.editing; S.editing = p.id;
+    if (other && other !== p.id) redraw(other);
+    redraw(p.id);
+    var ta = document.querySelector("#card-" + CSS.escape(p.id) + " textarea");
+    if (ta) { ta.focus(); ta.setSelectionRange(ta.value.length, ta.value.length); }
+  }
+  function closeEditor() { var id = S.editing; S.editing = null; if (id) { redraw(id); var el = $("card-" + id); if (el) el.focus({ preventScroll: true }); } }
+  function saveEditor(p) {
+    var el = $("card-" + p.id), payload = {}, thread = [];
+    el.querySelectorAll("textarea").forEach(function (ta) {
+      if (ta.name.indexOf("thread-") === 0) thread.push(ta.value); else payload[ta.name] = ta.value;
+    });
+    if (el.querySelector('textarea[name^="thread-"]') || (p.thread && p.thread.length)) payload.thread = thread;
+    var order = el.querySelector(".order");
+    if (order) payload.media_order = Array.prototype.filter.call(order.children, function (li) { return !li.classList.contains("dropped"); })
+      .map(function (li) { return +li.dataset.index; });
+    act(p, "edit", payload).then(function (ok) {
+      if (!ok) return;
+      S.editing = null; S.mine.push(p.id); redraw(p.id);
+      var now = S.posts.get(p.id), n = (now.lint_errors || []).length;
+      say(n ? "Saved. " + plural(n, "problem", "problems") + " still to fix." : "Saved. It passed every check.");
+      var card = $("card-" + p.id); if (card) card.focus({ preventScroll: true });
+    });
+  }
+  function openRow(p, which) {
+    if (S.editing) return;
+    if (p.locked) return say("This post has already gone out or been exported, so it cannot be changed here.", true);
+    var same = S[which] === p.id;
+    closeRows();
+    if (same) return;
+    S[which] = p.id; redraw(p.id);
+    var input = document.querySelector("#card-" + CSS.escape(p.id) + " .row input[type=text]");
+    if (input) input.focus();
+  }
+  function sendRemake(p) {
+    var el = $("card-" + p.id), typed = el.querySelector('input[name="remake-note"]').value.trim();
+    var note = Array.from(S.picked).concat(typed ? [typed] : []).join("; ");
+    var kind = el.querySelector('select[name="kind"]').value;
+    closeRows();
+    act(p, "remake", { note: note, kind: kind }, "Remake asked for. Press U to undo.");
+  }
+  function sendRefuse(p) {
+    var note = $("card-" + p.id).querySelector('input[name="refuse-note"]').value.trim();
+    closeRows();
+    act(p, "reject", { note: note }, "Turned down. Press U to undo.");
+  }
+  function undoMine() {
+    while (S.mine.length) {
+      var p = S.posts.get(S.mine.pop());
+      if (p) { setCurrent(p.id, true); return act(p, "undo", {}, null).then(function (ok) { if (ok) say("Put back the way it was."); }); }
+    }
+    say("There is nothing of yours left to undo on this page.");
+  }
+  function copyWords(p) {
+    var text = [p.text].concat(p.thread || []).join("\n\n");
+    var ok = function () { say("Copied."); }, no = function () { say("Copying is blocked in this browser. Select the words and copy them by hand.", true); };
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(ok, no); else no();
+  }
+  function setFilter(name, value) {
+    S.filters[name] = value;
+    drawAll();
+    if (!S.current && S.shown.length) setCurrent(S.shown[0], false);
+  }
+  function clearFilters() {
+    S.filters = { platform: "", identity: "", state: "", pillar: "", day: "", changed: false };
+    drawAll();
+    if (S.shown.length) setCurrent(S.shown[0], false);
+  }
+
+  // ---------- approve all ----------
+  function openAll() {
+    var split = bulkSplit(), body = $("all-body"), left = h("ul");
+    body.textContent = "";
+    body.append(h("p", null, "Of the posts showing now, approve ", h("b", { text: plural(split.go.length, "post", "posts") }),
+      " that you have looked at, that passed every check, and whose facts were checked."));
+    if (split.unseen) left.append(h("li", { text: plural(split.unseen, "post", "posts") + " you have not looked at yet" }));
+    if (split.facts) left.append(h("li", { text: plural(split.facts, "post", "posts") + " with unverified facts (approve those one at a time)" }));
+    if (split.fix) left.append(h("li", { text: plural(split.fix, "post", "posts") + " that need a fix" }));
+    if (split.remake) left.append(h("li", { text: plural(split.remake, "post", "posts") + " waiting for a remake" }));
+    if (left.childNodes.length) body.append(h("p", { text: "Left alone:" }), left);
+    $("all-go").textContent = "Approve " + split.go.length;
+    $("all").showModal();
+  }
+  function runAll() {
+    var go = bulkSplit().go;
+    $("all").close();
+    if (!go.length) return;
+    call("/api/approve-all", { posts: go.map(function (p) { return { id: p.id, rev: p.rev, content_sha: p.content_sha }; }) })
+      .then(function (data) {
+        return load(true).then(function () {
+          say("Approved " + data.approved.length + (data.skipped.length ? ". Left " + data.skipped.length + " alone: " + data.skipped[0].reason + "." : "."));
+        });
+      }, function (e) { if (e.status) say(e.message, true); });
+  }
+
+  // ---------- clicks ----------
+  document.addEventListener("click", function (ev) {
+    var t = ev.target.closest("[data-close]");
+    if (t) return t.closest("dialog").close();
+    if (ev.target.closest("#retry")) return load();
+    if (ev.target.closest("#all-open")) return openAll();
+    if (ev.target.closest("#all-go")) return runAll();
+    if (ev.target.closest("#keys-open")) { $("keys-on").checked = S.keys; return $("keys").showModal(); }
+    var rail = ev.target.closest("[data-rail]");
+    if (rail) {
+      var kind = rail.dataset.rail;
+      return kind === "changed" ? setFilter("changed", !S.filters.changed) :
+        setFilter(kind, S.filters[kind] === rail.dataset.value ? "" : rail.dataset.value);
+    }
+    var btn = ev.target.closest("[data-act]");
+    if (btn && btn.dataset.act === "clear") return clearFilters();
+    var el = ev.target.closest(".card");
+    if (!el) return;
+    var p = S.posts.get(el.dataset.id);
+    if (!p) return;
+    if (S.current !== p.id) setCurrent(p.id, false);
+    if (!btn) return;
+    var a = btn.dataset.act, li;
+    if (a === "open") { S.open.has(p.id) ? S.open.delete(p.id) : S.open.add(p.id); redraw(p.id); }
+    else if (a === "approve") approve(p, false);
+    else if (a === "edit") openEditor(p);
+    else if (a === "save") saveEditor(p);
+    else if (a === "cancel") closeEditor();
+    else if (a === "remake") openRow(p, "remaking");
+    else if (a === "refuse") openRow(p, "refusing");
+    else if (a === "close-rows") closeRows();
+    else if (a === "remake-go") sendRemake(p);
+    else if (a === "refuse-go") sendRefuse(p);
+    else if (a === "undo") act(p, "undo", {}, null).then(function (ok) { if (ok) say("Put back the way it was."); });
+    else if (a === "copy") copyWords(p);
+    else if (a === "latest") refresh(p.id).catch(function (e) { say(e.message, true); });
+    else if (a === "tick") { btn.checked ? S.ticked.add(p.id) : S.ticked.delete(p.id); redraw(p.id); var again = $("ack-" + p.id); if (again) again.focus(); }
+    else if (a === "chip") { var c = btn.dataset.chip; S.picked.has(c) ? S.picked.delete(c) : S.picked.add(c); btn.setAttribute("aria-pressed", String(S.picked.has(c))); }
+    else if (a === "add-tweet") {
+      var n = el.querySelectorAll('textarea[name^="thread-"]').length, ta = h("textarea", { id: "ed-" + p.id + "-thread-" + n, name: "thread-" + n, rows: "3" });
+      btn.parentNode.before(h("label", { "for": ta.id, text: "Tweet " + (n + 2) }), ta, h("p", { class: "live", data: { liveFor: "thread-" + n }, "aria-live": "polite" }));
+      liveCheck(el, p); ta.focus();
+    }
+    else if (a === "earlier" || a === "later") {
+      li = btn.closest("li");
+      if (a === "earlier" && li.previousElementSibling) li.previousElementSibling.before(li);
+      if (a === "later" && li.nextElementSibling) li.nextElementSibling.after(li);
+      btn.focus();
+    }
+    else if (a === "drop") { li = btn.closest("li"); li.classList.toggle("dropped"); btn.textContent = li.classList.contains("dropped") ? "Keep" : "Remove"; }
+  });
+
+  document.addEventListener("submit", function (ev) { ev.preventDefault(); });
+  document.addEventListener("input", function (ev) {
+    var el = ev.target.closest(".card");
+    if (el && ev.target.tagName === "TEXTAREA") liveCheck(el, S.posts.get(el.dataset.id));
+  });
+  document.addEventListener("change", function (ev) {
+    var t = ev.target;
+    if (t.id === "keys-on") { S.keys = t.checked; try { localStorage.setItem("smf-review-keys", S.keys ? "on" : "off"); } catch (e) { /* fine */ } return; }
+    if (t.form && t.form.id === "filters") setFilter(t.name, t.type === "checkbox" ? t.checked : t.value);
+  });
+
+  // ---------- keys ----------
+  document.addEventListener("keydown", function (ev) {
+    if (document.querySelector("dialog[open]")) return;               // the dialog handles its own Esc
+    var active = document.activeElement, typing = active && /^(INPUT|TEXTAREA|SELECT)$/.test(active.tagName);
+    var combo = ev.metaKey || ev.ctrlKey, el = active && active.closest && active.closest(".card");
+    var p = el ? S.posts.get(el.dataset.id) : S.posts.get(S.current);
+
+    if (typing && el && p) {                                          // inside a card's own boxes
+      if (ev.key === "Escape") { ev.preventDefault(); S.editing ? closeEditor() : closeRows(); }
+      else if (ev.key === "Enter" && combo && S.editing === p.id) { ev.preventDefault(); saveEditor(p); }
+      else if (ev.key === "Enter" && combo && S.remaking === p.id) { ev.preventDefault(); sendRemake(p); }
+      else if (ev.key === "Enter" && S.refusing === p.id && active.name === "refuse-note") { ev.preventDefault(); sendRefuse(p); }
+      return;
+    }
+    if (typing || combo || ev.altKey) return;
+    if (ev.key === "Escape") { if (S.editing) closeEditor(); else closeRows(); return; }
+    if (!S.keys) return;                                              // single-key shortcuts can be switched off
+    if (ev.key === "?") { ev.preventDefault(); $("keys-on").checked = S.keys; return $("keys").showModal(); }
+    if (active && active.tagName === "BUTTON" && (ev.key === " " || ev.key === "Enter")) return;   // let buttons be buttons
+    var k = ev.key.length === 1 ? ev.key.toLowerCase() : ev.key;
+
+    if (k === "j" || k === "ArrowDown") { ev.preventDefault(); step(1); }
+    else if (k === "k" || k === "ArrowUp") { ev.preventDefault(); step(-1); }
+    else if (k === "u" && ev.shiftKey) { ev.preventDefault(); undoMine(); }
+    else if (k === "f") { ev.preventDefault();
+      var nets = [""].concat(Array.from(new Set(Array.from(S.posts.values()).map(function (x) { return x.platform; }))).sort());
+      setFilter("platform", nets[(nets.indexOf(S.filters.platform) + 1) % nets.length]);
+      say(S.filters.platform ? "Showing " + (NETWORKS[S.filters.platform] || S.filters.platform) + " only." : "Showing every network."); }
+    else if (/^[1-9]$/.test(k)) { var d = days().filter(Boolean)[+k - 1]; if (d) { ev.preventDefault(); setFilter("day", S.filters.day === d ? "" : d); } }
+    else if (!p) return;
+    else if (k === " ") { ev.preventDefault(); S.open.has(p.id) ? S.open.delete(p.id) : S.open.add(p.id); redraw(p.id); }
+    else if (k === "a") { ev.preventDefault(); approve(p, true); }
+    else if (k === "e") { ev.preventDefault(); openEditor(p); }
+    else if (k === "r") { ev.preventDefault(); openRow(p, "remaking"); }
+    else if (k === "x") { ev.preventDefault(); openRow(p, "refusing"); }
+    else if (k === "u") { ev.preventDefault(); act(p, "undo", {}, null).then(function (ok) { if (ok) say("Put back the way it was."); }); }
+  });
+
+  // a broken image becomes words, not an empty box
+  document.addEventListener("error", function (ev) {
+    var img = ev.target;
+    if (img.tagName !== "IMG" || !img.closest(".media")) return;
+    img.replaceWith(h("div", { class: "gone", role: "img", "aria-label": "This image could not be shown: " + (img.dataset.name || "") },
+      "Could not show: " + (img.dataset.name || "this image")));
+  }, true);
+
+  load();
+})();
+</script>
+</body>
+</html>

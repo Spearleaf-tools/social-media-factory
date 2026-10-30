@@ -1,0 +1,31 @@
+# Codex settings for this folder (ChatGPT desktop app, local mode).
+# Codex only reads this file after the person trusts the folder. AGENTS.md holds the rules;
+# this file holds the guardrails. Do not loosen them to get past a block: ask for approval.
+
+# Work inside this folder freely; ask before anything outside it or on the internet.
+sandbox_mode = "workspace-write"
+approval_policy = "on-request"
+
+[sandbox_workspace_write]
+# Setup downloads, research, transcription and scheduling need the internet. Codex asks the
+# person each time, so nothing leaves the computer without them knowing.
+network_access = false
+
+# The same keys guards Claude uses (.claude/hooks), run before and after every shell command.
+# Codex only runs these after the person trusts them: type /hooks in Codex and trust both.
+# They are a second line behind the rules in AGENTS.md, not a wall; see HELP.md, "Keys".
+[[hooks.PreToolUse]]
+matcher = "^Bash$"
+
+[[hooks.PreToolUse.hooks]]
+type = "command"
+command = 'bash .claude/hooks/run-guard.sh guard-keys.sh PreToolUse'
+statusMessage = "Checking the command keeps keys private"
+
+[[hooks.PostToolUse]]
+matcher = "^Bash$"
+
+[[hooks.PostToolUse.hooks]]
+type = "command"
+command = 'bash .claude/hooks/run-guard.sh guard-output.sh PostToolUse'
+statusMessage = "Checking the output for keys"

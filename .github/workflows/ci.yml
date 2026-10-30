@@ -1,0 +1,69 @@
+name: ci
+
+# Three jobs.
+#   unit     quick logic tests, on every pull request and every change to main.
+#   windows  the blank-computer install test under Windows PowerShell 5.1. There is no human
+#            Windows tester, so this job is the Windows tester. It takes about 6 minutes, so it
+#            runs only on pull requests that are ready for review (not drafts) and when started
+#            by hand, never on main after a merge (the pull request already ran it).
+#   mac      the same test on macOS. macOS minutes cost 10x on a private repo, so while the repo
+#            is private it only runs when started by hand; once public it runs on every push.
+#
+# Why so careful: a private repo on the free plan gets 2,000 check minutes a month, and the
+# Windows job is almost all of what this repo uses (Oct 1-12: 91 runs, about 540 minutes, a
+# third of them duplicates of the same change). When they run out, every check stops until
+# the 1st, which is worst in the last week of a month, when most work is merged. A branch push
+# without a pull request runs nothing: open a pull request (a draft is fine) to get checks.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  unit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m unittest discover -s tests -t . -v
+
+  windows:
+    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'pull_request' && !github.event.pull_request.draft)
+    runs-on: windows-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: src
+      - name: Install from a ZIP on a blank Windows computer
+        shell: powershell
+        run: .\src\tests\ci\windows_blank_computer.ps1 -Source "$PWD\src"
+      - name: Keep the setup log when something goes wrong
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-setup-logs
+          path: ${{ runner.temp }}/**/.factory/setup.log
+          if-no-files-found: ignore
+
+  mac:
+    if: github.event_name == 'workflow_dispatch' || github.event.repository.private == false
+    runs-on: macos-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install from a ZIP on a blank Mac
+        run: bash tests/ci/mac_blank_computer.sh

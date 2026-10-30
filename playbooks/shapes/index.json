@@ -1,0 +1,83 @@
+{
+  "_meta": {
+    "last_researched": "2026-06-11",
+    "as_of": "June 2026",
+    "what": "The post shapes the writer can use. A shape is a structure: it says what beats a post has and in what order. It never says what the post is about. The subject, facts and voice come from the brand through the contract.",
+    "files": "Each shape is described in full in <id>.md in this folder, with a worked example for a fictional bakery.",
+    "fields": {
+      "id": "Stable identifier. Other parts of the Factory look shapes up by id, and it is stored on each post. Never rename one.",
+      "name": "What to call it when talking to a person.",
+      "best_for": "Platforms where the shape works best, strongest first. Keys match profiles.json, so 'twitter' means X.",
+      "length": "short (up to about 600 characters), medium (about 600 to 1,000), long (about 1,000 to 2,500). The figures describe the fullest version, on the first platform in best_for. On X anything above 280 characters becomes a thread.",
+      "identity": "Who may use it: 'any', 'person' (an identity that says I) or 'company' (an identity that says we and you).",
+      "when": "One line on when to choose it."
+    },
+    "rule": "Fill a shape only from the contract you were given. Never invent a fact, number, quote or customer. If the contract cannot fill a beat, drop the beat or choose another shape."
+  },
+  "shapes": [
+    {
+      "id": "three-tips",
+      "name": "Three Tips",
+      "best_for": ["linkedin", "instagram", "facebook"],
+      "length": "long",
+      "identity": "any",
+      "when": "The reader wants to do something and you can give them three things to do this week, each with a reason and a concrete detail."
+    },
+    {
+      "id": "myth-vs-reality",
+      "name": "Myth vs Reality",
+      "best_for": ["twitter", "instagram", "facebook"],
+      "length": "short",
+      "identity": "any",
+      "when": "One common belief is wrong or half right, and you have a fact or example that settles it quickly."
+    },
+    {
+      "id": "problem-agitate-solve",
+      "name": "Problem, Cost, Way Out",
+      "best_for": ["linkedin", "facebook"],
+      "length": "medium",
+      "identity": "any",
+      "when": "The reader already feels a specific problem, and you can give them a real first step out of it."
+    },
+    {
+      "id": "three-objections",
+      "name": "Three Objections, Answered",
+      "best_for": ["linkedin", "instagram"],
+      "length": "long",
+      "identity": "any",
+      "when": "People want the thing and still do not act, and you know from real conversations the reasons they give."
+    },
+    {
+      "id": "five-lessons",
+      "name": "Five Lessons",
+      "best_for": ["linkedin", "facebook"],
+      "length": "long",
+      "identity": "any",
+      "when": "There is a real stretch of experience to draw on (years, projects, customers) and each lesson has a moment behind it."
+    },
+    {
+      "id": "bullet-insight",
+      "name": "Bullet Insight",
+      "best_for": ["twitter", "linkedin"],
+      "length": "medium",
+      "identity": "any",
+      "when": "You have one sharp observation and a handful of short, parallel examples that prove it."
+    },
+    {
+      "id": "five-questions",
+      "name": "Five Questions",
+      "best_for": ["facebook", "linkedin"],
+      "length": "medium",
+      "identity": "any",
+      "when": "You want real conversation, and the audience has experiences worth hearing about."
+    },
+    {
+      "id": "before-after-story",
+      "name": "Before and After Story",
+      "best_for": ["instagram", "linkedin", "facebook"],
+      "length": "medium",
+      "identity": "person",
+      "when": "A real person went through a real change, and the contract holds the before, the after and the time between them."
+    }
+  ]
+}

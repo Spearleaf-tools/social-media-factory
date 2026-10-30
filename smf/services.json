@@ -1,0 +1,95 @@
+{
+  "about": "The outside services the Social Media Factory can use, for a business owner who has never set up an account like this (spec smf-spec-onboarding-v2.md rev 11, 'Outside services and keys'). The one place prices live: SERVICES.md, the setup checklist, GUIDE.md and the setup skill's walkthroughs all read from here. Every price has the date it was checked and its source; a price older than stale_after_days is shown as 'last checked, see the link' instead of a bare number. spending says how money can run away: subscription (charges on a date whatever you use), plan (a free plan that is never charged; its paid plans are monthly subscriptions), credit (prepaid, stops when it runs out, may run slightly over), free (no money).",
+  "stale_after_days": 90,
+  "always": [
+    "Keys go in your keys file, never in the chat, an email or a screenshot. Claude opens the file; you paste the key in yourself.",
+    "If a key ever lands somewhere it shouldn't (a chat, an email, a screenshot, a recording): make a new key, delete the old one, and put the new one in your keys file.",
+    "Screens on these websites change. If what you see doesn't match a step, take a screenshot with nothing private showing (no keys, passwords, codes or customer details) and ask Claude."
+  ],
+  "services": [
+    {"id": "claude", "short": "Claude Pro, about $20 a month", "name": "Claude", "keys": [],
+     "for": "running the Social Media Factory at all: you talk, it does the work on your computer",
+     "needed_for": "everything",
+     "cost": "Claude Pro, about $20 a month before tax. The free plan can't run the Social Media Factory.",
+     "checked": "2026-10-15", "source": "https://claude.com/pricing", "spending": "subscription",
+     "limit": "It's a subscription: it renews monthly whatever you use. Cancel any time in your Claude settings.",
+     "signup": "https://claude.ai",
+     "steps": [
+       "Go to claude.ai and create an account with an email you'll keep. You'll get a code by email to confirm it.",
+       "Choose the Pro plan and pay by card. You'll see a confirmation that you're on Pro.",
+       "Download the Claude desktop app from claude.ai/download, install it and sign in.",
+       "Open the Code tab. That's the part that works with folders on your computer; the Social Media Factory runs there."
+     ],
+     "remove": "To stop paying: Claude settings, then Billing, then cancel. Your Social Media Factory folder stays on your computer."},
+
+    {"id": "metricool", "short": "Advanced plan or higher", "name": "Metricool", "keys": ["METRICOOL_USER_TOKEN", "METRICOOL_USER_ID"],
+     "for": "scheduling posts and videos to your accounts, and reading how they did",
+     "needed_for": "scheduling, one short a day, the TikTok test-and-promote loop, and checking results",
+     "cost": "The Advanced plan or higher: about $53 a month paid yearly ($636 a year) or $67 paid monthly, before tax. The cheaper plans can't connect to the Social Media Factory.",
+     "checked": "2026-10-15", "source": "https://metricool.com/pricing/", "spending": "subscription",
+     "limit": "It's a subscription: it charges on the renewal date whether you post twice or two hundred times. Start monthly, the lower-risk choice, and set a calendar reminder a few days before it renews.",
+     "signup": "https://metricool.com",
+     "before": [
+       "Instagram: a Business or Creator account (in the Instagram app: Settings, then Account type and tools). Linking it to your Facebook Page gives Metricool fuller features.",
+       "Facebook: you're an admin of the business's Page, not only of your personal profile.",
+       "LinkedIn: for a company page, you're one of its admins. A personal profile works too.",
+       "TikTok: your account name, or none yet.",
+       "YouTube: which Google account owns the channel. It's often not the one you use every day.",
+       "Your phone nearby for security codes, and two-step login turned on for each account."
+     ],
+     "steps": [
+       "Check your social accounts are ready (the list above), so you don't pay before they can connect.",
+       "Go to metricool.com and sign up with an email your business controls. Turn on two-step login.",
+       "Choose the Advanced plan and pay by card. Monthly billing is the lower-risk start.",
+       "Create a brand in Metricool for your business: one Metricool brand for each brand in your Social Media Factory.",
+       "Connect each social account inside that brand. You log in to each platform yourself; your passwords never go to Claude or the Social Media Factory.",
+       "Find your key: in Metricool, Account settings, then API. Copy the token, and the user id shown on the same page."
+     ],
+     "key_words": {"METRICOOL_USER_TOKEN": "the API token", "METRICOOL_USER_ID": "the user id"},
+     "remove": "In Metricool: Account settings, then API. Make a new token and the old one stops working. To stop paying, cancel in Billing."},
+
+    {"id": "apify", "short": "free plan to start, then fractions of a cent per result", "name": "Apify", "keys": ["APIFY_API_TOKEN"],
+     "for": "research: what's working on YouTube, Instagram and TikTok, and what people ask on Reddit and X",
+     "needed_for": "research",
+     "cost": "A free plan with $5 of credit every month, no card needed. The credit doesn't carry over. Every research run shows its estimated cost before it starts.",
+     "checked": "2026-10-15", "source": "https://apify.com/pricing", "spending": "plan",
+     "limit": "On the free plan, research simply stops when the month's $5 is used up, and you're never charged. Paid plans are monthly subscriptions: they renew whatever you use. On a paid plan, also set a monthly usage limit in Settings, then Billing, so usage can't go past it.",
+     "signup": "https://apify.com",
+     "steps": [
+       "Go to apify.com and sign up. No card is needed for the free plan.",
+       "Find your key: in the Apify console, Settings, then API and Integrations. Copy the personal API token."
+     ],
+     "remove": "In the Apify console: Settings, then API and Integrations. Delete the token, or make a new one."},
+
+    {"id": "elevenlabs", "short": "about 22 cents per hour of audio", "name": "ElevenLabs", "keys": ["ELEVENLABS_API_KEY"],
+     "for": "turning speech into exact words, and telling speakers apart",
+     "needed_for": "answering the onboarding page by voice, and clips from your recordings",
+     "cost": "About 22 cents per hour of audio. The free plan includes about 30 minutes of transcription a month, enough to answer the onboarding page by voice. For clips and regular business use, choose the cheapest paid plan (about $6 a month when checked): the free plan may not include commercial use.",
+     "price_per_hour_usd": 0.22,
+     "checked": "2026-10-15", "source": "https://elevenlabs.io/pricing/api", "spending": "plan",
+     "limit": "The free plan is never charged: when its credit runs out, transcription stops until next month. Paid plans are monthly subscriptions that renew whatever you use; leave extra usage (usage-based billing) turned off so nothing is charged beyond the plan.",
+     "signup": "https://elevenlabs.io",
+     "steps": [
+       "Go to elevenlabs.io and sign up. Start on the free plan; you can move up later.",
+       "Leave extra usage (usage-based billing) off, so you can't be charged past your plan.",
+       "Find your key: your profile, then API keys, then Create. If it asks which permissions to give, allow speech to text. Copy the key."
+     ],
+     "remove": "In ElevenLabs: your profile, then API keys. Delete the key."},
+
+    {"id": "openai", "short": "a separate developer account; roughly 1 to 20 cents per picture", "name": "OpenAI (AI-made pictures)", "keys": ["OPENAI_API_KEY"],
+     "for": "AI-made pictures, only when you ask for one. Carousels and cards don't need it",
+     "needed_for": "AI-made pictures",
+     "cost": "An estimate of roughly 1 to 20 cents a picture, by size and quality, shown before each one. It's a separate OpenAI developer account with its own billing, not a ChatGPT subscription.",
+     "picture_cents": [1, 20],
+     "checked": "2026-10-09", "source": "https://developers.openai.com/api/docs/models/gpt-image-1.5", "spending": "credit",
+     "limit": "Add prepaid credit (for example $5) with automatic top-up turned off. When it runs out, pictures stop, though OpenAI may let it run slightly over first. A project budget and email alert only warn you; they don't stop spending.",
+     "signup": "https://platform.openai.com",
+     "key_note": "There's no free way to check this key, so “check my setup” shows it as unverified. That's expected.",
+     "steps": [
+       "Go to platform.openai.com and sign up. This is separate from ChatGPT, even if you already have ChatGPT.",
+       "In Billing, add a small prepaid credit and turn automatic top-up off.",
+       "Find your key: API keys, then Create new secret key. Copy it straight away; it's only shown once."
+     ],
+     "remove": "In the OpenAI platform: API keys. Revoke the key."}
+  ]
+}

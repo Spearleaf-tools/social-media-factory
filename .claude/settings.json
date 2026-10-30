@@ -1,0 +1,71 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash|PowerShell",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PROJECT_DIR}/.claude/hooks/run-guard.sh\" guard-keys.sh PreToolUse",
+            "onFailure": "block"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PROJECT_DIR}/.claude/hooks/run-guard.sh\" guard-prompt.sh UserPromptSubmit",
+            "onFailure": "block"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Bash|PowerShell|Grep|Glob|Read",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PROJECT_DIR}/.claude/hooks/run-guard.sh\" guard-output.sh PostToolUse",
+            "onFailure": "block"
+          }
+        ]
+      }
+    ],
+    "PostToolUseFailure": [
+      {
+        "matcher": "Bash|PowerShell|Grep|Glob|Read",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PROJECT_DIR}/.claude/hooks/run-guard.sh\" guard-output.sh PostToolUse",
+            "onFailure": "block"
+          }
+        ]
+      }
+    ]
+  },
+  "permissions": {
+    "deny": [
+      "Read(./keys.env)",
+      "Read(./.env)",
+      "Read(./.env.*)",
+      "Edit(./keys.env)",
+      "Edit(./.env)",
+      "Edit(./.env.*)"
+    ],
+    "allow": [
+      "Bash(.venv/bin/python factory.py status:*)",
+      "Bash(.venv/bin/python factory.py doctor:*)",
+      "Bash(.venv/bin/python factory.py where:*)",
+      "Bash(.venv/bin/python factory.py check-brand:*)",
+      "Bash(.venv\\Scripts\\python.exe factory.py status:*)",
+      "Bash(.venv\\Scripts\\python.exe factory.py doctor:*)",
+      "Bash(.venv\\Scripts\\python.exe factory.py where:*)",
+      "Bash(.venv\\Scripts\\python.exe factory.py check-brand:*)"
+    ]
+  }
+}
